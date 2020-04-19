@@ -13,6 +13,7 @@
 
     <string name="home_second">Home Second</string>
 
+    //item strings
     <string name="title">Title</string>
     <string name="category">Category</string>
     <string name="location">Location</string>
@@ -22,5 +23,9 @@
     <string name="main_characteristics">Main Characteristics</string>
     <string name="description">Description</string>
 
+    //user strings
+    <string name="full_name">Full_name</string>
+    <string name="username">username</string>
+    <string name="email">email@domain.com</string>
 
 </resources>
