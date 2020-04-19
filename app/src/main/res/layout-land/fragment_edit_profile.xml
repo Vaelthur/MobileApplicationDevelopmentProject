@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/landspace_Edit_profile"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/info_container_layout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/profile_picture"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:id="@+id/textViewFullNameEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/full_name_header"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewUserEmailEditProfile"
+            app:layout_constraintEnd_toStartOf="@+id/guideline4"
+            app:layout_constraintTop_toTopOf="@+id/topGuideline"
+            app:layout_constraintVertical_chainStyle="spread_inside" />
+
+        <TextView
+            android:id="@+id/textViewUserEmailEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/username_header"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewUsernameEditProfile"
+            app:layout_constraintEnd_toEndOf="@+id/textViewFullNameEditProfile"
+            app:layout_constraintTop_toBottomOf="@+id/textViewFullNameEditProfile" />
+
+        <TextView
+            android:id="@+id/textViewUsernameEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/email_header"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/textViewUserLocationEditProfile"
+            app:layout_constraintEnd_toEndOf="@+id/textViewUserEmailEditProfile"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailEditProfile" />
+
+        <TextView
+            android:id="@+id/textViewUserLocationEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/location_header"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintEnd_toEndOf="@+id/textViewUsernameEditProfile"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUsernameEditProfile" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/topGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.34" />
+
+        <EditText
+            android:id="@+id/editViewFullNameEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/full_name"
+            android:inputType="textPersonName|textCapWords"
+            android:selectAllOnFocus="true"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textViewFullNameEditProfile"
+            app:layout_constraintStart_toEndOf="@+id/textViewFullNameEditProfile" />
+
+        <EditText
+            android:id="@+id/editViewUsernameEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textViewUserEmailEditProfile"
+            app:layout_constraintStart_toEndOf="@+id/textViewUserEmailEditProfile" />
+
+        <EditText
+            android:id="@+id/editViewUserEmailEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:selectAllOnFocus="true"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textViewUsernameEditProfile"
+            app:layout_constraintStart_toEndOf="@+id/textViewUsernameEditProfile" />
+
+        <EditText
+            android:id="@+id/editViewUserLocationEditProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/location"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            app:layout_constraintBaseline_toBaselineOf="@+id/textViewUserLocationEditProfile"
+            app:layout_constraintStart_toEndOf="@+id/textViewUserLocationEditProfile" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_profile_picture"
+        app:civ_border_color="#FF000000"
+        app:civ_border_width="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/info_container_layout"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageButton
+        android:id="@+id/imageButtonChangePic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onImageButtonClickEvent"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_picture"
+        app:layout_constraintEnd_toEndOf="@+id/profile_picture"
+        app:layout_constraintTop_toTopOf="@+id/profile_picture"
+        app:srcCompat="@android:drawable/ic_menu_camera" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

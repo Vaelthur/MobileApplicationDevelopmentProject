@@ -21,15 +21,20 @@
     <string name="expire_date">Expire date</string>
     <string name="item_condition">Item condition</string>
     <string name="main_characteristics">Main Characteristics</string>
-    <string name="description">Item Picture</string>
+    <string name="description">Item Description</string>
     <string name="date_edit">Enter Date</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //user strings
-    <string name="full_name">Full_name</string>
+    <string name="full_name">Full Name</string>
     <string name="username">username</string>
     <string name="email">email@domain.com</string>
+
+    <string name="full_name_header">Full name:</string>
+    <string name="username_header">Username:</string>
+    <string name="email_header">Email:</string>
+    <string name="location_header">Location:</string>
 
 </resources>
