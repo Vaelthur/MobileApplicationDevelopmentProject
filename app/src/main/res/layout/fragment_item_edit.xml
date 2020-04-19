@@ -25,6 +25,15 @@
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintVertical_weight="1" />
 
+        <ImageButton
+            android:id="@+id/imageButtonChangePic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/item_picture"
+            app:layout_constraintEnd_toEndOf="@+id/item_picture"
+            app:layout_constraintStart_toStartOf="@+id/item_picture"
+            app:srcCompat="@android:drawable/ic_menu_camera" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/picture_guideline"
             android:layout_width="wrap_content"
@@ -87,9 +96,11 @@
                 app:layout_constraintTop_toBottomOf="@+id/item_title" />
 
             <EditText
+                android:id="@+id/item_price_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/price"
+                android:inputType="numberDecimal"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_price"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 

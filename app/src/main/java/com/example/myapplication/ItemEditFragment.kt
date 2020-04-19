@@ -2,10 +2,8 @@ package com.example.myapplication
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.DatePicker
 import android.widget.EditText
 import java.util.*
@@ -45,12 +43,19 @@ class ItemEditFragment : Fragment() {
             val m = cal.get(Calendar.MONTH)
             val d = cal.get(Calendar.DAY_OF_MONTH)
             // show just datepicker (i hope)
-            val dpg = context?.let { it1 -> DatePickerDialog(it1, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->  }, y, m , d ) }
+            val dpg = context?.let { it1 -> DatePickerDialog(it1, DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+                //TODO: save inserted parameters and show into textedit
+            }, y, m , d ) }
             if (dpg != null) {
                 dpg.show()
             }
         }
         return inflater.inflate(R.layout.fragment_item_edit, container, false)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.item_edit_menu, menu)
     }
 
     companion object {
