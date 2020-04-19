@@ -21,7 +21,11 @@
     <string name="expire_date">Expire date</string>
     <string name="item_condition">Item condition</string>
     <string name="main_characteristics">Main Characteristics</string>
-    <string name="description">Description</string>
+    <string name="description">Item Picture</string>
+    <string name="date_edit">Enter Date</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     //user strings
     <string name="full_name">Full_name</string>

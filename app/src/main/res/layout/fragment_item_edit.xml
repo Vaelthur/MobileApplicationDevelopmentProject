@@ -40,9 +40,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/picture_guideline">
+            app:layout_constraintTop_toBottomOf="@+id/picture_guideline"
+            app:layout_constraintVertical_bias="1.0">
 
-            <TextView
+            <EditText
                 android:id="@+id/item_condition_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -58,34 +59,39 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/title"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/item_location"
+                app:layout_constraintBottom_toTopOf="@+id/item_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread" />
 
-            <TextView
-                android:id="@+id/item_location"
+            <EditText
+                android:id="@+id/editText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/location"
-                app:layout_constraintBottom_toTopOf="@+id/item_price"
-                app:layout_constraintStart_toStartOf="@+id/item_title"
-                app:layout_constraintTop_toBottomOf="@+id/item_title" />
+                android:text="@string/title"
+                app:layout_constraintBaseline_toBaselineOf="@id/item_title"
+                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
+
 
             <TextView
                 android:id="@+id/item_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/price"
                 android:textColor="#005BA3"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/details_guideline"
-                app:layout_constraintStart_toStartOf="@+id/item_location"
-                app:layout_constraintTop_toBottomOf="@+id/item_location" />
+                app:layout_constraintStart_toStartOf="@+id/item_title"
+                app:layout_constraintTop_toBottomOf="@+id/item_title" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/price"
+                app:layout_constraintBaseline_toBaselineOf="@id/item_price"
+                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/details_guideline"
@@ -93,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="visible"
-                app:layout_constraintGuide_percent="0.35"
+                app:layout_constraintGuide_percent="0.22"
                 tools:visibility="visible" />
 
             <TextView
@@ -161,15 +167,28 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.49" />
 
-            <TextView
+
+            <!--            <EditText
                 android:id="@+id/item_category_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="category_value"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
-                app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
+                app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />-->
 
-            <TextView
+            <Spinner
+                android:id="@+id/category_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="58dp"
+                app:layout_constraintBottom_toTopOf="@+id/item_location_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/details_value_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/details_guideline"
+                app:layout_constraintVertical_bias="0.579" />
+
+            <EditText
                 android:id="@+id/item_location_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -177,11 +196,11 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
-            <TextView
+            <EditText
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20/04/2020"
+                android:hint="@string/date_edit"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -211,6 +230,14 @@
                 android:text="description_value"
                 app:layout_constraintStart_toStartOf="@+id/item_description"
                 app:layout_constraintTop_toBottomOf="@+id/item_description" />
+
+            <EditText
+                android:id="@+id/item_picture_descprition_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/description"
+                app:layout_constraintBaseline_toBaselineOf="@id/item_description_value"
+                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

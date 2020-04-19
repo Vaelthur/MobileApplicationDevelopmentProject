@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.myapplication"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,7 @@ android {
     }
 
 // To inline the bytecode built with JVM target 1.8 into
+    // min sdk was 21
 // bytecode that is being built with JVM target 1.6. (e.g. navArgs)
 
 
