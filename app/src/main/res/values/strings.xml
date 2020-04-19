@@ -12,4 +12,15 @@
     <string name="menu_slideshow">Slideshow</string>
 
     <string name="home_second">Home Second</string>
+
+    <string name="title">Title</string>
+    <string name="category">Category</string>
+    <string name="location">Location</string>
+    <string name="price">Price</string>
+    <string name="expire_date">Expire date</string>
+    <string name="item_condition">Item condition</string>
+    <string name="main_characteristics">Main Characteristics</string>
+    <string name="description">Description</string>
+
+
 </resources>
