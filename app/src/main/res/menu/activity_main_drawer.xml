@@ -24,5 +24,9 @@
             android:id="@+id/showProfileFragment"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="ShowProfile" />
+        <item
+            android:id="@+id/itemEditFragment"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Edit Item"/>
     </group>
 </menu>
