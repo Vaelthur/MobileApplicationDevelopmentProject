@@ -34,7 +34,15 @@ class ItemListFragment : Fragment() {
 
         val item1 = ItemInfoData(null,"Titolo", "torino", "400$")
         val item2 = ItemInfoData(null,"TITLE", "Roma", "400$")
-        val items : List<ItemInfoData> = listOf(item1, item2)
+        val item3 = ItemInfoData(null,"TITLE", "Roma", "400$")
+        val item4 = ItemInfoData(null,"TITLE", "Roma", "400$")
+        val item5 = ItemInfoData(null,"TITLE", "Roma", "400$")
+        val item6 = ItemInfoData(null,"TITLE", "Roma", "400$")
+        val item7 = ItemInfoData(null,"TITLE", "Roma", "400$")
+        val item8 = ItemInfoData(null,"TITLE", "Roma", "400$")
+        val items : List<ItemInfoData> = listOf(item1, item2, item3, item4, item5, item6, item7, item8)
+
+
 
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter = ItemInfoAdapter(items)
