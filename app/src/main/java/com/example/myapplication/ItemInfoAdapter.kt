@@ -4,6 +4,7 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +21,10 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
     ): ItemInfoAdapter.ItemInfoViewHolder {
         val view  = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_card_view, parent, false)
+
+        view.setOnClickListener {
+            parent.findNavController().navigate(R.id.itemDetailsFragment)
+        }
 
         // Navigate to fragment that allows editing of the selected item
         val editButton : ImageButton = view.findViewById(R.id.editItemButton)
@@ -42,12 +47,12 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
     // responsible to bind these values to a data class object
      class ItemInfoViewHolder(v : View) : RecyclerView.ViewHolder(v){
 
-         private val pictureURIView : ImageView = v.findViewById(R.id.item_card_picture)
-         private val title : TextView= v.findViewById(R.id.item_card_title)
-         private val location : TextView= v.findViewById(R.id.item_card_location)
-         private val price : TextView= v.findViewById(R.id.item_card_price)
+        private val pictureURIView : ImageView = v.findViewById(R.id.item_card_picture)
+        private val title : TextView= v.findViewById(R.id.item_card_title)
+        private val location : TextView= v.findViewById(R.id.item_card_location)
+        private val price : TextView= v.findViewById(R.id.item_card_price)
 
-         fun bind(itemInfo: ItemInfoData){
+        fun bind(itemInfo: ItemInfoData){
 
              if (itemInfo.pictureURIString == null) {
                  pictureURIView.setImageResource(R.drawable.default__item_image)
