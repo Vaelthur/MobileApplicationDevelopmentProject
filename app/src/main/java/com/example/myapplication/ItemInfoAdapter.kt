@@ -4,8 +4,10 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 
 class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
@@ -18,6 +20,12 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
     ): ItemInfoAdapter.ItemInfoViewHolder {
         val view  = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_card_view, parent, false)
+
+        // Navigate to fragment that allows editing of the selected item
+        val editButton : ImageButton = view.findViewById(R.id.editItemButton)
+        editButton.setOnClickListener {
+            parent.findNavController().navigate(R.id.itemEditFragment)
+        }
 
         return ItemInfoViewHolder(view)
     }
@@ -55,8 +63,5 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
          }
 
     }
-
-
-
 
 }

@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_nav_itemList_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
+        <action
+            android:id="@+id/action_nav_itemList_to_itemEditFragment"
+            app:destination="@id/itemEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
@@ -62,5 +65,13 @@
         <action
             android:id="@+id/action_itemDetailsFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemEditFragment"
+        android:name="com.example.myapplication.ItemEditFragment"
+        android:label="ItemEditFragment" >
+        <action
+            android:id="@+id/action_itemEditFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
     </fragment>
 </navigation>
