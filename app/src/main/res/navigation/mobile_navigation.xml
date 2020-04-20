@@ -44,11 +44,7 @@
         android:id="@+id/showProfileFragment"
         android:name="com.example.myapplication.ShowProfileFragment"
         android:label="fragment_show_profile"
-        tools:layout="@layout/fragment_show_profile" >
-        <action
-            android:id="@+id/action_showProfileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_show_profile" />
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.myapplication.EditProfileFragment"

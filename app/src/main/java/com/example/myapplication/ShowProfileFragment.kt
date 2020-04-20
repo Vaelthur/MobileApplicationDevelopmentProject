@@ -1,8 +1,10 @@
 package com.example.myapplication
 
+import android.graphics.drawable.Icon
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 
 class ShowProfileFragment : Fragment() {
 
