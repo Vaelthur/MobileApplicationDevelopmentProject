@@ -41,11 +41,11 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
 
          fun bind(itemInfo: ItemInfoData){
 
-             val imageURI : Uri? = Uri.parse(itemInfo.pictureURIString)
-             if (imageURI == null) {
+             if (itemInfo.pictureURIString == null) {
                  pictureURIView.setImageResource(R.drawable.default__item_image)
              }
              else {
+                 val imageURI : Uri? = Uri.parse(itemInfo.pictureURIString)
                  pictureURIView.setImageURI(imageURI)
              }
 

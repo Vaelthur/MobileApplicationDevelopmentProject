@@ -32,8 +32,8 @@ class ItemListFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
         val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
 
-        val item1 = ItemInfoData("def","Titolo", "torino", "400$")
-        val item2 = ItemInfoData("def","TITLE", "Roma", "400$")
+        val item1 = ItemInfoData(null,"Titolo", "torino", "400$")
+        val item2 = ItemInfoData(null,"TITLE", "Roma", "400$")
         val items : List<ItemInfoData> = listOf(item1, item2)
 
         recyclerView?.layoutManager = LinearLayoutManager(context)
