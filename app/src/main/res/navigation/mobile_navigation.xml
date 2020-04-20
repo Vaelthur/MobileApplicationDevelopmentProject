@@ -13,22 +13,8 @@
 
         <action
             android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.example.myapplication.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
             app:destination="@id/nav_home" />
-
-        <argument
-            android:name="myArg"
-            app:argType="string" />
     </fragment>
-
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.myapplication.ui.gallery.GalleryFragment"
@@ -43,5 +29,6 @@
     <fragment
         android:id="@+id/nav_itemList"
         android:name="com.example.myapplication.ui.home.ItemListFragment"
-        android:label="ItemListFragment" />
+        android:label="ItemListFragment"
+        tools:layout="@layout/fragment_itemlist" />
 </navigation>

@@ -40,8 +40,15 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
          private val price : TextView= v.findViewById(R.id.item_card_price)
 
          fun bind(itemInfo: ItemInfoData){
+
              val imageURI : Uri? = Uri.parse(itemInfo.pictureURIString)
-             pictureURIView.setImageURI(imageURI)
+             if (imageURI == null) {
+                 pictureURIView.setImageResource(R.drawable.default__item_image)
+             }
+             else {
+                 pictureURIView.setImageURI(imageURI)
+             }
+
              title.text = itemInfo.title
              location.text = itemInfo.location
              price.text = itemInfo.price
