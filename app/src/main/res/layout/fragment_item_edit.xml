@@ -207,11 +207,10 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
-            <EditText
+            <TextView
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="none"
                 android:hint="@string/date_edit"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
@@ -250,6 +249,15 @@
                 android:text="@string/description"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_description_value"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
+
+            <Button
+                android:id="@+id/button_edit_date"
+                android:layout_width="42dp"
+                android:layout_height="36dp"
+                android:text="Edit"
+                app:layout_constraintBaseline_toBaselineOf="@id/item_expire_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/item_expire_date_value" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -4,6 +4,7 @@ import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_show_profile.*
@@ -35,7 +36,8 @@ class ShowProfileFragment : Fragment() {
     /// region Helpers
     private fun readSharedPreferences() {
 
-        val accountJson = Helpers.readJsonFromPreferences(this)
+        val parentActivity = this.requireActivity() as AppCompatActivity
+        val accountJson = Helpers.readJsonFromPreferences(parentActivity)
 
         accountJson?. let {
             textViewFullNameShowProfile.text = it["fullname"].toString()

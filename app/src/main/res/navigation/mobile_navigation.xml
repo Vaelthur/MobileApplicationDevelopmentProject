@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
+        <action
+            android:id="@+id/action_nav_home_to_itemEditFragment2"
+            app:destination="@id/itemEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/nav_gallery"
@@ -61,6 +64,17 @@
         <action
             android:id="@+id/action_itemDetailsFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
+        <action
+            android:id="@+id/action_itemDetailsFragment_to_itemEditFragment2"
+            app:destination="@id/itemEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemEditFragment"
+        android:name="com.example.myapplication.ItemEditFragment"
+        android:label="ItemEditFragment" >
+        <action
+            android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemEditFragment"
