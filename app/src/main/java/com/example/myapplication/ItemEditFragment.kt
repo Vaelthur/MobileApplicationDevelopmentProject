@@ -4,9 +4,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.InputType
 import android.view.*
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import java.util.*
 
@@ -23,6 +21,11 @@ class ItemEditFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
+        val rndm = arrayOf("Arts", "Sports", "Baby", "Woman", "Man", "Electronics", "Games", "Automotive")
+        val spinner = view.findViewById<Spinner>(R.id.category_spinner)
+        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, rndm)
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = ad
         val BtnDate = view.findViewById<Button>(R.id.button_edit_date)
         BtnDate.setOnClickListener {
             val cal = Calendar.getInstance()
