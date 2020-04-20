@@ -54,12 +54,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when(item.itemId){
+        return when (item.itemId) {
             R.id.editProfileIcon -> {
-                                        findNavController(R.id.nav_host_fragment).navigate(R.id.editProfileFragment)
-                                        true
-                                    }
+                findNavController(R.id.nav_host_fragment).navigate(R.id.editProfileFragment)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

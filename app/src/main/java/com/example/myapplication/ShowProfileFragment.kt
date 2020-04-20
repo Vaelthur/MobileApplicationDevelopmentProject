@@ -1,16 +1,22 @@
 package com.example.myapplication
 
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import kotlinx.android.synthetic.main.fragment_show_profile.*
 
 class ShowProfileFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+
+        if(savedInstanceState == null){
+            readSharedPreferences()
+        }
     }
 
     override fun onCreateView(
@@ -18,7 +24,6 @@ class ShowProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        setHasOptionsMenu(true)
         return inflater.inflate(R.layout.fragment_show_profile, container, false)
     }
 
@@ -26,5 +31,22 @@ class ShowProfileFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.show_profile_menu, menu)
     }
+
+    /// region Helpers
+    private fun readSharedPreferences() {
+
+        val accountJson = Helpers.readJsonFromPreferences(this)
+
+        accountJson?. let {
+            textViewFullNameShowProfile.text = it["fullname"].toString()
+            textViewUsernameShowProfile.text = it["username"].toString()
+            textViewUserEmailShowProfile.text = it["email"].toString()
+            textViewUserLocationShowProfile.text = it["location"].toString()
+            Helpers.updateProfilePicture(this.requireContext(),
+                Uri.parse(it["profilePicture"].toString()),
+                profile_picture)
+        }
+    }
+    /// endregion
 
 }
