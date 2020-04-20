@@ -17,7 +17,7 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
         viewType: Int
     ): ItemInfoAdapter.ItemInfoViewHolder {
         val view  = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_card, parent, false)
+            .inflate(R.layout.item_card_view, parent, false)
 
         return ItemInfoViewHolder(view)
     }
