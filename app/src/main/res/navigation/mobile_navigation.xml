@@ -40,4 +40,8 @@
         android:name="com.example.myapplication.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/nav_itemList"
+        android:name="com.example.myapplication.ui.home.ItemListFragment"
+        android:label="ItemListFragment" />
 </navigation>
