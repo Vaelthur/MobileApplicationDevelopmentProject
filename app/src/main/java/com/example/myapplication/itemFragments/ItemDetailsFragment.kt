@@ -1,15 +1,17 @@
-package com.example.myapplication
+package com.example.myapplication.itemFragments
 
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import com.example.myapplication.R
 
 
 class ItemDetailsFragment : Fragment() {
 
     companion object {
-        fun newInstance() = ItemDetailsFragment()
+        fun newInstance() =
+            ItemDetailsFragment()
     }
 
     private lateinit var viewModel: ItemDetailsViewModel

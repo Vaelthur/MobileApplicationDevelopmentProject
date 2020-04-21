@@ -1,12 +1,12 @@
-package com.example.myapplication
+package com.example.myapplication.profile
 
-import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import com.example.myapplication.Helpers
+import com.example.myapplication.R
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 
 class ShowProfileFragment : Fragment() {
@@ -37,16 +37,21 @@ class ShowProfileFragment : Fragment() {
     private fun readSharedPreferences() {
 
         val parentActivity = this.requireActivity() as AppCompatActivity
-        val accountJson = Helpers.readJsonFromPreferences(parentActivity)
+        val accountJson =
+            Helpers.readJsonFromPreferences(
+                parentActivity
+            )
 
         accountJson?. let {
             textViewFullNameShowProfile.text = it["fullname"].toString()
             textViewUsernameShowProfile.text = it["username"].toString()
             textViewUserEmailShowProfile.text = it["email"].toString()
             textViewUserLocationShowProfile.text = it["location"].toString()
-            Helpers.updateProfilePicture(this.requireContext(),
+            Helpers.updateProfilePicture(
+                this.requireContext(),
                 Uri.parse(it["profilePicture"].toString()),
-                profile_picture)
+                profile_picture
+            )
         }
     }
     /// endregion

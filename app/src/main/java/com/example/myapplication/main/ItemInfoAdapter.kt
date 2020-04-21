@@ -1,15 +1,15 @@
-package com.example.myapplication
+package com.example.myapplication.main
 
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 
 class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
 
@@ -18,7 +18,7 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ItemInfoAdapter.ItemInfoViewHolder {
+    ): ItemInfoViewHolder {
         val view  = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_card_view, parent, false)
 
@@ -32,7 +32,9 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
             parent.findNavController().navigate(R.id.itemEditFragment)
         }
 
-        return ItemInfoViewHolder(view)
+        return ItemInfoViewHolder(
+            view
+        )
     }
 
     override fun onBindViewHolder(holder: ItemInfoViewHolder, position: Int) {

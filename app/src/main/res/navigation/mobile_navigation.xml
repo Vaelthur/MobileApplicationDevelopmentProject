@@ -7,31 +7,21 @@
 
     <fragment
         android:id="@+id/nav_itemList"
-        android:name="com.example.myapplication.ui.home.ItemListFragment"
+        android:name="com.example.myapplication.main.ItemListFragment"
         android:label="ItemListFragment"
-        tools:layout="@layout/fragment_itemlist" >
-        <action
-            android:id="@+id/action_nav_itemList_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
-        <action
-            android:id="@+id/action_nav_itemList_to_itemEditFragment"
-            app:destination="@id/itemEditFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_itemlist" />
     <fragment
         android:id="@+id/showProfileFragment"
-        android:name="com.example.myapplication.ShowProfileFragment"
+        android:name="com.example.myapplication.profile.ShowProfileFragment"
         android:label="fragment_show_profile"
         tools:layout="@layout/fragment_show_profile" >
-        <action
-            android:id="@+id/action_showProfileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
         <action
             android:id="@+id/action_showProfileFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="com.example.myapplication.EditProfileFragment"
+        android:name="com.example.myapplication.profile.EditProfileFragment"
         android:label="fragment_edit_profile"
         tools:layout="@layout/fragment_edit_profile" >
         <action
@@ -40,18 +30,15 @@
     </fragment>
     <fragment
         android:id="@+id/itemDetailsFragment"
-        android:name="com.example.myapplication.ItemDetailsFragment"
+        android:name="com.example.myapplication.itemFragments.ItemDetailsFragment"
         android:label="ItemDetailsFragment" >
         <action
             android:id="@+id/action_itemDetailsFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
-        <action
-            android:id="@+id/action_itemDetailsFragment_to_itemEditFragment2"
-            app:destination="@id/itemEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemEditFragment"
-        android:name="com.example.myapplication.ItemEditFragment"
+        android:name="com.example.myapplication.itemFragments.ItemEditFragment"
         android:label="ItemEditFragment" >
         <action
             android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"

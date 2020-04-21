@@ -1,11 +1,11 @@
-package com.example.myapplication
+package com.example.myapplication.itemFragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
-import android.text.InputType
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
+import com.example.myapplication.R
 import java.util.*
 
 class ItemEditFragment : Fragment() {

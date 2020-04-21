@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.profile
 
 import android.content.Context
 import android.net.Uri
@@ -7,6 +7,9 @@ import android.view.*
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myapplication.AccountInfo
+import com.example.myapplication.Helpers
+import com.example.myapplication.R
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 
 

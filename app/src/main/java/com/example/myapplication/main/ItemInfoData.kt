@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.main
 
 import java.net.URI
 

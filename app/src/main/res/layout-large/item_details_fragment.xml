@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
-        tools:context=".ItemDetailsFragment">
+        tools:context=".itemFragments.ItemDetailsFragment">
 
         <ImageView
             android:id="@+id/item_picture"
