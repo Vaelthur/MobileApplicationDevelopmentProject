@@ -1,11 +1,12 @@
-package com.example.myapplication.itemFragments
+package com.example.myapplication
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.InputType
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.Fragment
-import com.example.myapplication.R
+import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.util.*
 
 class ItemEditFragment : Fragment() {
@@ -20,12 +21,20 @@ class ItemEditFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // view necessary to access gui elements
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
+
+        // click listener on Imagebutton
+        view.findViewById<ImageButton>(R.id.imageButtonChangePhoto).setOnClickListener { onImageButtonClickEvent(it) }
+
+        // random array to see if spinner works + spinner init
         val rndm = arrayOf("Arts", "Sports", "Baby", "Woman", "Man", "Electronics", "Games", "Automotive")
         val spinner = view.findViewById<Spinner>(R.id.category_spinner)
         val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, rndm)
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = ad
+
+        // open datepicker and set text into textview
         val BtnDate = view.findViewById<Button>(R.id.button_edit_date)
         BtnDate.setOnClickListener {
             val cal = Calendar.getInstance()
@@ -40,6 +49,20 @@ class ItemEditFragment : Fragment() {
             dpd.show()
         }
         return view
+    }
+
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?
+    ) {
+        activity?.menuInflater?.inflate(R.menu.change_pic, menu)
+    }
+
+    private fun onImageButtonClickEvent(it: View) {
+        registerForContextMenu(it)
+        requireActivity().openContextMenu(it)
+        unregisterForContextMenu(it)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
