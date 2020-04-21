@@ -1,20 +1,26 @@
 package com.example.myapplication.profile
 
+import android.app.Activity
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.myapplication.AccountInfo
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders.of
+import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
-import com.example.myapplication.AccountInfoFactory
 
 
 class EditProfileFragment : Fragment() {
+
+    private lateinit var showProfileViewModel: ShowProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,18 +32,21 @@ class EditProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         // Inflate the layout for this fragment
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        arguments?.let {
-            updateAccountInfoView(it)
-        }
-        savedInstanceState?.let {
-            updateAccountInfoView(it)
-        }
+
+        showProfileViewModel.getAccountInfo()?.observe(requireActivity(), Observer {
+            //Update UI
+            editViewFullNameEditProfile.setText(it.fullname)
+            editViewUsernameEditProfile.setText(it.username)
+            editViewUserEmailEditProfile.setText(it.email)
+            editViewUserLocationEditProfile.setText(it.location)
+        })
         val imageButton = view.findViewById<ImageButton>(R.id.imageButtonChangePic)
         imageButton.setOnClickListener {
             onImageButtonClickEvent(it)
@@ -52,19 +61,6 @@ class EditProfileFragment : Fragment() {
         activity?.menuInflater?.inflate(R.menu.change_pic, menu)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this.activity as AppCompatActivity)
-        outState.putSerializable("accountInfo", accountInfo)
-    }
-
- /*   override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        savedInstanceState?.let {
-            updateAccountInfoView(it)
-        }
-    }*/
-
     private fun onImageButtonClickEvent(it: View) {
         registerForContextMenu(it)
         requireActivity().openContextMenu(it)
@@ -76,33 +72,64 @@ class EditProfileFragment : Fragment() {
         inflater.inflate(R.menu.edit_profile_menu, menu)
     }
 
-    private fun updateAccountInfoView(savedInstanceState: Bundle?) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.saveIcon -> {
+                saveProfile()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
-        val savedData: AccountInfo =
-            savedInstanceState?.getSerializable("accountInfo") as AccountInfo
-        val parentActivity = this.activity as AppCompatActivity
+    private fun saveProfile() {
 
-        // Update view
+        hideSoftKeyboard(this.activity)
 
-        editViewFullNameEditProfile.setText(savedData.fullname)
-        editViewUsernameEditProfile.setText(savedData.username)
-        editViewUserEmailEditProfile.setText(savedData.email)
-        editViewUserLocationEditProfile.setText(savedData.location)
-        Helpers.updateProfilePicture(
-            parentActivity,
-            Uri.parse(savedData.profilePicture),
-            profile_picture
-        )
-
-        // Keep profile_picture_editing and view sync
-        val writingToSharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE)
-        with(writingToSharedPreferences.edit()) {
-        putString("profile_picture_editing", savedData.profilePicture)
-        commit()
-
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this.activity as AppCompatActivity)
+        if(!Helpers.isEmailValid(accountInfo.email)) {
+            Toast.makeText(this.context, "Email format not valid", Toast.LENGTH_SHORT).show()
+            editViewUserEmailEditProfile.requestFocus()
+            return
         }
 
+        if(Helpers.someEmptyFields(accountInfo)) {
+            Toast.makeText(this.context, "Fill all the fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Save content to sharedPreferences
+        val jsonString = Gson().toJson(accountInfo)
+        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString("account_info", jsonString)
+            commit()
+        }
+
+        showProfileViewModel.setAccountInfo(accountInfo)
+        //Return to ShowProfileActivity
+        /*val startProfileEditIntent = Intent()
+        val accountBundle = Bundle()
+        accountBundle.putSerializable("accountInfo", accountInfo)
+        startProfileEditIntent.putExtras(accountBundle)
+        setResult(Activity.RESULT_OK ,startProfileEditIntent)*/
+        (this.activity as AppCompatActivity).onBackPressed()
     }
+
+    fun hideSoftKeyboard(activity: Activity?) {
+        activity?.let {
+            val inputManager =
+                it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (activity.currentFocus != null) {
+                inputManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+                inputManager.hideSoftInputFromInputMethod(
+                    activity.currentFocus!!.windowToken,
+                    0
+                )
+            }
+        }
+    }
+
 }
 
 

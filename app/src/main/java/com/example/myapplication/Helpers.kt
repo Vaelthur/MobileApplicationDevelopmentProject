@@ -11,10 +11,11 @@ import android.util.Patterns
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.exifinterface.media.ExifInterface
-import androidx.fragment.app.FragmentActivity
 import org.json.JSONObject
 import java.io.IOException
+
 
 class Helpers(){
 

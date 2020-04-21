@@ -1,21 +1,19 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
+import com.example.myapplication.profile.ShowProfileViewModel
+import com.google.android.material.navigation.NavigationView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -48,24 +46,5 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.editProfileIcon -> {
-                val accountBundle = Bundle()
-                val accountInfo = AccountInfoFactory.getAccountInfoFromTextView(this)
-                accountBundle.putSerializable("accountInfo", accountInfo)
-                findNavController(R.id.nav_host_fragment).navigate(R.id.editProfileFragment, accountBundle)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    fun onImageButtonClickEvent(sender: View?) {
-        registerForContextMenu(sender)
-        openContextMenu(sender)
-        unregisterForContextMenu(sender)
     }
 }
