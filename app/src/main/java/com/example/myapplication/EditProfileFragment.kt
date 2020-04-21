@@ -24,8 +24,14 @@ class EditProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
+        val imageButton = view.findViewById<ImageButton>(R.id.imageButtonChangePic)
+        imageButton.setOnClickListener {
+            onImageButtonClickEvent(it)
+        }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit_profile, container, false)
+        return view
     }
 
     override fun onCreateContextMenu(
@@ -34,15 +40,6 @@ class EditProfileFragment : Fragment() {
         menuInfo: ContextMenu.ContextMenuInfo?
     ) {
         activity?.menuInflater?.inflate(R.menu.change_pic, menu)
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val imageButton = view.findViewById<ImageButton>(R.id.imageButtonChangePic)
-        imageButton.setOnClickListener {
-            onImageButtonClickEvent(it)
-        }
     }
 
     private fun onImageButtonClickEvent(it: View) {
