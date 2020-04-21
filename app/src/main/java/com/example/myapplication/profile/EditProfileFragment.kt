@@ -11,6 +11,7 @@ import com.example.myapplication.AccountInfo
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import com.example.myapplication.AccountInfoFactory
 
 
 class EditProfileFragment : Fragment() {
@@ -18,9 +19,6 @@ class EditProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        savedInstanceState?.let {
-            updateAccountInfoView(it)
-        }
     }
 
     override fun onCreateView(
@@ -29,12 +27,21 @@ class EditProfileFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
+        // Inflate the layout for this fragment
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        arguments?.let {
+            updateAccountInfoView(it)
+        }
+        savedInstanceState?.let {
+            updateAccountInfoView(it)
+        }
         val imageButton = view.findViewById<ImageButton>(R.id.imageButtonChangePic)
         imageButton.setOnClickListener {
             onImageButtonClickEvent(it)
         }
-        // Inflate the layout for this fragment
-        return view
     }
 
     override fun onCreateContextMenu(
@@ -44,6 +51,19 @@ class EditProfileFragment : Fragment() {
     ) {
         activity?.menuInflater?.inflate(R.menu.change_pic, menu)
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this.activity as AppCompatActivity)
+        outState.putSerializable("accountInfo", accountInfo)
+    }
+
+ /*   override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        savedInstanceState?.let {
+            updateAccountInfoView(it)
+        }
+    }*/
 
     private fun onImageButtonClickEvent(it: View) {
         registerForContextMenu(it)
@@ -63,6 +83,7 @@ class EditProfileFragment : Fragment() {
         val parentActivity = this.activity as AppCompatActivity
 
         // Update view
+
         editViewFullNameEditProfile.setText(savedData.fullname)
         editViewUsernameEditProfile.setText(savedData.username)
         editViewUserEmailEditProfile.setText(savedData.email)
@@ -76,9 +97,11 @@ class EditProfileFragment : Fragment() {
         // Keep profile_picture_editing and view sync
         val writingToSharedPreferences = parentActivity.getPreferences(Context.MODE_PRIVATE)
         with(writingToSharedPreferences.edit()) {
-            putString("profile_picture_editing", savedData.profilePicture)
-            commit()
+        putString("profile_picture_editing", savedData.profilePicture)
+        commit()
+
         }
+
     }
 }
 
