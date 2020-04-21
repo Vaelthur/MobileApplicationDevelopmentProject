@@ -37,9 +37,9 @@
             app:destination="@id/nav_itemList" />
     </fragment>
     <fragment
-        android:id="@+id/itemEditFragment"
-        android:name="com.example.myapplication.itemFragments.ItemEditFragment"
-        android:label="ItemEditFragment" >
+        android:id="@+id/ItemEditFragment"
+        android:name="com.example.myapplication.ItemEditFragment"
+        android:label="ItemEditFragment">
         <action
             android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />

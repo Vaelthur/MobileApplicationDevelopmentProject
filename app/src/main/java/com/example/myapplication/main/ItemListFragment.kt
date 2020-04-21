@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 
 class ItemListFragment : Fragment() {
 
@@ -85,6 +87,11 @@ class ItemListFragment : Fragment() {
         recyclerView?.adapter =
             ItemInfoAdapter(items)
 
+        val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
+        fab.setOnClickListener { view ->
+            Snackbar.make(view, "Create new item", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
         return root
     }
 

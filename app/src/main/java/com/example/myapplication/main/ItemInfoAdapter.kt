@@ -29,7 +29,7 @@ class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Ada
         // Navigate to fragment that allows editing of the selected item
         val editButton : ImageButton = view.findViewById(R.id.editItemButton)
         editButton.setOnClickListener {
-            parent.findNavController().navigate(R.id.itemEditFragment)
+            parent.findNavController().navigate(R.id.ItemEditFragment)
         }
 
         return ItemInfoViewHolder(
