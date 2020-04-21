@@ -3,34 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@id/nav_itemList">
 
-    <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.myapplication.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_nav_home_to_nav_itemList"
-            app:destination="@id/nav_itemList" />
-        <action
-            android:id="@+id/action_nav_home_to_showProfileFragment"
-            app:destination="@id/showProfileFragment" />
-        <action
-            android:id="@+id/action_nav_home_to_itemEditFragment2"
-            app:destination="@id/itemEditFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.myapplication.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.myapplication.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/nav_itemList"
         android:name="com.example.myapplication.ui.home.ItemListFragment"
@@ -47,7 +21,14 @@
         android:id="@+id/showProfileFragment"
         android:name="com.example.myapplication.ShowProfileFragment"
         android:label="fragment_show_profile"
-        tools:layout="@layout/fragment_show_profile" />
+        tools:layout="@layout/fragment_show_profile" >
+        <action
+            android:id="@+id/action_showProfileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_showProfileFragment_to_nav_itemList"
+            app:destination="@id/nav_itemList" />
+    </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.myapplication.EditProfileFragment"
@@ -74,14 +55,6 @@
         android:label="ItemEditFragment" >
         <action
             android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/itemEditFragment"
-        android:name="com.example.myapplication.ItemEditFragment"
-        android:label="ItemEditFragment" >
-        <action
-            android:id="@+id/action_itemEditFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
     </fragment>
 </navigation>
