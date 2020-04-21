@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders.of
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
@@ -81,16 +83,13 @@ class ItemListFragment : Fragment() {
         )
         val items : List<ItemInfoData> = listOf(item1, item2, item3, item4, item5, item6, item7, item8)
 
-
-
         recyclerView?.layoutManager = LinearLayoutManager(context)
         recyclerView?.adapter =
             ItemInfoAdapter(items)
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Create new item", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment)
         }
         return root
     }
