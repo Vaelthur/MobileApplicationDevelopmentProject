@@ -25,27 +25,6 @@ class AccountInfoFactory(){
         val getEditViewText =
             { id: EditText -> id.text }
 
-        fun getAccountInfoFromTextEdit(parentActivity: AppCompatActivity)
-                : AccountInfo {
-
-            val getProfilePicturePath : () -> Uri =
-                {   val readFromSharePref = parentActivity.getPreferences(Context.MODE_PRIVATE)
-                    Uri.parse(readFromSharePref.getString("profile_picture_editing", defaultProfilePic )) }
-
-            val fullname = StringBuffer(getEditViewText(parentActivity.editViewFullNameEditProfile)).toString()
-            val username = StringBuffer(getEditViewText(parentActivity.editViewUsernameEditProfile)).toString()
-            val email = StringBuffer(getEditViewText(parentActivity.editViewUserEmailEditProfile)).toString()
-            val location = StringBuffer(getEditViewText(parentActivity.editViewUserLocationEditProfile)).toString()
-            val profilePicture= getProfilePicturePath().toString()
-
-            return AccountInfo(
-                fullname,
-                username,
-                email,
-                location,
-                profilePicture)
-        }
-
         fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
 
             val fullname = StringBuffer(getEditViewText(editProfileFragment.editViewFullNameEditProfile)).toString()

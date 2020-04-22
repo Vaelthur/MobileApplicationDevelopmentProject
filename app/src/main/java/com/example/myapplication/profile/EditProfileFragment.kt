@@ -44,7 +44,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        showProfileViewModel.getTempAccountInfo()?.observe(requireActivity(), Observer {
+        showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
             editViewUsernameEditProfile.setText(it.username)
             editViewUserEmailEditProfile.setText(it.email)
@@ -67,7 +67,7 @@ class EditProfileFragment : Fragment() {
         super.onDestroyView()
         val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         showProfileViewModel.setTempAccountInfo(tempAccountInfo)
-        showProfileViewModel.getTempAccountInfo()?.removeObservers(requireActivity())
+        showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
     }
 
     override fun onCreateContextMenu(
@@ -102,7 +102,7 @@ class EditProfileFragment : Fragment() {
     private fun saveProfile() {
 
         hideSoftKeyboard(this.activity)
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this.activity as AppCompatActivity)
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
 
 
         if(Helpers.someEmptyFields(accountInfo)) {

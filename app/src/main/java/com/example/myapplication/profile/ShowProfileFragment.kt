@@ -35,7 +35,7 @@ class ShowProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val accountInfo = showProfileViewModel.getAccountInfo()
+        val accountInfo = showProfileViewModel.accountInfo
         if(accountInfo?.value == null) {
             readSharedPreferences()
         }
@@ -55,7 +55,7 @@ class ShowProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        showProfileViewModel.getAccountInfo()?.removeObservers(requireActivity())
+        showProfileViewModel.accountInfo?.removeObservers(requireActivity())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
