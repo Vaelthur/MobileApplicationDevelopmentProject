@@ -6,6 +6,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.profile.EditProfileFragment
+import com.example.myapplication.profile.ShowProfileViewModel
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 import org.json.JSONObject
@@ -13,7 +14,7 @@ import java.io.Serializable
 
 
 data class AccountInfo (val fullname: String, val username: String,
-                        val email: String, val location: String, val profilePicture: String)
+                        val email: String, val location: String, var profilePicture: String)
     : Serializable {}
 
 class AccountInfoFactory(){
@@ -31,7 +32,7 @@ class AccountInfoFactory(){
             val username = StringBuffer(getEditViewText(editProfileFragment.editViewUsernameEditProfile)).toString()
             val email = StringBuffer(getEditViewText(editProfileFragment.editViewUserEmailEditProfile)).toString()
             val location = StringBuffer(getEditViewText(editProfileFragment.editViewUserLocationEditProfile)).toString()
-            val profilePicture = Uri.parse(defaultProfilePic).toString() //TEMPORARY SOLUTION
+            val profilePicture = Uri.parse(defaultProfilePic).toString()
 
             return AccountInfo(
                 fullname,
@@ -40,6 +41,7 @@ class AccountInfoFactory(){
                 location,
                 profilePicture)
         }
+
 
         fun getAccountInfoFromTextView(parentActivity: AppCompatActivity)
                 : AccountInfo {

@@ -87,7 +87,9 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        val profilePictureUri = showProfileViewModel.tempAccountInfo.value!!.profilePicture
         val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        tempAccountInfo.profilePicture = profilePictureUri
         showProfileViewModel.setTempAccountInfo(tempAccountInfo)
         showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
     }
@@ -139,10 +141,49 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Update view while editing profile picture
+        if(resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                REQUEST_IMAGE_CAPTURE -> imageCaptureHandler()
+                REQUEST_IMAGE_GALLERY -> imageGalleryHandler(data?.data)
+            }
+        }
+    }
+
+    private fun imageGalleryHandler(profilePictureUri : Uri?) {
+        profilePictureUri?.let {
+            this.activity?.grantUriPermission(this.activity?.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            this.activity?.contentResolver?.takePersistableUriPermission(it,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+
+
+            val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+            with(readFromSharePref.edit()) {
+                putString("profile_picture_editing", profilePictureUri.toString())
+                commit()
+            }
+            Helpers.updateProfilePicture(requireContext(), it, profile_picture)
+        }
+    }
+
+    private fun imageCaptureHandler() {
+        val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+        val profilePictureUri =  Uri.parse(readFromSharePref.getString("profile_picture_editing", AccountInfoFactory.defaultProfilePic))
+        showProfileViewModel.setProfilePicture(profilePictureUri.toString())
+        //Helpers.updateProfilePicture(requireContext(), profilePictureUri, profile_picture)
+    }
+
     private fun saveProfile() {
 
         hideSoftKeyboard(this.activity)
+
+        val profilePictureUri = showProfileViewModel.tempAccountInfo.value!!.profilePicture
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        accountInfo.profilePicture = profilePictureUri
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
