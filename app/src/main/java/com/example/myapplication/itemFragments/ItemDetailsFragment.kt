@@ -1,5 +1,6 @@
 package com.example.myapplication.itemFragments
 
+import android.net.Uri
 import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
@@ -45,6 +46,9 @@ class ItemDetailsFragment : Fragment() {
             item_location_value.text = it.location
             item_condition_value.text =it.condition
             item_description_value.text = it.description
+            Helpers.updateItemPicture(this.requireContext(),
+                Uri.parse(it.pictureURIString),
+                item_picture)
 
             viewModel.setTempItemInfo(it)
         })

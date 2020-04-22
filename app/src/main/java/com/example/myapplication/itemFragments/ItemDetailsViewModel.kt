@@ -37,4 +37,9 @@ class ItemDetailsViewModel : ViewModel() {
 
         return ItemDetailsInfoData(itemPic, title, location, price, category, expDate, condition, description)
     }
+
+    fun setItemPicture(itemPicPath: String) {
+        tempItemInfo.value?.pictureURIString = itemPicPath
+        tempItemInfo.value = tempItemInfo.value
+    }
 }

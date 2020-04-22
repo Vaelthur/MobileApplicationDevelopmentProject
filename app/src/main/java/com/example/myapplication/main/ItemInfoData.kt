@@ -15,7 +15,7 @@ import java.util.concurrent.locks.Condition
 
 data class ItemInfoData(val pictureURIString : String?, val title : String, val location : String, val price : String)
 
-data class ItemDetailsInfoData(val pictureURIString: String?, val title: String,
+data class ItemDetailsInfoData(var pictureURIString: String, val title: String,
                                val location: String, val price: String, val category: String,
                                val expDate: String, val condition: String, val description: String)
     :Serializable{}

@@ -64,6 +64,43 @@ class Helpers(){
             }
         }
 
+        fun updateItemPicture(context: Context, profilePictureUri: Uri, item_picture: ImageView) {
+
+            try {
+                val imageBitmap =
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        val source = ImageDecoder.createSource(context.contentResolver, profilePictureUri)
+                        ImageDecoder.decodeBitmap(source)
+                    }
+                    else {
+                        MediaStore.Images.Media.getBitmap(context.contentResolver, profilePictureUri)
+                    }
+
+                // Rotate if necessary
+                val inputStream = context.contentResolver.openInputStream(profilePictureUri)
+                val exif = inputStream?.let { ExifInterface(it) }
+                val orientation : Int? = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED)
+
+                val rotatedBitmap : Bitmap = when(orientation) {
+                    ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(imageBitmap,90F)
+                    ExifInterface.ORIENTATION_ROTATE_180 ->  rotateImage(imageBitmap,180F)
+                    ExifInterface.ORIENTATION_ROTATE_270 ->  rotateImage(imageBitmap,270F)
+                    else ->  imageBitmap
+                }
+
+                // Scale bitmap down
+                val nh = (rotatedBitmap.height * (512.0 / rotatedBitmap.width)).toInt()
+                val scaled = Bitmap.createScaledBitmap(rotatedBitmap, 512, nh, true)
+
+                item_picture.setImageBitmap(scaled)
+            }
+            catch(e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(context, "Could not set item picture", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         fun readJsonFromPreferences(parentActivity: AppCompatActivity): JSONObject? {
 
             val readFromSharePref = parentActivity.getSharedPreferences("account_info", Context.MODE_PRIVATE)
