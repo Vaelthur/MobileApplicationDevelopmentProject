@@ -14,6 +14,7 @@ import org.json.JSONObject
 
 class ShowProfileViewModel : ViewModel() {
     private val accountInfo = MutableLiveData<AccountInfo>()
+    private val tempAccountInfo = MutableLiveData<AccountInfo>()
 
     fun getAccountInfo(): LiveData<AccountInfo>? {
         return accountInfo
@@ -30,5 +31,22 @@ class ShowProfileViewModel : ViewModel() {
 
     fun setAccountInfo(accountInfo: AccountInfo) {
         this.accountInfo.value = accountInfo
+    }
+
+    fun getTempAccountInfo(): LiveData<AccountInfo>? {
+        return tempAccountInfo
+    }
+
+    fun setTempAccountInfo(accountJson: JSONObject) {
+        val fullname = accountJson["fullname"].toString()
+        val username = accountJson["username"].toString()
+        val email = accountJson["email"].toString()
+        val location = accountJson["location"].toString()
+        val profile_picture = accountJson["profilePicture"].toString()
+        tempAccountInfo.value = AccountInfo(fullname,username,email,location,profile_picture)
+    }
+
+    fun setTempAccountInfo(tempAccountInfo: AccountInfo) {
+        this.tempAccountInfo.value = tempAccountInfo
     }
 }

@@ -39,7 +39,7 @@ class ShowProfileFragment : Fragment() {
         if(accountInfo?.value == null) {
             readSharedPreferences()
         }
-        accountInfo?.observe(this.viewLifecycleOwner, Observer {
+        accountInfo?.observe(requireActivity(), Observer {
             textViewFullNameShowProfile.text = it.fullname
             textViewUsernameShowProfile.text = it.username
             textViewUserEmailShowProfile.text = it.email
@@ -49,7 +49,13 @@ class ShowProfileFragment : Fragment() {
                 Uri.parse(it.profilePicture),
                 profile_picture
             )
+            showProfileViewModel.setTempAccountInfo(it)
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        showProfileViewModel.getAccountInfo()?.removeObservers(requireActivity())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -60,12 +66,10 @@ class ShowProfileFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.editProfileIcon -> {
-                val accountBundle = Bundle()
-                val accountInfo = AccountInfoFactory.getAccountInfoFromTextView(this.activity as AppCompatActivity)
-                accountBundle.putSerializable("accountInfo", accountInfo)
-                this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
 
+                this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment)
                 true
+
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -82,15 +86,7 @@ class ShowProfileFragment : Fragment() {
 
         accountJson?. let {
             showProfileViewModel.setAccountInfo(accountJson)
-            /*textViewFullNameShowProfile.text = it["fullname"].toString()
-            textViewUsernameShowProfile.text = it["username"].toString()
-            textViewUserEmailShowProfile.text = it["email"].toString()
-            textViewUserLocationShowProfile.text = it["location"].toString()
-            Helpers.updateProfilePicture(
-                this.requireContext(),
-                Uri.parse(it["profilePicture"].toString()),
-                profile_picture
-            )*/
+            showProfileViewModel.setTempAccountInfo(accountJson)
         }
     }
     /// endregion

@@ -2,15 +2,19 @@ package com.example.myapplication.profile
 
 import android.app.Activity
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
+import androidx.navigation.findNavController
+import com.example.myapplication.AccountInfo
 import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
@@ -32,25 +36,38 @@ class EditProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
-        // Inflate the layout for this fragment
+        showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
+
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        showProfileViewModel.getAccountInfo()?.observe(requireActivity(), Observer {
-            //Update UI
+        showProfileViewModel.getTempAccountInfo()?.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
             editViewUsernameEditProfile.setText(it.username)
             editViewUserEmailEditProfile.setText(it.email)
             editViewUserLocationEditProfile.setText(it.location)
+            Helpers.updateProfilePicture(
+                this.requireContext(),
+                Uri.parse(it.profilePicture),
+                profile_picture
+            )
+
         })
+
         val imageButton = view.findViewById<ImageButton>(R.id.imageButtonChangePic)
         imageButton.setOnClickListener {
             onImageButtonClickEvent(it)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.setTempAccountInfo(tempAccountInfo)
+        showProfileViewModel.getTempAccountInfo()?.removeObservers(requireActivity())
     }
 
     override fun onCreateContextMenu(
@@ -85,16 +102,17 @@ class EditProfileFragment : Fragment() {
     private fun saveProfile() {
 
         hideSoftKeyboard(this.activity)
-
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this.activity as AppCompatActivity)
-        if(!Helpers.isEmailValid(accountInfo.email)) {
-            Toast.makeText(this.context, "Email format not valid", Toast.LENGTH_SHORT).show()
-            editViewUserEmailEditProfile.requestFocus()
-            return
-        }
+
 
         if(Helpers.someEmptyFields(accountInfo)) {
             Toast.makeText(this.context, "Fill all the fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if(!Helpers.isEmailValid(accountInfo.email)) {
+            Toast.makeText(this.context, "Email format not valid", Toast.LENGTH_SHORT).show()
+            editViewUserEmailEditProfile.requestFocus()
             return
         }
 
@@ -113,10 +131,11 @@ class EditProfileFragment : Fragment() {
         accountBundle.putSerializable("accountInfo", accountInfo)
         startProfileEditIntent.putExtras(accountBundle)
         setResult(Activity.RESULT_OK ,startProfileEditIntent)*/
-        (this.activity as AppCompatActivity).onBackPressed()
+        //(this.activity as AppCompatActivity).onBackPressed()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
     }
 
-    fun hideSoftKeyboard(activity: Activity?) {
+    private fun hideSoftKeyboard(activity: Activity?) {
         activity?.let {
             val inputManager =
                 it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
