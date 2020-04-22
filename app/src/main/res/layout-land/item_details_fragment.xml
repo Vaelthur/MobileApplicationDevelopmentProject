@@ -16,7 +16,6 @@
             android:id="@+id/item_picture"
             android:layout_width="358dp"
             android:layout_height="295dp"
-            android:contentDescription="Item picture"
             android:src="@drawable/default__item_image"
             app:layout_constraintBottom_toTopOf="@id/picture_guideline"
             app:layout_constraintEnd_toStartOf="@+id/central_guideline"
@@ -40,6 +39,7 @@
             android:fontFamily="sans-serif-medium"
             android:text="@string/title"
             android:textSize="30sp"
+            android:layout_marginStart="24dp"
             app:layout_constraintBottom_toTopOf="@+id/item_location"
             app:layout_constraintStart_toStartOf="@+id/central_guideline"
             app:layout_constraintTop_toTopOf="parent"
@@ -56,6 +56,17 @@
             app:layout_constraintBottom_toTopOf="@+id/picture_guideline"
             app:layout_constraintStart_toStartOf="@+id/item_location"
             app:layout_constraintTop_toBottomOf="@+id/item_location" />
+
+        <TextView
+            android:id="@+id/price_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/currency"
+            android:textColor="#005BA3"
+            android:textSize="30sp"
+            app:layout_constraintBaseline_toBaselineOf="@+id/item_price"
+            android:layout_marginStart="4dp"
+            app:layout_constraintStart_toEndOf="@id/item_price"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/central_guideline"
@@ -89,7 +100,7 @@
                 android:id="@+id/item_condition_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="condition_value"
+                android:text="@string/condition_value"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -170,7 +181,7 @@
                 android:id="@+id/item_category_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="category_value"
+                android:text="@string/category"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -178,7 +189,7 @@
                 android:id="@+id/item_location_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="location_value"
+                android:text="@string/location"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -186,7 +197,7 @@
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="20/04/2020"
+                android:text="@string/expire_date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -203,7 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="@string/description"
+                android:text="@string/description_header"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/description_guideline" />
@@ -213,7 +224,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="description_value"
+                android:text="@string/description"
                 app:layout_constraintStart_toStartOf="@+id/item_description"
                 app:layout_constraintTop_toBottomOf="@+id/item_description" />
 

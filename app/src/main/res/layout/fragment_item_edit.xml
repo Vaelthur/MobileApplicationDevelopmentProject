@@ -16,7 +16,6 @@
             android:id="@+id/item_picture"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:contentDescription="@string/description"
             android:src="@drawable/default__item_image"
             app:layout_constraintBottom_toTopOf="@id/picture_guideline"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,7 +55,7 @@
                 android:id="@+id/item_condition_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="condition_value"
+                android:text="@string/condition_value"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -178,15 +177,6 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.49" />
 
-
-            <!--            <EditText
-                android:id="@+id/item_category_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="category_value"
-                app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
-                app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />-->
-
             <Spinner
                 android:id="@+id/category_spinner"
                 android:layout_width="wrap_content"
@@ -203,7 +193,7 @@
                 android:id="@+id/item_location_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="location_value"
+                android:text="@string/location"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -228,33 +218,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="@string/description"
+                android:text="@string/description_header"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/description_guideline" />
 
-            <TextView
-                android:id="@+id/item_description_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="@string/description"
-                app:layout_constraintStart_toStartOf="@+id/item_description"
-                app:layout_constraintTop_toBottomOf="@+id/item_description" />
 
             <EditText
                 android:id="@+id/item_picture_description_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/description"
-                app:layout_constraintBaseline_toBaselineOf="@id/item_description_value"
-                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
+                app:layout_constraintTop_toBottomOf="@id/item_description"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/button_edit_date"
                 android:layout_width="42dp"
                 android:layout_height="36dp"
-                android:text="Edit"
+                android:text="@string/btn_str"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_expire_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/item_expire_date_value" />

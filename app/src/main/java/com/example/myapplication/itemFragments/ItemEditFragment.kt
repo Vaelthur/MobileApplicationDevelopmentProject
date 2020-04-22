@@ -1,27 +1,27 @@
 package com.example.myapplication
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.myapplication.itemFragments.ItemDetailsViewModel
+import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemDetailsInfoData
 import java.util.*
 import com.example.myapplication.main.ItemInfoFactory
+import androidx.lifecycle.ViewModelProviders.of
+import androidx.navigation.findNavController
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 
 class ItemEditFragment : Fragment() {
 
-    // views
-    val titleV = view?.findViewById<EditText>(R.id.item_title_edit)
-    val locationV = view?.findViewById<EditText>(R.id.item_location_value)
-    val priceV = view?.findViewById<EditText>(R.id.item_price_edit)
-    val categoryV = view?.findViewById<Spinner>(R.id.category_spinner)
-    val expDateV = view?.findViewById<TextView>(R.id.item_expire_date_value)
-    val conditionV = view?.findViewById<EditText>(R.id.item_condition_value)
-    val descriptionV = view?.findViewById<EditText>(R.id.item_picture_description_edit)
-    val itemPhotoV = view?.findViewById<ImageView>(R.id.imageView)
+    private lateinit var  viewModel: ItemDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,13 +35,13 @@ class ItemEditFragment : Fragment() {
         // view necessary to access gui elements
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
 
+        viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
+
         // click listener on Imagebutton
         view.findViewById<ImageButton>(R.id.imageButtonChangePhoto).setOnClickListener { onImageButtonClickEvent(it) }
 
-        // random array to see if spinner works + spinner init
-        val rndm = arrayOf("Arts", "Sports", "Baby", "Woman", "Man", "Electronics", "Games", "Automotive")
         val spinner = view.findViewById<Spinner>(R.id.category_spinner)
-        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, rndm)
+        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getMainCategories())
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = ad
 
@@ -64,23 +64,31 @@ class ItemEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState != null) {
-            updateItemInfoView(savedInstanceState)
-        }
+
+        // update gui
+        viewModel.tempItemInfo.observe(requireActivity(), androidx.lifecycle.Observer {
+            view.findViewById<EditText>(R.id.item_title_edit)?.setText(it.title)
+            view.findViewById<EditText>(R.id.item_location_value)?.setText(it.location)
+            view.findViewById<EditText>(R.id.item_price_edit)?.setText(it.price)
+            view.findViewById<TextView>(R.id.item_expire_date_value)?.text = it.expDate
+            view.findViewById<EditText>(R.id.item_picture_description_edit)?.setText(it.description)
+            view.findViewById<EditText>(R.id.item_condition_value)?.setText(it.condition)
+            view.findViewById<Spinner>(R.id.category_spinner)?.setSelection(ItemCategories().getPosFromValue(it.category))
+        })
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        if (savedInstanceState != null) {
-            // Restore Instance state
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val tempiteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
+        viewModel.setTempItemInfo(tempiteminfo)
+        viewModel.tempItemInfo.removeObservers(requireActivity())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save instance state - all the views i need to save data from
         // TODO: put in outstate values / into
-        val itemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this.activity as AppCompatActivity)
+        val itemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
         outState.putSerializable("itemInfo", itemInfo)
     }
 
@@ -103,16 +111,43 @@ class ItemEditFragment : Fragment() {
         inflater.inflate(R.menu.item_edit_menu, menu)
     }
 
-    // Helpers
-    private fun updateItemInfoView(savedInstanceState: Bundle?){
-        val savedData:ItemDetailsInfoData = savedInstanceState?.getSerializable("itemInfo") as ItemDetailsInfoData
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save_action -> {
+                saveEdits()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 
-        titleV?.setText(savedData.title)
-        locationV?.setText(savedData.location)
-        priceV?.setText(savedData.price)
-        expDateV?.text = savedData.expDate
-        descriptionV?.setText(savedData.description)
-        conditionV?.setText(savedData.condition)
-        categoryV?.setSelection(savedData.category)
+    private fun saveEdits(){
+        hideSoftKeyboard(requireActivity())
+        val iteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
+
+        val jsonString = Gson().toJson(iteminfo)
+        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("item_info",  Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString("item_info", jsonString)
+            commit()
+        }
+
+        viewModel.setItemInfo(iteminfo)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+    }
+
+    // Helpers
+    private fun hideSoftKeyboard(activity: Activity?) {
+        activity?.let {
+            val inputManager =
+                it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (activity.currentFocus != null) {
+                inputManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+                inputManager.hideSoftInputFromInputMethod(
+                    activity.currentFocus!!.windowToken,
+                    0
+                )
+            }
+        }
     }
 }

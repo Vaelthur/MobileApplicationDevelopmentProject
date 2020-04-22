@@ -18,13 +18,17 @@
     //item strings
     <string name="title">Title</string>
     <string name="category">Category</string>
-    <string name="location">Location</string>
+    <string name="location">Turin Capital</string>
     <string name="price">Price</string>
-    <string name="expire_date">Expire date</string>
+    <string name="expire_date">20/04/2020</string>
     <string name="item_condition">Item condition</string>
     <string name="main_characteristics">Main Characteristics</string>
-    <string name="description">Item Description</string>
+    <string name="description">Description of the Item on sale</string>
+    <string name="description_header">Description</string>
     <string name="date_edit">Enter Date</string>
+    <string name="currency">$</string>
+    <string name="condition_value">Used (2nd hand)</string>
+    <string name="btn_str">Change</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
