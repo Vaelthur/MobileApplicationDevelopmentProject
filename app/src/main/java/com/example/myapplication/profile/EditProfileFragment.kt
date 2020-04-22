@@ -166,7 +166,8 @@ class EditProfileFragment : Fragment() {
                 putString("profile_picture_editing", profilePictureUri.toString())
                 commit()
             }
-            Helpers.updateProfilePicture(requireContext(), it, profile_picture)
+            showProfileViewModel.setProfilePicture(profilePictureUri.toString())
+            //Helpers.updateProfilePicture(requireContext(), it, profile_picture)
         }
     }
 
@@ -181,9 +182,9 @@ class EditProfileFragment : Fragment() {
 
         hideSoftKeyboard(this.activity)
 
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value!!.profilePicture
+        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        accountInfo.profilePicture = profilePictureUri
+        profilePictureUri?.let {accountInfo.profilePicture = profilePictureUri}
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
