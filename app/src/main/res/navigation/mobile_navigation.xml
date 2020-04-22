@@ -8,13 +8,13 @@
     <fragment
         android:id="@+id/nav_itemList"
         android:name="com.example.myapplication.main.ItemListFragment"
-        android:label="ItemListFragment"
+        android:label="My Items"
         tools:layout="@layout/fragment_itemlist" />
     <fragment
         android:id="@+id/showProfileFragment"
         android:name="com.example.myapplication.profile.ShowProfileFragment"
-        android:label="fragment_show_profile"
-        tools:layout="@layout/fragment_show_profile" >
+        android:label="My Profile"
+        tools:layout="@layout/fragment_show_profile">
         <action
             android:id="@+id/action_showProfileFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
@@ -22,8 +22,8 @@
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="com.example.myapplication.profile.EditProfileFragment"
-        android:label="fragment_edit_profile"
-        tools:layout="@layout/fragment_edit_profile" >
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_edit_profile">
         <action
             android:id="@+id/action_editProfileFragment_to_showProfileFragment"
             app:destination="@id/showProfileFragment" />
