@@ -30,9 +30,6 @@ class ItemInfoFactory(){
                 {
                         id: EditText -> id.text
                 }
-//        val getItemPicturePath : () -> Uri = {
-//            // TODO: implement
-//        }
 
             val title = StringBuffer(getEditViewText(editFrag.item_title_edit)).toString()
             val location = StringBuffer(getEditViewText(editFrag.item_location_value)).toString()
@@ -41,7 +38,7 @@ class ItemInfoFactory(){
             val expDate = editFrag.item_expire_date_value.text.toString()
             val condition = StringBuffer(getEditViewText(editFrag.item_condition_value)).toString()
             val description = StringBuffer(getEditViewText(editFrag.item_picture_description_edit)).toString()
-            val itemPic = defaultItemPhoto
+            val itemPic = Uri.parse(defaultItemPhoto).toString()
 
             return ItemDetailsInfoData(itemPic, title, location, price, category, expDate, condition, description)
         }

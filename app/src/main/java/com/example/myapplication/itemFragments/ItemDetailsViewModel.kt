@@ -14,11 +14,11 @@ class ItemDetailsViewModel : ViewModel() {
     }
 
     fun setItemInfo(itemInfoD: ItemDetailsInfoData){
-        this.itemInfo.value = itemInfoD
+        itemInfo.value = itemInfoD
     }
 
     fun setTempItemInfo(itemJson: JSONObject){
-        itemInfo.value = createItemInfoFromJSON(itemJson)
+        tempItemInfo.value = createItemInfoFromJSON(itemJson)
     }
 
     fun setTempItemInfo(itemInfoD: ItemDetailsInfoData){
@@ -33,7 +33,7 @@ class ItemDetailsViewModel : ViewModel() {
         val description = itemJson["description"].toString()
         val category = itemJson["category"].toString()
         val expDate = itemJson["expDate"].toString()
-        val itemPic = itemJson["itemPic"].toString()
+        val itemPic = itemJson["pictureURIString"].toString()
 
         return ItemDetailsInfoData(itemPic, title, location, price, category, expDate, condition, description)
     }

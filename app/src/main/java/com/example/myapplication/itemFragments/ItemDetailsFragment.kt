@@ -69,7 +69,7 @@ class ItemDetailsFragment : Fragment() {
 
         val parentActivity = this.requireActivity() as AppCompatActivity
         val accountJson =
-            Helpers.readJsonFromPreferences(
+            Helpers.readItemJsonFromPreferences(
                 parentActivity
             )
 

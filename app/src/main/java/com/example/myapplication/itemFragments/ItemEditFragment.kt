@@ -114,14 +114,6 @@ class ItemEditFragment : Fragment() {
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        // Save instance state - all the views i need to save data from
-        // TODO: put in outstate values / into
-        val itemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
-        outState.putSerializable("itemInfo", itemInfo)
-    }
-
     override fun onCreateContextMenu(
         menu: ContextMenu,
         v: View,

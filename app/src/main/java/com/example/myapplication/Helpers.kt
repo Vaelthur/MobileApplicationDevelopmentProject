@@ -64,20 +64,20 @@ class Helpers(){
             }
         }
 
-        fun updateItemPicture(context: Context, profilePictureUri: Uri, item_picture: ImageView) {
+        fun updateItemPicture(context: Context, itemPictureUri: Uri, item_picture: ImageView) {
 
             try {
                 val imageBitmap =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        val source = ImageDecoder.createSource(context.contentResolver, profilePictureUri)
+                        val source = ImageDecoder.createSource(context.contentResolver, itemPictureUri)
                         ImageDecoder.decodeBitmap(source)
                     }
                     else {
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, profilePictureUri)
+                        MediaStore.Images.Media.getBitmap(context.contentResolver, itemPictureUri)
                     }
 
                 // Rotate if necessary
-                val inputStream = context.contentResolver.openInputStream(profilePictureUri)
+                val inputStream = context.contentResolver.openInputStream(itemPictureUri)
                 val exif = inputStream?.let { ExifInterface(it) }
                 val orientation : Int? = exif?.getAttributeInt(ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_UNDEFINED)
@@ -116,6 +116,14 @@ class Helpers(){
 
         fun isEmailValid(email: CharSequence): Boolean {
             return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        }
+
+        fun readItemJsonFromPreferences(parentActivity: AppCompatActivity): JSONObject? {
+
+            val readFromSharePref = parentActivity.getSharedPreferences("item_info", Context.MODE_PRIVATE)
+            val itemInfo = readFromSharePref.getString("item_info", null)
+
+            return itemInfo?.let{ JSONObject(itemInfo) }
         }
     }
 }
