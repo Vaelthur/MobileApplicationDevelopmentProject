@@ -23,7 +23,7 @@ data class ItemDetailsInfoData(var pictureURIString: String, val title: String,
 class ItemInfoFactory(){
 
     companion object ItemInfoFactory{
-        val defaultItemPhoto = "android.resource://com.example.myapplication/drawable/default__item_image"
+        const val defaultItemPhoto = "android.resource://com.example.myapplication/drawable/default__item_image"
 
         fun getItemInfoFromTextEdit(editFrag: ItemEditFragment): ItemDetailsInfoData{
             val getEditViewText =

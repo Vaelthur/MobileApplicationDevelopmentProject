@@ -83,7 +83,6 @@ class ItemEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // update gui
         viewModel.tempItemInfo?.observe(requireActivity(), Observer{
             item_title_edit.setText(it.title)
             item_location_value.setText(it.location)

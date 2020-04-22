@@ -153,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/expire_date"
+                android:text="@string/expire_date_header"
                 app:layout_constraintBottom_toTopOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/item_location_details"
                 app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
@@ -201,7 +201,7 @@
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/date_edit"
+                android:hint="@string/expire_date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 

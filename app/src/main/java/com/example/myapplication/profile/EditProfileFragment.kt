@@ -66,6 +66,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+
         showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
             editViewUsernameEditProfile.setText(it.username)
@@ -87,9 +88,11 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value!!.profilePicture
+        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
         val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        tempAccountInfo.profilePicture = profilePictureUri
+        if (profilePictureUri != null) {
+            tempAccountInfo.profilePicture = profilePictureUri
+        }
         showProfileViewModel.setTempAccountInfo(tempAccountInfo)
         showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
     }

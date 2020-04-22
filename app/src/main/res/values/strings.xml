@@ -21,6 +21,7 @@
     <string name="location">Turin Capital</string>
     <string name="price">Price</string>
     <string name="expire_date">20/04/2020</string>
+    <string name="expire_date_header">Expire Date</string>
     <string name="item_condition">Item condition</string>
     <string name="main_characteristics">Main Characteristics</string>
     <string name="description">Description of the Item on sale</string>
