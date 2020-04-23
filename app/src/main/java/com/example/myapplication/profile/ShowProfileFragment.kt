@@ -39,7 +39,7 @@ class ShowProfileFragment : Fragment() {
         if(accountInfo?.value == null) {
             readSharedPreferences()
         }
-        accountInfo?.observe(requireActivity(), Observer {
+        accountInfo.observe(requireActivity(), Observer {
             textViewFullNameShowProfile.text = it.fullname
             textViewUsernameShowProfile.text = it.username
             textViewUserEmailShowProfile.text = it.email

@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
-class ItemInfoAdapter(private val items : List<ItemInfoData>) : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
+class ItemInfoAdapter(private val items: List<ItemInfoData>) : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
 
     override fun getItemCount() = items.size
 
