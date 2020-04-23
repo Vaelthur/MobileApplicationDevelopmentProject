@@ -65,6 +65,28 @@ class ItemEditFragment : Fragment() {
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = ad
 
+        val subspinner = view.findViewById<Spinner>(R.id.subcategory_spinner)
+        val subAd = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
+        subAd.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        subspinner.adapter = subAd
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view1: View?,
+                position: Int,
+                id: Long
+            ) {
+                val tempsubcat = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
+                tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                subspinner.adapter = tempsubcat
+            }
+        }
+
         // open datepicker and set text into textview
         val BtnDate = view.findViewById<Button>(R.id.button_edit_date)
         BtnDate.setOnClickListener {
