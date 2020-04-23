@@ -2,19 +2,21 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:context=".ItemEditFragment">
 
         <ImageView
             android:id="@+id/item_picture"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:src="@drawable/default__item_image"
             app:layout_constraintBottom_toTopOf="@id/picture_guideline"
@@ -46,7 +48,6 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/picture_guideline"
             app:layout_constraintVertical_bias="1.0">
@@ -98,8 +99,8 @@
                 android:id="@+id/item_price_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/price"
                 android:inputType="numberDecimal"
+                android:text="@string/price"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_price"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
@@ -229,8 +230,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/description"
-                app:layout_constraintTop_toBottomOf="@id/item_description"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_description" />
 
             <Button
                 android:id="@+id/button_edit_date"

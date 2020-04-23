@@ -109,6 +109,9 @@ class ItemEditFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        hideSoftKeyboard(requireActivity())
+
         setCorrectlyTempItemInfo()
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
@@ -326,7 +329,7 @@ class ItemEditFragment : Fragment() {
         }
         catch (e: IOException){
             e.printStackTrace()
-            Toast.makeText(activity, "Could not set profile picture", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Could not set item picture", Toast.LENGTH_SHORT).show()
         }
 
         return file
