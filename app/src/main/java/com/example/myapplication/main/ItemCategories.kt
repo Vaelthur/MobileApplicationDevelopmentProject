@@ -38,4 +38,18 @@ class ItemCategories() {
         }
     }
 
+    fun getSubPosFrom(subCat: String, mainCat:String) :Int{
+        when (getPosFromValue(mainCat)){
+            0 -> return artsSubCat.indexOf(subCat)
+            1 -> return sportsSubCat.indexOf(subCat)
+            2 -> return babySubCat.indexOf(subCat)
+            3 -> return womanSubCat.indexOf(subCat)
+            4 -> return menSubCat.indexOf(subCat)
+            5 -> return electSubCat.indexOf(subCat)
+            6 -> return gameSubCat.indexOf(subCat)
+            7 -> return autoSubCat.indexOf(subCat)
+            else -> return nullArr.indexOf("Error")
+        }
+    }
+
 }
