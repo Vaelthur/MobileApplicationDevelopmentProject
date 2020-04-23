@@ -249,7 +249,7 @@ class ItemEditFragment : Fragment() {
                 takePicture()
             }
         } else {
-            Toast.makeText(context, "Camera not found", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(requireView(), "Camera not found")
         }
     }
 
@@ -329,7 +329,7 @@ class ItemEditFragment : Fragment() {
         }
         catch (e: IOException){
             e.printStackTrace()
-            Toast.makeText(activity, "Could not set item picture", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(requireView(), "Could not set item picture")
         }
 
         return file
@@ -364,7 +364,7 @@ class ItemEditFragment : Fragment() {
 
         for (result in grantResults){
             if(result != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this.context, "Permission denied", Toast.LENGTH_SHORT).show()
+                Helpers.makeSnackbar(requireView(), "Permission denied")
                 return
             }
         }

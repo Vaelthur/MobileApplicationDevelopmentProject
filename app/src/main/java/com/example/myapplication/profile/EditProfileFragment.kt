@@ -183,12 +183,12 @@ class EditProfileFragment : Fragment() {
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
-            Toast.makeText(this.context, "Fill all the fields", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
             return
         }
 
         if(!Helpers.isEmailValid(accountInfo.email)) {
-            Toast.makeText(this.context, "Email format not valid", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(this.requireView(), "Email format not valid")
             editViewUserEmailEditProfile.requestFocus()
             return
         }
@@ -247,7 +247,7 @@ class EditProfileFragment : Fragment() {
                 takePicture()
             }
         } else {
-            Toast.makeText(context, "Camera not found", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(requireView(), "Camera not found")
         }
     }
 
@@ -335,7 +335,7 @@ class EditProfileFragment : Fragment() {
         }
         catch (e: IOException){
             e.printStackTrace()
-            Toast.makeText(activity, "Could not set profile picture", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(requireView(), "Could not set profile picture")
         }
 
         return file
@@ -372,7 +372,7 @@ class EditProfileFragment : Fragment() {
 
         for (result in grantResults){
             if(result != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this.context, "Permission denied", Toast.LENGTH_SHORT).show()
+                Helpers.makeSnackbar(requireView(), "Permission denied")
                 return
             }
         }

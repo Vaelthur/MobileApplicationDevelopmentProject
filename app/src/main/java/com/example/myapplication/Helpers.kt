@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 import java.io.IOException
 
@@ -132,6 +133,10 @@ class Helpers(){
             headerView?.findViewById<TextView>(R.id.full_name_navheader)?.text = fullname
             headerView?.findViewById<TextView>(R.id.email_navheader)?.text = email
             headerView?.findViewById<ImageView>(R.id.profile_picture_navheader)?.setImageURI(Uri.parse(profilePicture))
+        }
+
+        fun makeSnackbar(view: View, text: CharSequence) {
+            Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
         }
     }
 }
