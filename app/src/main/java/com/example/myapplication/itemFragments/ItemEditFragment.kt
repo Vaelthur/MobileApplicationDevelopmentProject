@@ -54,6 +54,7 @@ class ItemEditFragment : Fragment() {
         // view necessary to access gui elements
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
 
+        // initialize viewmodel
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         // click listener on Imagebutton
@@ -83,7 +84,11 @@ class ItemEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        viewModel.tempItemInfo?.observe(requireActivity(), Observer{
+        if (viewModel.tempItemInfo.value == null) {
+            setCorrectlyTempItemInfo()
+        }
+
+        viewModel.tempItemInfo.observe(requireActivity(), Observer{
             item_title_edit.setText(it.title)
             item_location_value.setText(it.location)
             item_price_edit.setText(it.price)
@@ -104,12 +109,7 @@ class ItemEditFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val itemPicUri = viewModel.tempItemInfo.value?.pictureURIString
-        val tempiteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
-        if (itemPicUri != null) {
-            tempiteminfo.pictureURIString = itemPicUri
-        }
-        viewModel.setTempItemInfo(tempiteminfo)
+        setCorrectlyTempItemInfo()
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
 
@@ -370,5 +370,15 @@ class ItemEditFragment : Fragment() {
             PERMISSION_CODE_CAMERA -> takePicture()
             PERMISSION_CODE_GALLERY -> takeFromGallery()
         }
+    }
+
+    private fun setCorrectlyTempItemInfo() {
+        // set tempItemInfo
+        val itemPicUri = viewModel.tempItemInfo.value?.pictureURIString
+        val tempiteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
+        if (itemPicUri != null) {
+            tempiteminfo.pictureURIString = itemPicUri
+        }
+        viewModel.setTempItemInfo(tempiteminfo)
     }
 }
