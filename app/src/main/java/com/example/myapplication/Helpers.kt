@@ -8,11 +8,13 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Patterns
+import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.exifinterface.media.ExifInterface
+import com.google.android.material.navigation.NavigationView
 import org.json.JSONObject
 import java.io.IOException
 
@@ -101,7 +103,7 @@ class Helpers(){
             }
         }
 
-        fun readJsonFromPreferences(parentActivity: AppCompatActivity): JSONObject? {
+        fun readAccountJsonFromPreferences(parentActivity: AppCompatActivity): JSONObject? {
 
             val readFromSharePref = parentActivity.getSharedPreferences("account_info", Context.MODE_PRIVATE)
             val accountInfo = readFromSharePref.getString("account_info", null)
@@ -124,6 +126,12 @@ class Helpers(){
             val itemInfo = readFromSharePref.getString("item_info", null)
 
             return itemInfo?.let{ JSONObject(itemInfo) }
+        }
+
+        fun setNavHeaderView(headerView: View?, fullname: String, email: String, profilePicture: String) {
+            headerView?.findViewById<TextView>(R.id.full_name_navheader)?.text = fullname
+            headerView?.findViewById<TextView>(R.id.email_navheader)?.text = email
+            headerView?.findViewById<ImageView>(R.id.profile_picture_navheader)?.setImageURI(Uri.parse(profilePicture))
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.myapplication.profile
 
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -8,12 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
-import com.example.myapplication.AccountInfo
-import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import androidx.lifecycle.ViewModelProviders.of
-import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 
 class ShowProfileFragment : Fragment() {
@@ -80,7 +76,7 @@ class ShowProfileFragment : Fragment() {
 
         val parentActivity = this.requireActivity() as AppCompatActivity
         val accountJson =
-            Helpers.readJsonFromPreferences(
+            Helpers.readAccountJsonFromPreferences(
                 parentActivity
             )
 

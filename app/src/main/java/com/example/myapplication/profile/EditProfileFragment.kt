@@ -13,22 +13,18 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
-import com.example.myapplication.AccountInfo
 import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import java.io.File
@@ -206,8 +202,18 @@ class EditProfileFragment : Fragment() {
         }
 
         showProfileViewModel.setAccountInfo(accountInfo)
+        setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+    }
+
+    private fun setProfileNavHeaderHandler() {
+        val navView : NavigationView? = this.activity?.findViewById(R.id.nav_view)
+        val headerView : View? = navView?.getHeaderView(0)
+        val accountInfo = showProfileViewModel.accountInfo.value
+        accountInfo?.let {
+            Helpers.setNavHeaderView(headerView, it.fullname, it.email, it.profilePicture)
+        }
     }
 
     private fun hideSoftKeyboard(activity: Activity?) {
