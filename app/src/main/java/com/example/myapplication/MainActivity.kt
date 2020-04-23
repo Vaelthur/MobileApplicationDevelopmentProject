@@ -5,13 +5,11 @@ import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.myapplication.profile.ShowProfileViewModel
 import com.google.android.material.navigation.NavigationView
 
 
@@ -35,6 +33,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_itemList), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        Helpers.readAccountJsonFromPreferences(this)?.let {
+            Helpers.setNavHeaderView(navView.getHeaderView(0), it["fullname"].toString(), it["email"].toString(), it["profilePicture"].toString())
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -47,4 +49,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+
 }

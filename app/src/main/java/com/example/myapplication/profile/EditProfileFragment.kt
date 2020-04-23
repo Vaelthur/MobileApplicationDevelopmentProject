@@ -13,22 +13,18 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.ActivityCompat.requestPermissions
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
-import com.example.myapplication.AccountInfo
 import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
+import com.google.android.material.navigation.NavigationView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import java.io.File
@@ -187,12 +183,12 @@ class EditProfileFragment : Fragment() {
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
-            Toast.makeText(this.context, "Fill all the fields", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
             return
         }
 
         if(!Helpers.isEmailValid(accountInfo.email)) {
-            Toast.makeText(this.context, "Email format not valid", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(this.requireView(), "Email format not valid")
             editViewUserEmailEditProfile.requestFocus()
             return
         }
@@ -206,8 +202,19 @@ class EditProfileFragment : Fragment() {
         }
 
         showProfileViewModel.setAccountInfo(accountInfo)
+        setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        Helpers.makeSnackbar(requireView(), "Profile changed correctly")
+    }
+
+    private fun setProfileNavHeaderHandler() {
+        val navView : NavigationView? = this.activity?.findViewById(R.id.nav_view)
+        val headerView : View? = navView?.getHeaderView(0)
+        val accountInfo = showProfileViewModel.accountInfo.value
+        accountInfo?.let {
+            Helpers.setNavHeaderView(headerView, it.fullname, it.email, it.profilePicture)
+        }
     }
 
     private fun hideSoftKeyboard(activity: Activity?) {
@@ -241,7 +248,7 @@ class EditProfileFragment : Fragment() {
                 takePicture()
             }
         } else {
-            Toast.makeText(context, "Camera not found", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(requireView(), "Camera not found")
         }
     }
 
@@ -329,7 +336,7 @@ class EditProfileFragment : Fragment() {
         }
         catch (e: IOException){
             e.printStackTrace()
-            Toast.makeText(activity, "Could not set profile picture", Toast.LENGTH_SHORT).show()
+            Helpers.makeSnackbar(requireView(), "Could not set profile picture")
         }
 
         return file
@@ -366,7 +373,7 @@ class EditProfileFragment : Fragment() {
 
         for (result in grantResults){
             if(result != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this.context, "Permission denied", Toast.LENGTH_SHORT).show()
+                Helpers.makeSnackbar(requireView(), "Permission denied")
                 return
             }
         }

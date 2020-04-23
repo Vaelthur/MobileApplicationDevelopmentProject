@@ -1,7 +1,16 @@
 package com.example.myapplication.main
 
 class ItemCategories() {
-    private val mainCat = arrayOf("Arts", "Sports", "Baby", "Woman", "Man", "Electronics", "Games", "Automotive")
+    private val mainCat = arrayOf("Arts & Crafts", "Sports & Hobby", "Baby", "Women's fashion", "Men's fashion", "Electronics", "Games & Videogames", "Automotive")
+    private val artsSubCat = arrayOf("Painting, Drawing & Art Supplies", "Sewing", "Scrapbooking & Stamping", "Party Decorations & Supplies")
+    private val sportsSubCat = arrayOf("Sports & Outdoors", "Outdoor Recreation", "Sports & Fitness", "Pet Supplies")
+    private val babySubCat = arrayOf("Apparel & Accessories", "Baby & Toddler Toys", "Car Seats & Accessories", "Pregnancy & Maternity", "Strollers & Accessories")
+    private val womanSubCat = arrayOf("Clothing", "Shoes", "Watches", "Handbags", "Accessories")
+    private val menSubCat = arrayOf("Clothing", "Shoes", "Watches", "Accessories")
+    private val electSubCat = arrayOf("Computers", "Monitors", "Printers & Scanners", "Camera & Photo", "Smartphone & Tablet", "Audio", "Television & Video", "Video Game Consoles", "Wearable Technology", "Accessories & Supplies", "Irons & Steamers", "Vacuums & FLoor Care")
+    private val gameSubCat = arrayOf("Action Figures & Statues", "Arts & Crafts", "Building Toys", "Dolls & Accessories", "Kids' Electronics", "Learning & Education", "Tricycles, Scooters & Wagons", "Videogames")
+    private val autoSubCat = arrayOf("Car Electronics & Accessories", "Accssories", "Motorcycle & Powersports", "Replacement Parts", "RV Parts & Accessories", "Tools & Equipment")
+    private val nullArr = arrayOf("Error", "Something", "Went", "Wrong")
 
     fun getMainCategories(): Array<String>{
         return this.mainCat
@@ -15,5 +24,18 @@ class ItemCategories() {
         return this.mainCat[pos]
     }
 
+    fun getSubCategoriesFromMain(mCat: String): Array<String> {
+        when (mainCat.indexOf(mCat)) {
+            0 -> return artsSubCat
+            1 -> return sportsSubCat
+            2 -> return babySubCat
+            3 -> return womanSubCat
+            4 -> return menSubCat
+            5 -> return electSubCat
+            6 -> return gameSubCat
+            7 -> return autoSubCat
+            else -> return nullArr
+        }
+    }
 
 }
