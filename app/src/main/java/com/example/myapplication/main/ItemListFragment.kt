@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
@@ -37,7 +36,7 @@ class ItemListFragment : Fragment() {
             val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter =
-                ItemInfoAdapter(itemListViewModel.itemList)
+                ItemInfoAdapter(itemListViewModel.itemListLiveData)
         })
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)

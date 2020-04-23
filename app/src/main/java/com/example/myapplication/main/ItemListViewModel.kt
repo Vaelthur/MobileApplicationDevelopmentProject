@@ -7,7 +7,6 @@ import com.example.myapplication.AccountInfo
 class ItemListViewModel : ViewModel() {
 
     val itemListLiveData = MutableLiveData<ArrayList<ItemInfoData>>()
-    var itemList : ArrayList<ItemInfoData> = arrayListOf()
 
     init {
         populate()
@@ -20,7 +19,6 @@ class ItemListViewModel : ViewModel() {
             "Torino",
             "400$")
         itemListLiveData.value = arrayListOf(item)
-        itemList = arrayListOf(item)
     }
 
     fun addItem() {
@@ -30,9 +28,9 @@ class ItemListViewModel : ViewModel() {
             "Torino",
             "400$")
         itemListLiveData.value?.add(item)
-        itemList.add(item)
         itemListLiveData.value = itemListLiveData.value
     }
+
 
 
 

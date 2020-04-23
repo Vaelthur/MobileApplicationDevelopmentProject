@@ -12,9 +12,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 
-class ItemInfoAdapter(private val items: List<ItemInfoData>) : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
+class ItemInfoAdapter(private val items: MutableLiveData<ArrayList<ItemInfoData>>)
+    : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = items.value!!.size
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -40,10 +41,10 @@ class ItemInfoAdapter(private val items: List<ItemInfoData>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ItemInfoViewHolder, position: Int) {
         // Get the item
-        val item = items[position]
+        val item = items.value?.get(position)
 
         //Bind to viewHolder, which sets the view contents
-        holder.bind(item)
+        item?.let { holder.bind(it) }
     }
 
     // This class gets the values of fields from the view, it is then
