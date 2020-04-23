@@ -205,6 +205,7 @@ class EditProfileFragment : Fragment() {
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        Helpers.makeSnackbar(requireView(), "Profile changed correctly")
     }
 
     private fun setProfileNavHeaderHandler() {
