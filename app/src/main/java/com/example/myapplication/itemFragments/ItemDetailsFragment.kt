@@ -35,7 +35,7 @@ class ItemDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val itemInfo = viewModel.itemInfo
         if(itemInfo?.value == null){
-            readSharedPreferences()
+            return
         }
         itemInfo.observe(requireActivity(), Observer {
             item_title.text = it.title

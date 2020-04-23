@@ -66,6 +66,9 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        if(showProfileViewModel.tempAccountInfo.value == null) {
+            setCorrectlyTempAccountInfo()
+        }
 
         showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
@@ -88,12 +91,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
-        val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        if (profilePictureUri != null) {
-            tempAccountInfo.profilePicture = profilePictureUri
-        }
-        showProfileViewModel.setTempAccountInfo(tempAccountInfo)
+        setCorrectlyTempAccountInfo()
         showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
     }
 
@@ -170,7 +168,6 @@ class EditProfileFragment : Fragment() {
                 commit()
             }
             showProfileViewModel.setProfilePicture(profilePictureUri.toString())
-            //Helpers.updateProfilePicture(requireContext(), it, profile_picture)
         }
     }
 
@@ -178,7 +175,6 @@ class EditProfileFragment : Fragment() {
         val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
         val profilePictureUri =  Uri.parse(readFromSharePref.getString("profile_picture_editing", AccountInfoFactory.defaultProfilePic))
         showProfileViewModel.setProfilePicture(profilePictureUri.toString())
-        //Helpers.updateProfilePicture(requireContext(), profilePictureUri, profile_picture)
     }
 
     private fun saveProfile() {
@@ -379,6 +375,15 @@ class EditProfileFragment : Fragment() {
             PERMISSION_CODE_CAMERA -> takePicture()
             PERMISSION_CODE_GALLERY -> takeFromGallery()
         }
+    }
+
+    private fun setCorrectlyTempAccountInfo() {
+        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
+        val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        if (profilePictureUri != null) {
+            tempAccountInfo.profilePicture = profilePictureUri
+        }
+        showProfileViewModel.setTempAccountInfo(tempAccountInfo)
     }
 
 }
