@@ -43,6 +43,7 @@ class ItemEditFragment : Fragment() {
 
     // bool var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
     private var first = false
+    private var rot = false
 
     private lateinit var  viewModel: ItemDetailsViewModel
 
@@ -86,9 +87,15 @@ class ItemEditFragment : Fragment() {
                 tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 subspinner.adapter = tempsubcat
 
+                if(rot){
+                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
+                    rot=false;
+                }
+
                 if(first) {
                     subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
                     first=false;
+                    rot=true
                 }
             }
         }
@@ -108,6 +115,11 @@ class ItemEditFragment : Fragment() {
             dpd.show()
         }
         return view
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        rot = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
