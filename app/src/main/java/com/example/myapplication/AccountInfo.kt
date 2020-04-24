@@ -23,7 +23,6 @@ class AccountInfoFactory(){
 
         const val defaultProfilePic = "android.resource://com.example.myapplication/drawable/default_profile_picture"
 
-
         fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
 
             val getEditViewText =
@@ -45,10 +44,10 @@ class AccountInfoFactory(){
                         else {
                             Uri.parse(defaultProfilePic)
                         }
-                    } else {
+                    }
+                    else {
                         Uri.parse(tempProfilePicture)
                     }
-
                 }
 
             val fullname = StringBuffer(getEditViewText(editProfileFragment.editViewFullNameEditProfile)).toString()
