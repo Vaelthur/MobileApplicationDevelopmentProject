@@ -1,5 +1,6 @@
 package com.example.myapplication.profile
 
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -47,6 +48,8 @@ class ShowProfileFragment : Fragment() {
             )
             showProfileViewModel.setTempAccountInfo(it)
         })
+
+        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
     }
 
     override fun onDestroyView() {

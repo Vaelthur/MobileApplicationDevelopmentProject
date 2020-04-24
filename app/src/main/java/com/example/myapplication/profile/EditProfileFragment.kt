@@ -86,10 +86,11 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
+        showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
     }
 
     override fun onCreateContextMenu(
@@ -201,6 +202,7 @@ class EditProfileFragment : Fragment() {
         }
 
         showProfileViewModel.setAccountInfo(accountInfo)
+        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
