@@ -41,8 +41,4 @@ class ShowProfileViewModel : ViewModel() {
         return AccountInfo(fullname,username,email,location,profile_picture)
     }
 
-    fun setProfilePicture(profilePicturePath: String) {
-        tempAccountInfo.value?.profilePicture = profilePicturePath
-        tempAccountInfo.value = tempAccountInfo.value
-    }
 }

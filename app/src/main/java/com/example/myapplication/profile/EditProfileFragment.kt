@@ -164,23 +164,21 @@ class EditProfileFragment : Fragment() {
                 putString("profile_picture_editing", profilePictureUri.toString())
                 commit()
             }
-            showProfileViewModel.setProfilePicture(profilePictureUri.toString())
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         }
     }
 
     private fun imageCaptureHandler() {
         val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
         val profilePictureUri =  Uri.parse(readFromSharePref.getString("profile_picture_editing", AccountInfoFactory.defaultProfilePic))
-        showProfileViewModel.setProfilePicture(profilePictureUri.toString())
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
     }
 
     private fun saveProfile() {
 
         hideSoftKeyboard(this.activity)
 
-        //val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        //profilePictureUri?.let {accountInfo.profilePicture = profilePictureUri}
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
