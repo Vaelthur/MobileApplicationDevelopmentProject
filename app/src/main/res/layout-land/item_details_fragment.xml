@@ -132,9 +132,20 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/category"
-                app:layout_constraintBottom_toTopOf="@+id/item_location_details"
+                app:layout_constraintBottom_toTopOf="@+id/item_subcategory"
                 app:layout_constraintStart_toStartOf="@+id/main_characteristics"
                 app:layout_constraintTop_toBottomOf="@+id/main_characteristics" />
+
+            <TextView
+                android:id="@+id/item_subcategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/sub_cat"
+                app:layout_constraintBottom_toTopOf="@+id/item_location_details"
+                app:layout_constraintStart_toStartOf="@+id/main_characteristics"
+                app:layout_constraintTop_toBottomOf="@+id/item_category" />
 
             <TextView
                 android:id="@+id/item_location_details"
@@ -144,8 +155,8 @@
                 android:fontFamily="sans-serif-light"
                 android:text="@string/location"
                 app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
-                app:layout_constraintStart_toStartOf="@+id/item_category"
-                app:layout_constraintTop_toBottomOf="@+id/item_category" />
+                app:layout_constraintStart_toStartOf="@+id/item_subcategory"
+                app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
 
             <TextView
                 android:id="@+id/item_expire_date"
@@ -183,6 +194,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
+                app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
+
+            <TextView
+                android:id="@+id/item_subcategory_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sub_cat"
+                app:layout_constraintBaseline_toBaselineOf="@+id/item_subcategory"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayout"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
