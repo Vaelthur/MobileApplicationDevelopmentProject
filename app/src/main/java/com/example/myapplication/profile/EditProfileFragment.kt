@@ -1,6 +1,7 @@
 package com.example.myapplication.profile
 
 import android.Manifest
+import android.accounts.Account
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -63,7 +64,7 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if(showProfileViewModel.tempAccountInfo.value == null) {
-            setCorrectlyTempAccountInfo()
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         }
 
         showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
@@ -85,10 +86,11 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
-        setCorrectlyTempAccountInfo()
-        showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
     }
 
     override fun onCreateContextMenu(
@@ -163,23 +165,21 @@ class EditProfileFragment : Fragment() {
                 putString("profile_picture_editing", profilePictureUri.toString())
                 commit()
             }
-            showProfileViewModel.setProfilePicture(profilePictureUri.toString())
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         }
     }
 
     private fun imageCaptureHandler() {
         val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
         val profilePictureUri =  Uri.parse(readFromSharePref.getString("profile_picture_editing", AccountInfoFactory.defaultProfilePic))
-        showProfileViewModel.setProfilePicture(profilePictureUri.toString())
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
     }
 
     private fun saveProfile() {
 
         hideSoftKeyboard(this.activity)
 
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        profilePictureUri?.let {accountInfo.profilePicture = profilePictureUri}
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
@@ -202,6 +202,7 @@ class EditProfileFragment : Fragment() {
         }
 
         showProfileViewModel.setAccountInfo(accountInfo)
+        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
@@ -382,15 +383,6 @@ class EditProfileFragment : Fragment() {
             PERMISSION_CODE_CAMERA -> takePicture()
             PERMISSION_CODE_GALLERY -> takeFromGallery()
         }
-    }
-
-    private fun setCorrectlyTempAccountInfo() {
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
-        val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        if (profilePictureUri != null) {
-            tempAccountInfo.profilePicture = profilePictureUri
-        }
-        showProfileViewModel.setTempAccountInfo(tempAccountInfo)
     }
 
 }

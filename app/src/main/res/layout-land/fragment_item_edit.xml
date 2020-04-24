@@ -57,7 +57,7 @@
                 android:id="@+id/item_condition_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="condition_value"
+                android:text="@string/condition_value"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -78,7 +78,7 @@
                 android:id="@+id/item_title_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/title"
+                android:text="@string/title_std"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_title"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
@@ -100,7 +100,7 @@
                 android:id="@+id/item_price_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/price"
+                android:text="@string/price_val_std"
                 android:inputType="numberDecimal"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_price"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
@@ -134,9 +134,20 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/category"
-                app:layout_constraintBottom_toTopOf="@+id/item_location_details"
+                app:layout_constraintBottom_toTopOf="@+id/item_subcategory"
                 app:layout_constraintStart_toStartOf="@+id/main_characteristics"
                 app:layout_constraintTop_toBottomOf="@+id/main_characteristics" />
+
+            <TextView
+                android:id="@+id/item_subcategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/sub_cat"
+                app:layout_constraintBottom_toTopOf="@+id/item_location_details"
+                app:layout_constraintStart_toStartOf="@+id/main_characteristics"
+                app:layout_constraintTop_toBottomOf="@+id/item_category" />
 
             <TextView
                 android:id="@+id/item_location_details"
@@ -146,8 +157,8 @@
                 android:fontFamily="sans-serif-light"
                 android:text="@string/location"
                 app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
-                app:layout_constraintStart_toStartOf="@+id/item_category"
-                app:layout_constraintTop_toBottomOf="@+id/item_category" />
+                app:layout_constraintStart_toStartOf="@+id/item_subcategory"
+                app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
 
             <TextView
                 android:id="@+id/item_expire_date"
@@ -184,12 +195,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="58dp"
-                app:layout_constraintBottom_toTopOf="@+id/item_location_value"
+                app:layout_constraintBottom_toTopOf="@+id/subcategory_spinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline"
                 app:layout_constraintTop_toBottomOf="@+id/details_guideline"
                 app:layout_constraintVertical_bias="0.579" />
+
+            <Spinner
+                android:id="@+id/subcategory_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@+id/item_location_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/details_value_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/category_spinner"/>
 
             <EditText
                 android:id="@+id/item_location_value"

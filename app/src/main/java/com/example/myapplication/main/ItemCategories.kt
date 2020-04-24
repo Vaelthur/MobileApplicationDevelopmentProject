@@ -9,7 +9,7 @@ class ItemCategories() {
     private val menSubCat = arrayOf("Clothing", "Shoes", "Watches", "Accessories")
     private val electSubCat = arrayOf("Computers", "Monitors", "Printers & Scanners", "Camera & Photo", "Smartphone & Tablet", "Audio", "Television & Video", "Video Game Consoles", "Wearable Technology", "Accessories & Supplies", "Irons & Steamers", "Vacuums & FLoor Care")
     private val gameSubCat = arrayOf("Action Figures & Statues", "Arts & Crafts", "Building Toys", "Dolls & Accessories", "Kids' Electronics", "Learning & Education", "Tricycles, Scooters & Wagons", "Videogames")
-    private val autoSubCat = arrayOf("Car Electronics & Accessories", "Accssories", "Motorcycle & Powersports", "Replacement Parts", "RV Parts & Accessories", "Tools & Equipment")
+    private val autoSubCat = arrayOf("Car Electronics & Accessories", "Accessories", "Motorcycle & Powersports", "Replacement Parts", "RV Parts & Accessories", "Tools & Equipment")
     private val nullArr = arrayOf("Error", "Something", "Went", "Wrong")
 
     fun getMainCategories(): Array<String>{
@@ -25,6 +25,7 @@ class ItemCategories() {
     }
 
     fun getSubCategoriesFromMain(mCat: String): Array<String> {
+
         when (mainCat.indexOf(mCat)) {
             0 -> return artsSubCat
             1 -> return sportsSubCat
