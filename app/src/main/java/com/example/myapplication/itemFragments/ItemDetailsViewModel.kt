@@ -32,10 +32,11 @@ class ItemDetailsViewModel : ViewModel() {
         val condition = itemJson["condition"].toString()
         val description = itemJson["description"].toString()
         val category = itemJson["category"].toString()
+        val subcategory = itemJson["subcategory"].toString()
         val expDate = itemJson["expDate"].toString()
         val itemPic = itemJson["pictureURIString"].toString()
 
-        return ItemDetailsInfoData(itemPic, title, location, price, category, expDate, condition, description)
+        return ItemDetailsInfoData(itemPic, title, location, price, category, subcategory, expDate, condition, description)
     }
 
     fun setItemPicture(itemPicPath: String) {

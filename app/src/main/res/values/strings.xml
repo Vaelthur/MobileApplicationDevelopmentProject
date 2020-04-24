@@ -17,9 +17,11 @@
 
     //item strings
     <string name="title">Title</string>
+    <string name="title_std">Your Item Name</string>
     <string name="category">Category</string>
     <string name="location">Turin Capital</string>
     <string name="price">Price</string>
+    <string name="price_val_std">0.99</string>
     <string name="expire_date">20/04/2020</string>
     <string name="expire_date_header">Expire Date</string>
     <string name="item_condition">Item condition</string>

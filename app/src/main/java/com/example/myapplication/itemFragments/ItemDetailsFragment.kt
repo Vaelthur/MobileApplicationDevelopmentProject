@@ -42,6 +42,7 @@ class ItemDetailsFragment : Fragment() {
             item_price.text = it.price
             item_location.text = it.location
             item_category_value.text = it.category
+            item_subcategory_value.text = it.subcategory
             item_expire_date_value.text = it.expDate
             item_location_value.text = it.location
             item_condition_value.text =it.condition

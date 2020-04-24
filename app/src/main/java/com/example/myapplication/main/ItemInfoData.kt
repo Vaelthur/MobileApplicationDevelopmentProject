@@ -16,7 +16,7 @@ import java.util.concurrent.locks.Condition
 data class ItemInfoData(val pictureURIString : String?, val title : String, val location : String, val price : String)
 
 data class ItemDetailsInfoData(var pictureURIString: String, val title: String,
-                               val location: String, val price: String, val category: String,
+                               val location: String, val price: String, val category: String, val subcategory: String,
                                val expDate: String, val condition: String, val description: String)
     :Serializable{}
 
@@ -35,12 +35,13 @@ class ItemInfoFactory(){
             val location = StringBuffer(getEditViewText(editFrag.item_location_value)).toString()
             val price = StringBuffer(getEditViewText(editFrag.item_price_edit)).toString()
             val category = editFrag.category_spinner.selectedItem.toString()
+            val subcategory = editFrag.subcategory_spinner.selectedItem.toString()
             val expDate = editFrag.item_expire_date_value.text.toString()
             val condition = StringBuffer(getEditViewText(editFrag.item_condition_value)).toString()
             val description = StringBuffer(getEditViewText(editFrag.item_picture_description_edit)).toString()
             val itemPic = Uri.parse(defaultItemPhoto).toString()
 
-            return ItemDetailsInfoData(itemPic, title, location, price, category, expDate, condition, description)
+            return ItemDetailsInfoData(itemPic, title, location, price, category, subcategory, expDate, condition, description)
         }
     }
 

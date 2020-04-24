@@ -54,9 +54,11 @@
 
             <EditText
                 android:id="@+id/item_condition_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/condition_value"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -67,6 +69,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/title"
+                android:selectAllOnFocus="true"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_price"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,9 +78,12 @@
 
             <EditText
                 android:id="@+id/item_title_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/title"
+                android:text="@string/title_std"
+                android:selectAllOnFocus="true"
+                android:textSize="20sp"
+                android:singleLine="true"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_title"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
@@ -97,12 +103,27 @@
 
             <EditText
                 android:id="@+id/item_price_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
                 android:inputType="numberDecimal"
-                android:text="@string/price"
+                android:textColor="#005BA3"
+                android:selectAllOnFocus="true"
+                android:textSize="20sp"
+                android:text="@string/price_val_std"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_price"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
+
+            <TextView
+                android:id="@+id/price_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/currency"
+                android:textColor="#005BA3"
+                android:textSize="20sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/item_price_edit"
+                android:layout_marginStart="4dp"
+                app:layout_constraintStart_toEndOf="@id/item_price_edit"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/details_guideline"
@@ -212,9 +233,12 @@
 
             <EditText
                 android:id="@+id/item_location_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/location"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:imeOptions="actionDone"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
@@ -222,6 +246,7 @@
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:selectAllOnFocus="true"
                 android:hint="@string/expire_date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
@@ -247,15 +272,16 @@
 
             <EditText
                 android:id="@+id/item_picture_description_edit"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:selectAllOnFocus="true"
                 android:text="@string/description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_description" />
 
             <Button
                 android:id="@+id/button_edit_date"
-                android:layout_width="42dp"
+                android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:text="@string/btn_str"
                 app:layout_constraintBaseline_toBaselineOf="@id/item_expire_date"

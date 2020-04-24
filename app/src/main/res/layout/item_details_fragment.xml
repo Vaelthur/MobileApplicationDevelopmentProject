@@ -14,7 +14,7 @@
 
         <ImageView
             android:id="@+id/item_picture"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:src="@drawable/default__item_image"
             app:layout_constraintBottom_toTopOf="@id/picture_guideline"
@@ -28,7 +28,7 @@
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/picture_guideline"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.4" />
 
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-medium"
-                android:text="@string/title"
+                android:text="@string/title_std"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_location"
                 app:layout_constraintStart_toStartOf="parent"
@@ -127,9 +127,20 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/category"
-                app:layout_constraintBottom_toTopOf="@+id/item_location_details"
+                app:layout_constraintBottom_toTopOf="@+id/item_subcategory"
                 app:layout_constraintStart_toStartOf="@+id/main_characteristics"
                 app:layout_constraintTop_toBottomOf="@+id/main_characteristics" />
+
+            <TextView
+                android:id="@+id/item_subcategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/sub_cat"
+                app:layout_constraintBottom_toTopOf="@+id/item_location_details"
+                app:layout_constraintStart_toStartOf="@+id/main_characteristics"
+                app:layout_constraintTop_toBottomOf="@+id/item_category" />
 
             <TextView
                 android:id="@+id/item_location_details"
@@ -137,10 +148,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/location"
+                android:text="@string/location_header"
                 app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
-                app:layout_constraintStart_toStartOf="@+id/item_category"
-                app:layout_constraintTop_toBottomOf="@+id/item_category" />
+                app:layout_constraintStart_toStartOf="@+id/item_subcategory"
+                app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
 
             <TextView
                 android:id="@+id/item_expire_date"
@@ -148,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/expire_date"
+                android:text="@string/expire_date_header"
                 app:layout_constraintBottom_toTopOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/item_location_details"
                 app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
@@ -170,8 +181,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintGuide_begin="205dp"
-                app:layout_constraintGuide_end="193dp" />
+                app:layout_constraintGuide_percent="0.40" />
 
             <TextView
                 android:id="@+id/item_category_value"
@@ -179,6 +189,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/category"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
+                app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
+
+            <TextView
+                android:id="@+id/item_subcategory_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sub_cat"
+                app:layout_constraintBaseline_toBaselineOf="@+id/item_subcategory"
+                app:layout_constraintEnd_toEndOf="@id/constraintLayout"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
@@ -193,7 +213,7 @@
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/category"
+                android:text="@string/expire_date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
