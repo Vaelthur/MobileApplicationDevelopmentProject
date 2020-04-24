@@ -1,6 +1,7 @@
 package com.example.myapplication.profile
 
 import android.Manifest
+import android.accounts.Account
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -63,7 +64,7 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if(showProfileViewModel.tempAccountInfo.value == null) {
-            setCorrectlyTempAccountInfo()
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         }
 
         showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
@@ -87,7 +88,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        setCorrectlyTempAccountInfo()
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         showProfileViewModel.tempAccountInfo?.removeObservers(requireActivity())
     }
 
@@ -177,9 +178,9 @@ class EditProfileFragment : Fragment() {
 
         hideSoftKeyboard(this.activity)
 
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
+        //val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        profilePictureUri?.let {accountInfo.profilePicture = profilePictureUri}
+        //profilePictureUri?.let {accountInfo.profilePicture = profilePictureUri}
 
 
         if(Helpers.someEmptyFields(accountInfo)) {
@@ -382,15 +383,6 @@ class EditProfileFragment : Fragment() {
             PERMISSION_CODE_CAMERA -> takePicture()
             PERMISSION_CODE_GALLERY -> takeFromGallery()
         }
-    }
-
-    private fun setCorrectlyTempAccountInfo() {
-        val profilePictureUri = showProfileViewModel.tempAccountInfo.value?.profilePicture
-        val tempAccountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        if (profilePictureUri != null) {
-            tempAccountInfo.profilePicture = profilePictureUri
-        }
-        showProfileViewModel.setTempAccountInfo(tempAccountInfo)
     }
 
 }

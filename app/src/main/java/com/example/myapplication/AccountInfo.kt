@@ -14,7 +14,7 @@ import java.io.Serializable
 
 
 data class AccountInfo (val fullname: String, val username: String,
-                        val email: String, val location: String, var profilePicture: String)
+                        val email: String, val location: String, val profilePicture: String)
     : Serializable {}
 
 class AccountInfoFactory(){
@@ -23,16 +23,39 @@ class AccountInfoFactory(){
 
         const val defaultProfilePic = "android.resource://com.example.myapplication/drawable/default_profile_picture"
 
-        val getEditViewText =
-            { id: EditText -> id.text }
 
         fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
+
+            val getEditViewText =
+                { id: EditText -> id.text }
+
+            val getProfilePicturePath : (editProfileFragment : EditProfileFragment) -> Uri =
+                {
+                    val readFromPref = it.requireActivity().getPreferences(Context.MODE_PRIVATE)
+                    val tempProfilePicture = readFromPref.getString("profile_picture_editing", null)
+
+                    if(tempProfilePicture == null) {
+                        val readFromSharePref = it.requireActivity().getSharedPreferences("account_info", Context.MODE_PRIVATE)
+                        val accountInfo = readFromSharePref.getString("account_info", null)
+
+                        if(!accountInfo.isNullOrBlank()) {
+                            val accountJson = JSONObject(accountInfo)
+                            Uri.parse(accountJson["profilePicture"].toString())
+                        }
+                        else {
+                            Uri.parse(defaultProfilePic)
+                        }
+                    } else {
+                        Uri.parse(tempProfilePicture)
+                    }
+
+                }
 
             val fullname = StringBuffer(getEditViewText(editProfileFragment.editViewFullNameEditProfile)).toString()
             val username = StringBuffer(getEditViewText(editProfileFragment.editViewUsernameEditProfile)).toString()
             val email = StringBuffer(getEditViewText(editProfileFragment.editViewUserEmailEditProfile)).toString()
             val location = StringBuffer(getEditViewText(editProfileFragment.editViewUserLocationEditProfile)).toString()
-            val profilePicture = Uri.parse(defaultProfilePic).toString()
+            val profilePicture = getProfilePicturePath(editProfileFragment).toString()
 
             return AccountInfo(
                 fullname,
