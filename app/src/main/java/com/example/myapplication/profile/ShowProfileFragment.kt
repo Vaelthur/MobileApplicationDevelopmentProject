@@ -33,9 +33,11 @@ class ShowProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val accountInfo = showProfileViewModel.accountInfo
+
         if(accountInfo?.value == null) {
             readSharedPreferences()
         }
+
         accountInfo.observe(requireActivity(), Observer {
             textViewFullNameShowProfile.text = it.fullname
             textViewUsernameShowProfile.text = it.username
@@ -64,7 +66,7 @@ class ShowProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.editProfileIcon -> {
+            R.id.editItemIcon -> {
 
                 this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment)
                 true

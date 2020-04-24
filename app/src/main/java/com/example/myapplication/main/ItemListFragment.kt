@@ -29,23 +29,23 @@ class ItemListFragment : Fragment() {
     ): View? {
 
         itemListViewModel =
-            of(requireActivity()).get(ItemListViewModel::class.java)
+            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
-        itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {
+        itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {itemList ->
             val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter =
-                ItemInfoAdapter(itemListViewModel.itemList)
+                ItemInfoAdapter(itemList)
         })
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
-            itemListViewModel =
-                of(requireActivity()).get(ItemListViewModel::class.java)
-            itemListViewModel.addItem()
-            //requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment)
+//            itemListViewModel =
+//                of(requireActivity()).get(ItemListViewModel::class.java)
+//            itemListViewModel.addItem()
+            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment)
         }
         return root
     }
