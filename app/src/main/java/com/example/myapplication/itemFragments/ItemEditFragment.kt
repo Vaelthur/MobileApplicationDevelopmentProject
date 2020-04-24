@@ -216,6 +216,7 @@ class ItemEditFragment : Fragment() {
     }
 
     private fun imageCaptureHandler() {
+
         val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
         val itemPictureUri =  Uri.parse(readFromSharePref.getString("item_picture_editing", ItemInfoFactory.defaultItemPhoto))
         viewModel.setItemPicture(itemPictureUri.toString())
@@ -229,8 +230,6 @@ class ItemEditFragment : Fragment() {
         if (itemPicUri != null) {
             iteminfo.pictureURIString = itemPicUri
         }
-
-
 
         val jsonString = Gson().toJson(iteminfo)
         val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("item_info",  Context.MODE_PRIVATE) ?: return

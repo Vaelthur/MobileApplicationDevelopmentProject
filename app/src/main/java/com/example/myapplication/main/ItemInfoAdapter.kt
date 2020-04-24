@@ -7,15 +7,17 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.data.Item
 
-class ItemInfoAdapter(private val items: MutableLiveData<ArrayList<ItemInfoData>>)
+class ItemInfoAdapter(private val items: List<Item>)
     : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
 
-    override fun getItemCount() = items.value!!.size
+    override fun getItemCount() = items.size
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -41,10 +43,10 @@ class ItemInfoAdapter(private val items: MutableLiveData<ArrayList<ItemInfoData>
 
     override fun onBindViewHolder(holder: ItemInfoViewHolder, position: Int) {
         // Get the item
-        val item = items.value?.get(position)
+        val item = items[position]
 
         //Bind to viewHolder, which sets the view contents
-        item?.let { holder.bind(it) }
+        holder.bind(item)
     }
 
     // This class gets the values of fields from the view, it is then
@@ -56,7 +58,7 @@ class ItemInfoAdapter(private val items: MutableLiveData<ArrayList<ItemInfoData>
         private val location : TextView= v.findViewById(R.id.item_card_location)
         private val price : TextView= v.findViewById(R.id.item_card_price)
 
-        fun bind(itemInfo: ItemInfoData){
+        fun bind(itemInfo: Item){
 
              if (itemInfo.pictureURIString == null) {
                  pictureURIView.setImageResource(R.drawable.default__item_image)
