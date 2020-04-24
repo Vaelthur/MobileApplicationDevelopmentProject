@@ -41,6 +41,9 @@ class ItemEditFragment : Fragment() {
     private val PERMISSION_CODE_CAMERA = 1000
     private val PERMISSION_CODE_GALLERY = 1001
 
+    // bool var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
+    private var first = false
+
     private lateinit var  viewModel: ItemDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,9 +86,9 @@ class ItemEditFragment : Fragment() {
                 tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 subspinner.adapter = tempsubcat
 
-                // I set up the correct value of the subspinner here
-                if (viewModel.tempItemInfo.value != null) {
-                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory, viewModel.tempItemInfo.value!!.category))
+                if(first) {
+                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
+                    first=false;
                 }
             }
         }
@@ -118,7 +121,7 @@ class ItemEditFragment : Fragment() {
             item_picture_description_edit.setText(it.description)
             item_condition_value.setText(it.condition)
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
-//            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
+            this.first = true
 //            Helpers.updateItemPicture(this.requireContext(),
 //                Uri.parse(it.pictureURIString),
 //                item_picture)
