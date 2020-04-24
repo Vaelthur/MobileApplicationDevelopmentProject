@@ -1,31 +1,34 @@
 package com.example.myapplication.itemFragments
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.myapplication.data.Item
 import com.example.myapplication.main.ItemDetailsInfoData
 import org.json.JSONObject
 
 class ItemDetailsViewModel : ViewModel() {
-    val itemInfo = MutableLiveData<ItemDetailsInfoData>()
-    val tempItemInfo = MutableLiveData<ItemDetailsInfoData>()
+    val itemInfo = MutableLiveData<Item>()
+    val tempItemInfo = MutableLiveData<Item>()
 
     fun setItemInfo(itemJson: JSONObject) {
         itemInfo.value = createItemInfoFromJSON(itemJson)
     }
 
-    fun setItemInfo(itemInfoD: ItemDetailsInfoData){
-        itemInfo.value = itemInfoD
+    fun setItemInfo(item: Item){
+        itemInfo.value = item
     }
 
     fun setTempItemInfo(itemJson: JSONObject){
         tempItemInfo.value = createItemInfoFromJSON(itemJson)
     }
 
-    fun setTempItemInfo(itemInfoD: ItemDetailsInfoData){
-        this.tempItemInfo.value = itemInfoD
+    fun setTempItemInfo(item: Item){
+        this.tempItemInfo.value = item
     }
 
-    private fun createItemInfoFromJSON(itemJson: JSONObject): ItemDetailsInfoData {
+    private fun createItemInfoFromJSON(itemJson: JSONObject): Item {
+
         val title = itemJson["title"].toString()
         val price = itemJson["price"].toString()
         val location = itemJson["location"].toString()
@@ -36,11 +39,6 @@ class ItemDetailsViewModel : ViewModel() {
         val expDate = itemJson["expDate"].toString()
         val itemPic = itemJson["pictureURIString"].toString()
 
-        return ItemDetailsInfoData(itemPic, title, location, price, category, subcategory, expDate, condition, description)
-    }
-
-    fun setItemPicture(itemPicPath: String) {
-        tempItemInfo.value?.pictureURIString = itemPicPath
-        tempItemInfo.value = tempItemInfo.value
+        return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description)
     }
 }

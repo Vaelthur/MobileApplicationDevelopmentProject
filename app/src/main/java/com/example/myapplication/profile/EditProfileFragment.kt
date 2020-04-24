@@ -1,7 +1,6 @@
 package com.example.myapplication.profile
 
 import android.Manifest
-import android.accounts.Account
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -80,8 +79,7 @@ class EditProfileFragment : Fragment() {
 
         })
 
-        val imageButton = view.findViewById<ImageButton>(R.id.imageButtonChangePic)
-        imageButton.setOnClickListener {
+        imageButtonChangePic.setOnClickListener {
             onImageButtonClickEvent(it)
         }
     }
@@ -113,7 +111,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.saveIcon -> {
+            R.id.saveIconProfile -> {
                 saveProfile()
                 true
             }

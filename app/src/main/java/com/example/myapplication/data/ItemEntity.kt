@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -24,7 +25,7 @@ data class Item(
     @ColumnInfo(name = "expDate") val expDate: String,
     @ColumnInfo(name = "condition") val condition: String,
     @ColumnInfo(name = "description") val description: String
-){
+) : Serializable {
     @PrimaryKey(autoGenerate = true)
     var itemId: Int = 0
 }
@@ -107,14 +108,14 @@ abstract class ItemRoomDatabase : RoomDatabase() {
             val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
 
             var item = Item(
-                 "null", "TOLO FIGA",
+                "android.resource://com.example.myapplication/drawable/default__item_image", "TOLO FIGA",
                 "Torino", "100", "divernten", "sottocategoria", timeStamp, "makle", "descrivo"
             )
 
             itemDao.insertAll(item)
 
             item = Item(
-                 "null", "LOOOL",
+                "android.resource://com.example.myapplication/drawable/default__item_image", "LOOOL",
                 "Mustafa", "100", "divernten","sottocategoria", timeStamp, "makle", "descrivo"
             )
 

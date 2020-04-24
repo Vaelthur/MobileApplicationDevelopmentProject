@@ -27,6 +27,7 @@ import com.example.myapplication.main.ItemInfoFactory
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
+import com.example.myapplication.data.Item
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.io.File
@@ -54,7 +55,7 @@ class ItemEditFragment : Fragment() {
         // view necessary to access gui elements
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
 
-        // initialize viewmodel
+        // get viewmodel
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         // click listener on Imagebutton
@@ -106,11 +107,8 @@ class ItemEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        if (viewModel.tempItemInfo.value == null) {
-            setCorrectlyTempItemInfo()
-        }
-
         viewModel.tempItemInfo.observe(requireActivity(), Observer{
+
             item_title_edit.setText(it.title)
             item_location_value.setText(it.location)
             item_price_edit.setText(it.price)
@@ -118,14 +116,13 @@ class ItemEditFragment : Fragment() {
             item_picture_description_edit.setText(it.description)
             item_condition_value.setText(it.condition)
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
-            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subcategory, it.category))
-            Helpers.updateItemPicture(this.requireContext(),
-                Uri.parse(it.pictureURIString),
-                item_picture)
+            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
+//            Helpers.updateItemPicture(this.requireContext(),
+//                Uri.parse(it.pictureURIString),
+//                item_picture)
         })
 
-        val imageButton = imageButtonChangePhoto
-        imageButton.setOnClickListener {
+        imageButtonChangePhoto.setOnClickListener {
             onImageButtonClickEvent(it)
         }
     }
@@ -134,8 +131,8 @@ class ItemEditFragment : Fragment() {
         super.onDestroyView()
 
         hideSoftKeyboard(requireActivity())
-
-        setCorrectlyTempItemInfo()
+        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
+        viewModel.setTempItemInfo(tempItemInfo)
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
 
@@ -210,8 +207,8 @@ class ItemEditFragment : Fragment() {
                 commit()
             }
 
-            //Helpers.updateItemPicture(requireContext(), it, item_picture)
-            viewModel.setItemPicture(itemPictureUri.toString())
+            Helpers.updateItemPicture(requireContext(), it, item_picture)
+            //viewModel.setItemPicture(itemPictureUri.toString())
         }
     }
 
@@ -219,7 +216,7 @@ class ItemEditFragment : Fragment() {
 
         val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
         val itemPictureUri =  Uri.parse(readFromSharePref.getString("item_picture_editing", ItemInfoFactory.defaultItemPhoto))
-        viewModel.setItemPicture(itemPictureUri.toString())
+        //viewModel.setItemPicture(itemPictureUri.toString())
     }
 
     private fun saveEdits(){
@@ -228,7 +225,7 @@ class ItemEditFragment : Fragment() {
         val itemPicUri = viewModel.tempItemInfo.value?.pictureURIString
         val iteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
         if (itemPicUri != null) {
-            iteminfo.pictureURIString = itemPicUri
+            //iteminfo.pictureURIString = itemPicUri
         }
 
         val jsonString = Gson().toJson(iteminfo)
@@ -238,7 +235,7 @@ class ItemEditFragment : Fragment() {
             commit()
         }
 
-        viewModel.setItemInfo(iteminfo)
+        //viewModel.setItemInfo(iteminfo)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
     }
 
@@ -395,15 +392,5 @@ class ItemEditFragment : Fragment() {
             PERMISSION_CODE_CAMERA -> takePicture()
             PERMISSION_CODE_GALLERY -> takeFromGallery()
         }
-    }
-
-    private fun setCorrectlyTempItemInfo() {
-        // set tempItemInfo
-        val itemPicUri = viewModel.tempItemInfo.value?.pictureURIString
-        val tempiteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
-        if (itemPicUri != null) {
-            tempiteminfo.pictureURIString = itemPicUri
-        }
-        viewModel.setTempItemInfo(tempiteminfo)
     }
 }
