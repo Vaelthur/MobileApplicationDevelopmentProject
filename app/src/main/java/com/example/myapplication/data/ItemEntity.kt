@@ -105,7 +105,8 @@ abstract class ItemRoomDatabase : RoomDatabase() {
 
             itemDao.deleteAll()
 
-            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+//            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            val timeStamp:String = SimpleDateFormat("dd/MM/yyyy").format(Date())
 
             var item = Item(
                 "android.resource://com.example.myapplication/drawable/default__item_image", "TOLO FIGA",
