@@ -67,9 +67,6 @@ class ItemEditFragment : Fragment() {
         spinner.adapter = ad
 
         val subspinner = view.findViewById<Spinner>(R.id.subcategory_spinner)
-        val subAd = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
-        subAd.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        subspinner.adapter = subAd
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -85,6 +82,11 @@ class ItemEditFragment : Fragment() {
                 val tempsubcat = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
                 tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 subspinner.adapter = tempsubcat
+
+                // I set up the correct value of the subspinner here
+                if (viewModel.tempItemInfo.value != null) {
+                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory, viewModel.tempItemInfo.value!!.category))
+                }
             }
         }
 
@@ -116,7 +118,7 @@ class ItemEditFragment : Fragment() {
             item_picture_description_edit.setText(it.description)
             item_condition_value.setText(it.condition)
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
-            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
+//            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
 //            Helpers.updateItemPicture(this.requireContext(),
 //                Uri.parse(it.pictureURIString),
 //                item_picture)

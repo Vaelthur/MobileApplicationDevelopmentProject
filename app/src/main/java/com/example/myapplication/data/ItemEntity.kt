@@ -109,14 +109,14 @@ abstract class ItemRoomDatabase : RoomDatabase() {
 
             var item = Item(
                 "android.resource://com.example.myapplication/drawable/default__item_image", "TOLO FIGA",
-                "Torino", "100", "divernten", "sottocategoria", timeStamp, "makle", "descrivo"
+                "Torino", "100", "Automotive", "Tools & Equipment", timeStamp, "makle", "descrivo"
             )
 
             itemDao.insertAll(item)
 
             item = Item(
                 "android.resource://com.example.myapplication/drawable/default__item_image", "LOOOL",
-                "Mustafa", "100", "divernten","sottocategoria", timeStamp, "makle", "descrivo"
+                "Mustafa", "100", "Automotive","Tools & Equipment", timeStamp, "makle", "descrivo"
             )
 
             itemDao.insertAll(item)
