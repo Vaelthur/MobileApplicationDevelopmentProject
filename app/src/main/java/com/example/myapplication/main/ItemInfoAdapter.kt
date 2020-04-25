@@ -79,6 +79,7 @@ class ItemInfoAdapter(private val items: List<Item>)
             // Navigate to fragment that allows editing of the selected item
             val editButton : ImageButton = v.findViewById(R.id.editItemButton)
             editButton.setOnClickListener {
+                v.findNavController().navigate(R.id.itemDetailsFragment, itemBundle)
                 v.findNavController().navigate(R.id.ItemEditFragment, itemBundle)
             }
         }

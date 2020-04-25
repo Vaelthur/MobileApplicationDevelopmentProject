@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/nav_itemList"
         android:name="com.example.myapplication.main.ItemListFragment"
-        android:label="ItemListFragment"
-        tools:layout="@layout/fragment_itemlist" >
+        android:label="Home"
+        tools:layout="@layout/fragment_itemlist">
         <action
             android:id="@+id/action_nav_itemList_to_showProfileFragment"
             app:destination="@id/showProfileFragment"
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/itemDetailsFragment"
         android:name="com.example.myapplication.itemFragments.ItemDetailsFragment"
-        android:label="ItemDetailsFragment" >
+        android:label="Item Details">
         <action
             android:id="@+id/action_itemDetailsFragment_to_nav_itemList"
             app:destination="@id/nav_itemList"
@@ -50,7 +50,7 @@
     <fragment
         android:id="@+id/ItemEditFragment"
         android:name="com.example.myapplication.ItemEditFragment"
-        android:label="ItemEditFragment">
+        android:label="Edit Item">
         <action
             android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />

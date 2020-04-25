@@ -33,7 +33,7 @@ class ItemListFragment : Fragment() {
         itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
-        val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
+        var root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
         itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {itemList ->
             val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
@@ -48,8 +48,14 @@ class ItemListFragment : Fragment() {
             "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
             val itemBundle = Bundle(1)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
+            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.itemDetailsFragment, itemBundle)
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
         }
+
+        if(itemListViewModel.itemListLiveData.value?.size == 0 || itemListViewModel.itemListLiveData.value == null) {
+            return inflater.inflate(R.layout.fragment_itemlist_empty, container, false)
+        }
+
         return root
     }
 

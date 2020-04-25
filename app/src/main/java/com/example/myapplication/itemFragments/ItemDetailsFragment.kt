@@ -41,8 +41,10 @@ class ItemDetailsFragment : Fragment() {
 
         arguments?. let {
             val incomingItem : Item = it.getSerializable("item") as Item
-            viewModel.setItemInfo(incomingItem)
-            viewModel.setTempItemInfo(incomingItem)
+            if(viewModel.itemInfo.value == null) {
+                viewModel.setItemInfo(incomingItem)
+                viewModel.setTempItemInfo(incomingItem)
+            }
         }
 
         val itemInfo = viewModel.itemInfo
@@ -50,7 +52,8 @@ class ItemDetailsFragment : Fragment() {
             return
         }
 
-        itemInfo.observe(requireActivity(), Observer {
+
+        viewModel.itemInfo.observe(requireActivity(), Observer {
             item_title.text = it.title
             item_price.text = it.price
             item_location.text = it.location
