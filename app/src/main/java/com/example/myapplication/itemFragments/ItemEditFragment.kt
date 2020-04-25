@@ -43,9 +43,9 @@ class ItemEditFragment : Fragment() {
     private val PERMISSION_CODE_CAMERA = 1000
     private val PERMISSION_CODE_GALLERY = 1001
 
-    // bool var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
-    private var first = false
-    private var rot = false
+    //
+    // var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
+    private var pos=0
 
     private lateinit var  viewModel: ItemDetailsViewModel
 
@@ -95,15 +95,8 @@ class ItemEditFragment : Fragment() {
                 tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 subspinner.adapter = tempsubcat
 
-                if(rot){
+                if( pos == spinner.selectedItemPosition ) {
                     subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
-                    rot=false;
-                }
-
-                if(first) {
-                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
-                    first=false;
-                    rot=true
                 }
             }
         }
@@ -125,11 +118,6 @@ class ItemEditFragment : Fragment() {
         return view
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        rot = true
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel.tempItemInfo.observe(requireActivity(), Observer{
@@ -141,7 +129,7 @@ class ItemEditFragment : Fragment() {
             item_picture_description_edit.setText(it.description)
             item_condition_value.setText(it.condition)
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
-            this.first = true
+            this.pos = ItemCategories().getPosFromValue(it.category)
             Helpers.updateItemPicture(this.requireContext(),
                 Uri.parse(it.pictureURIString),
                 item_picture)
