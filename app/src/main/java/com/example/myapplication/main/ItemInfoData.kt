@@ -6,10 +6,12 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.ItemEditFragment
 import com.example.myapplication.R
 import com.example.myapplication.data.Item
+import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.profile.EditProfileFragment
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import org.json.JSONObject
@@ -33,10 +35,15 @@ class ItemInfoFactory(){
             val getItemPicturePath : (editFrag : ItemEditFragment) -> Uri =
                 {
                     val readFromPref = it.requireActivity().getPreferences(Context.MODE_PRIVATE)
-                    val tempProfilePicture = readFromPref.getString("item_picture_editing", null)
+                    var tempProfilePicture = readFromPref.getString("item_picture_editing", null)
+
+                    val itemListViewModel =
+                        ViewModelProviders.of(editFrag.requireActivity()).get(ItemDetailsViewModel()::class.java)
 
                     if(tempProfilePicture == null){
-                            Uri.parse(ItemInfoFactory.defaultItemPhoto)
+                        tempProfilePicture = itemListViewModel.tempItemInfo.value?.pictureURIString
+                        Uri.parse(tempProfilePicture)
+                        //Uri.parse(ItemInfoFactory.defaultItemPhoto)
                     }
                     else {
                         Uri.parse(tempProfilePicture)
