@@ -104,7 +104,7 @@ abstract class ItemRoomDatabase : RoomDatabase() {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
 
-           // itemDao.deleteAll()
+            //itemDao.deleteAll()
 
 //            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             val timeStamp:String = SimpleDateFormat("dd/MM/yyyy").format(Date())

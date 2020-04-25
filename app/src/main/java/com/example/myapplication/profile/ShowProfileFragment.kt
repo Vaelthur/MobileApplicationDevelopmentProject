@@ -66,7 +66,7 @@ class ShowProfileFragment : Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.editItemIcon -> {
+            R.id.editProfileIcon -> {
 
                 this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment)
                 true

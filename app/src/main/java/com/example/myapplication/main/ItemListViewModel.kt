@@ -31,7 +31,7 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val item = Item(
              "null", "MEGA TITOLO",
-            "Torino", "100", "divernten","subcaaacca", timeStamp, "makle", "descrivo"
+            "Torino", "100", "Sports & Hobby","Sports & Fitness", timeStamp, "makle", "descrivo"
         )
         repository.insertAll(item)
     }

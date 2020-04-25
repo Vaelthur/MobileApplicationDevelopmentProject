@@ -62,10 +62,6 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        if(showProfileViewModel.tempAccountInfo.value == null) {
-            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        }
-
         showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
             editViewUsernameEditProfile.setText(it.username)
@@ -168,8 +164,6 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun imageCaptureHandler() {
-        val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
-        val profilePictureUri =  Uri.parse(readFromSharePref.getString("profile_picture_editing", AccountInfoFactory.defaultProfilePic))
         showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
     }
 

@@ -144,7 +144,7 @@ class ItemEditFragment : Fragment() {
         super.onDestroyView()
 
         hideSoftKeyboard(requireActivity())
-        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
+        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
         viewModel.setTempItemInfo(tempItemInfo)
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
@@ -220,14 +220,14 @@ class ItemEditFragment : Fragment() {
                 commit()
             }
 
-            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this)
+            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
 
         }
     }
 
     private fun imageCaptureHandler() {
 
-        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this)
+        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
     }
 
     private fun saveEdits(){
