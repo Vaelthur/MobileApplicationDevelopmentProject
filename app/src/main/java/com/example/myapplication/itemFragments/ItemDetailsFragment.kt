@@ -66,14 +66,10 @@ class ItemDetailsFragment : Fragment() {
                 Uri.parse(it.pictureURIString.toString()),
                 item_picture)
 
-            val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
-            with(readFromSharePref.edit()) {
-                putString("item_picture_editing", it.pictureURIString)
-                commit()
-            }
-
             viewModel.setTempItemInfo(it)
         })
+
+        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("item_picture_editing").apply()
     }
 
     override fun onDestroyView() {

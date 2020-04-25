@@ -43,7 +43,7 @@ class ItemInfoFactory(){
                     val tempProfilePicture = readFromPref.getString("item_picture_editing", null)
 
                     if(tempProfilePicture == null){
-                            Uri.parse(AccountInfoFactory.defaultProfilePic)
+                            Uri.parse(ItemInfoFactory.defaultItemPhoto)
                     }
                     else {
                         Uri.parse(tempProfilePicture)

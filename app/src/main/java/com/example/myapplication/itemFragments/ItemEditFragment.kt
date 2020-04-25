@@ -62,6 +62,12 @@ class ItemEditFragment : Fragment() {
         // get viewmodel
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
+        arguments?. let {
+            val incomingItem : Item = it.getSerializable("item") as Item
+            viewModel.setItemInfo(incomingItem)
+            viewModel.setTempItemInfo(incomingItem)
+        }
+
         // click listener on Imagebutton
         view.findViewById<ImageButton>(R.id.imageButtonChangePhoto).setOnClickListener { onImageButtonClickEvent(it) }
 
@@ -134,9 +140,9 @@ class ItemEditFragment : Fragment() {
             item_condition_value.setText(it.condition)
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
             this.first = true
-//            Helpers.updateItemPicture(this.requireContext(),
-//                Uri.parse(it.pictureURIString),
-//                item_picture)
+            Helpers.updateItemPicture(this.requireContext(),
+                Uri.parse(it.pictureURIString),
+                item_picture)
         })
 
         imageButtonChangePhoto.setOnClickListener {
@@ -224,16 +230,14 @@ class ItemEditFragment : Fragment() {
                 commit()
             }
 
-            Helpers.updateItemPicture(requireContext(), it, item_picture)
-            //viewModel.setItemPicture(itemPictureUri.toString())
+            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this)
+
         }
     }
 
     private fun imageCaptureHandler() {
 
-        val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
-        val itemPictureUri =  Uri.parse(readFromSharePref.getString("item_picture_editing", ItemInfoFactory.defaultItemPhoto))
-        //viewModel.setItemPicture(itemPictureUri.toString())
+        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this)
     }
 
     private fun saveEdits(){
