@@ -253,7 +253,7 @@ class ItemEditFragment : Fragment() {
         val itemBundle = Bundle(1)
         itemBundle.putSerializable("item", itemToSave as Serializable?)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
+        //this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
     }
 
     private fun hideSoftKeyboard(activity: Activity?) {
