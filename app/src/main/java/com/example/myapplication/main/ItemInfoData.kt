@@ -18,20 +18,13 @@ import java.net.URI
 import java.util.*
 import java.util.concurrent.locks.Condition
 
-data class ItemInfoData(val pictureURIString : String?, val title : String, val location : String, val price : String)
-
-data class ItemDetailsInfoData(val pictureURIString: String, val title: String,
-                               val location: String, val price: String, val category: String, val subCategory: String,
-                               val expDate: String, val condition: String, val description: String)
-    :Serializable{}
-
 class ItemInfoFactory(){
 
     companion object ItemInfoFactory{
 
         const val defaultItemPhoto = "android.resource://com.example.myapplication/drawable/default__item_image"
 
-        fun getItemInfoFromTextEdit(editFrag: ItemEditFragment): Item {
+        fun getItemInfoFromTextEdit(editFrag: ItemEditFragment, id : Int? = null): Item {
             val getEditViewText =
                 {
                         id: EditText -> id.text
@@ -59,6 +52,10 @@ class ItemInfoFactory(){
             val condition = StringBuffer(getEditViewText(editFrag.item_condition_value)).toString()
             val description = StringBuffer(getEditViewText(editFrag.item_picture_description_edit)).toString()
             val itemPic = getItemPicturePath(editFrag).toString()
+
+            id?.let{
+                return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description, id)
+            }
 
             return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description)
         }

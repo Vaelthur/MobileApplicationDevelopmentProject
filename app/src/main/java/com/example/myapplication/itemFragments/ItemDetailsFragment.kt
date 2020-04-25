@@ -15,7 +15,6 @@ import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.Item
 import kotlinx.android.synthetic.main.item_details_fragment.*
-import com.example.myapplication.main.ItemDetailsInfoData
 
 
 class ItemDetailsFragment : Fragment() {

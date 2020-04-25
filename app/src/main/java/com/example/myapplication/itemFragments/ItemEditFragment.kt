@@ -28,8 +28,10 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.example.myapplication.data.Item
+import com.example.myapplication.main.ItemListViewModel
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_item_edit.*
+import kotlinx.android.synthetic.main.fragment_itemlist.*
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -241,22 +243,18 @@ class ItemEditFragment : Fragment() {
     }
 
     private fun saveEdits(){
+
         hideSoftKeyboard(requireActivity())
+        val itemToSave  = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+        viewModel.itemInfo.value  = itemToSave
+        viewModel.tempItemInfo.value  = itemToSave
 
-        val itemPicUri = viewModel.tempItemInfo.value?.pictureURIString
-        val iteminfo = ItemInfoFactory.getItemInfoFromTextEdit(this)
-        if (itemPicUri != null) {
-            //iteminfo.pictureURIString = itemPicUri
-        }
+        // Save to DB
+        val itemListViewModel =
+            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
-        val jsonString = Gson().toJson(iteminfo)
-        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("item_info",  Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
-            putString("item_info", jsonString)
-            commit()
-        }
+        itemListViewModel.updateItem(itemToSave)
 
-        //viewModel.setItemInfo(iteminfo)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
     }
 

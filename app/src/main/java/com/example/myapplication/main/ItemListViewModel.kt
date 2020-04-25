@@ -41,10 +41,15 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
         repository.delete(item)
     }
 
+    fun insertAll(itemToSave: Item) = viewModelScope.launch(Dispatchers.IO){
+
+        repository.insertAll(itemToSave)
+    }
+
+    fun updateItem(itemToUpdate: Item) = viewModelScope.launch(Dispatchers.IO){
+
+        repository.updateItem(itemToUpdate)
+    }
+
     /// endregion
-
-
-
-
-
 }

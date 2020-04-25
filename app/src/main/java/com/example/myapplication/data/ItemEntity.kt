@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -24,11 +25,9 @@ data class Item(
     @ColumnInfo(name = "sub_category") val subCategory: String,
     @ColumnInfo(name = "expDate") val expDate: String,
     @ColumnInfo(name = "condition") val condition: String,
-    @ColumnInfo(name = "description") val description: String
-) : Serializable {
-    @PrimaryKey(autoGenerate = true)
-    var itemId: Int = 0
-}
+    @ColumnInfo(name = "description") val description: String,
+    @PrimaryKey(autoGenerate = true) var itemId: Int = 0
+) : Serializable {}
 
 @Dao
 interface ItemDao {
@@ -47,9 +46,11 @@ interface ItemDao {
     @Query("DELETE FROM item_table WHERE 1")
     fun deleteAll()
 
+    @Update
+    fun updateItem(item: Item)
 }
 
-@Database(entities = [Item::class], version = 2)
+@Database(entities = [Item::class], version = 1)
 abstract class ItemRoomDatabase : RoomDatabase() {
     abstract fun itemDao(): ItemDao
 
@@ -103,21 +104,14 @@ abstract class ItemRoomDatabase : RoomDatabase() {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
 
-            itemDao.deleteAll()
+           // itemDao.deleteAll()
 
 //            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             val timeStamp:String = SimpleDateFormat("dd/MM/yyyy").format(Date())
 
-            var item = Item(
+            val item = Item(
                 "android.resource://com.example.myapplication/drawable/default__item_image", "TOLO FIGA",
                 "Torino", "100", "Automotive", "Tools & Equipment", timeStamp, "makle", "descrivo"
-            )
-
-            itemDao.insertAll(item)
-
-            item = Item(
-                "android.resource://com.example.myapplication/drawable/default__item_image", "LOOOL",
-                "Mustafa", "100", "Automotive","Tools & Equipment", timeStamp, "makle", "descrivo"
             )
 
             itemDao.insertAll(item)

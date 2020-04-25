@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.data.Item
-import com.example.myapplication.main.ItemDetailsInfoData
 import org.json.JSONObject
 
 class ItemDetailsViewModel : ViewModel() {

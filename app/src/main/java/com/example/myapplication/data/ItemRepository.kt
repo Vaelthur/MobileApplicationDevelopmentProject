@@ -2,6 +2,7 @@ package com.example.myapplication.data
 
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 
 class ItemRepository(private val itemDao: ItemDao) {
 
@@ -19,8 +20,17 @@ class ItemRepository(private val itemDao: ItemDao) {
         itemDao.insertAll(item)
     }
 
+    @Suppress("RedundantSuspendModifier")
     @WorkerThread
     suspend fun delete(item : Item){
         itemDao.delete(item)
     }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun updateItem(item : Item){
+        itemDao.updateItem(item)
+    }
+
+
 }
