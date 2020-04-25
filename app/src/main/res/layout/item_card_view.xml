@@ -64,6 +64,18 @@
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@id/item_card_location" />
 
+        <TextView
+            android:id="@+id/price_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/currency"
+            android:textSize="24sp"
+            android:textColor="#005BA3"
+            app:layout_constraintStart_toEndOf="@id/item_card_price"
+            app:layout_constraintBaseline_toBaselineOf="@id/item_card_price"
+            android:layout_marginStart="6dp"/>
+
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline5"
             android:layout_width="wrap_content"
