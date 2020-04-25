@@ -111,7 +111,8 @@ class ItemEditFragment : Fragment() {
             val d = cal.get(Calendar.DAY_OF_MONTH)
 
             val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view1, year, month, dayOfMonth ->
-                val t = "$dayOfMonth/$month/$year"
+                val monthFinal = month+1
+                val t = "$dayOfMonth/$monthFinal/$year"
                 view.findViewById<TextView>(R.id.item_expire_date_value).text = t
             }, y, m, d )
             dpd.show()
