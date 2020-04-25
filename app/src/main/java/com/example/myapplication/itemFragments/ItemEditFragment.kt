@@ -34,6 +34,7 @@ import kotlinx.android.synthetic.main.fragment_item_edit.*
 import kotlinx.android.synthetic.main.fragment_itemlist.*
 import java.io.File
 import java.io.IOException
+import java.io.Serializable
 import java.text.SimpleDateFormat
 
 class ItemEditFragment : Fragment() {
@@ -233,7 +234,8 @@ class ItemEditFragment : Fragment() {
     private fun saveEdits(){
 
         hideSoftKeyboard(requireActivity())
-        val itemToSave  = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+        val itemID = viewModel.tempItemInfo.value?.itemId
+        val itemToSave  = ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
         viewModel.itemInfo.value  = itemToSave
         viewModel.tempItemInfo.value  = itemToSave
 
@@ -241,9 +243,15 @@ class ItemEditFragment : Fragment() {
         val itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
-        itemListViewModel.updateItem(itemToSave)
+        if(itemID == 0)
+            itemListViewModel.insertAll(itemToSave)
+        else
+            itemListViewModel.updateItem(itemToSave)
 
+        val itemBundle = Bundle(1)
+        itemBundle.putSerializable("item", itemToSave as Serializable?)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
     }
 
     private fun hideSoftKeyboard(activity: Activity?) {

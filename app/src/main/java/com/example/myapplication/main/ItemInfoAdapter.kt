@@ -71,7 +71,7 @@ class ItemInfoAdapter(private val items: List<Item>)
         fun setListeners(itemInfo : Item){
             val itemBundle = Bundle(1)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
-            //
+
             v.setOnClickListener {
                 v.findNavController().navigate(R.id.itemDetailsFragment, itemBundle)
             }
@@ -82,7 +82,6 @@ class ItemInfoAdapter(private val items: List<Item>)
                 v.findNavController().navigate(R.id.ItemEditFragment, itemBundle)
             }
         }
-
     }
 
 }

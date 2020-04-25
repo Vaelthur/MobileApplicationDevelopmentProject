@@ -42,7 +42,10 @@
         android:label="ItemDetailsFragment" >
         <action
             android:id="@+id/action_itemDetailsFragment_to_nav_itemList"
-            app:destination="@id/nav_itemList" />
+            app:destination="@id/nav_itemList"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/nav_itemList"
+            app:popUpToInclusive="false" />
     </fragment>
     <fragment
         android:id="@+id/ItemEditFragment"
@@ -50,6 +53,9 @@
         android:label="ItemEditFragment">
         <action
             android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
+        <action
+            android:id="@+id/action_ItemEditFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
     </fragment>
 </navigation>

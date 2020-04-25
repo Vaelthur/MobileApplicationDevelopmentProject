@@ -90,4 +90,5 @@ class ItemDetailsFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
 }

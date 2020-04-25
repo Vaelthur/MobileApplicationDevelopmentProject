@@ -11,7 +11,9 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
+import com.example.myapplication.data.Item
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.io.Serializable
 
 class ItemListFragment : Fragment() {
 
@@ -42,10 +44,11 @@ class ItemListFragment : Fragment() {
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
-//            itemListViewModel =
-//                of(requireActivity()).get(ItemListViewModel::class.java)
-//            itemListViewModel.addItem()
-            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment)
+            val itemInfo = Item(ItemInfoFactory.defaultItemPhoto, "", "",
+            "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
+            val itemBundle = Bundle(1)
+            itemBundle.putSerializable("item", itemInfo as Serializable?)
+            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
         }
         return root
     }
