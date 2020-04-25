@@ -130,6 +130,7 @@ class ItemEditFragment : Fragment() {
             item_picture_description_edit.setText(it.description)
             item_condition_value.setText(it.condition)
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
+            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
             this.pos = ItemCategories().getPosFromValue(it.category)
             Helpers.updateItemPicture(this.requireContext(),
                 Uri.parse(it.pictureURIString),
