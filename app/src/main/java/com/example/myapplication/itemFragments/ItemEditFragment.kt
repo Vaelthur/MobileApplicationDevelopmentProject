@@ -67,10 +67,8 @@ class ItemEditFragment : Fragment() {
 
         arguments?. let {
             val incomingItem : Item = it.getSerializable("item") as Item
-            if (viewModel.tempItemInfo.value == null){
-                viewModel.setItemInfo(incomingItem)
-                viewModel.setTempItemInfo(incomingItem)
-            }
+            viewModel.setItemInfo(incomingItem)
+            viewModel.setTempItemInfo(incomingItem)
         }
 
         // click listener on Imagebutton

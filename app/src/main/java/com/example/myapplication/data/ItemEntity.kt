@@ -73,7 +73,7 @@ abstract class ItemRoomDatabase : RoomDatabase() {
                     // Wipes and rebuilds instead of migrating if no Migration object.
                     // Migration is not part of this codelab.
                     .fallbackToDestructiveMigration()
-                    .addCallback(WordDatabaseCallback(scope))
+//                    .addCallback(WordDatabaseCallback(scope))
                     .build()
                 INSTANCE = instance
                 // return instance
@@ -81,30 +81,30 @@ abstract class ItemRoomDatabase : RoomDatabase() {
             }
         }
 
-        private class WordDatabaseCallback(
-            private val scope: CoroutineScope
-        ) : RoomDatabase.Callback() {
-            /**
-             * Override the onOpen method to populate the database.
-             * For this sample, we clear the database every time it is created or opened.
-             */
-            override fun onOpen(db: SupportSQLiteDatabase) {
-                super.onOpen(db)
-                // If you want to keep the data through app restarts,
-                // comment out the following line.
-                INSTANCE?.let { database ->
-                    scope.launch(Dispatchers.IO) {
-                        populateDatabase(database.itemDao())
-                    }
-                }
-            }
-        }
+//        private class WordDatabaseCallback(
+//            private val scope: CoroutineScope
+//        ) : RoomDatabase.Callback() {
+//            /**
+//             * Override the onOpen method to populate the database.
+//             * For this sample, we clear the database every time it is created or opened.
+//             */
+//            override fun onOpen(db: SupportSQLiteDatabase) {
+//                super.onOpen(db)
+//                // If you want to keep the data through app restarts,
+//                // comment out the following line.
+//                /*INSTANCE?.let { database ->
+//                    scope.launch(Dispatchers.IO) {
+//                        populateDatabase(database.itemDao())
+//                    }
+//                }*/
+//            }
+//        }
 
         fun populateDatabase(itemDao: ItemDao) {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
 
-            itemDao.deleteAll()
+            //itemDao.deleteAll()
 
 //            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
             val timeStamp:String = SimpleDateFormat("dd/MM/yyyy").format(Date())

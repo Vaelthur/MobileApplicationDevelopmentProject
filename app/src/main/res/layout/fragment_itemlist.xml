@@ -29,4 +29,27 @@
         app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/empty_list_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/emptylist"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerItemList"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/recyclerItemList"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/new_item_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Create new ad"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/empty_list_msg"
+        app:layout_constraintStart_toStartOf="@+id/empty_list_msg"
+        app:layout_constraintTop_toBottomOf="@+id/empty_list_msg" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
