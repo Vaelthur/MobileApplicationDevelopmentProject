@@ -48,7 +48,8 @@ class ItemDetailsFragment : Fragment() {
         }
 
         val itemInfo = viewModel.itemInfo
-        if(itemInfo.value == null){
+        if(itemInfo.value == Helpers.getDefaultItem()){
+            this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
             return
         }
 

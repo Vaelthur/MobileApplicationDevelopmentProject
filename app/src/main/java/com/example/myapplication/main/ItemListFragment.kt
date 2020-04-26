@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.Item
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -49,7 +50,7 @@ class ItemListFragment : Fragment() {
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
 
-            val itemBundle = getDefaultItemBundle()
+            val itemBundle = Helpers.getDefaultItemBundle()
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.itemDetailsFragment, itemBundle)
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
         }
@@ -59,7 +60,7 @@ class ItemListFragment : Fragment() {
             val emptyView =  inflater.inflate(R.layout.fragment_itemlist_empty, container, false)
             val editButton : Button = emptyView.findViewById(R.id.newAddButton)
             editButton.setOnClickListener {
-                val itemBundle = getDefaultItemBundle()
+                val itemBundle = Helpers.getDefaultItemBundle()
                 requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.itemDetailsFragment, itemBundle)
                 requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
             }
@@ -69,15 +70,4 @@ class ItemListFragment : Fragment() {
 
         return root
     }
-
-    private fun getDefaultItemBundle() : Bundle {
-
-        val itemInfo = Item(ItemInfoFactory.defaultItemPhoto, "", "",
-            "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
-        val itemBundle = Bundle(1)
-        itemBundle.putSerializable("item", itemInfo as Serializable?)
-
-        return itemBundle
-    }
-
 }

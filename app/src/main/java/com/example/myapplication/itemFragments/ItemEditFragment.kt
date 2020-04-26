@@ -67,8 +67,10 @@ class ItemEditFragment : Fragment() {
 
         arguments?. let {
             val incomingItem : Item = it.getSerializable("item") as Item
-            viewModel.setItemInfo(incomingItem)
-            viewModel.setTempItemInfo(incomingItem)
+            if (viewModel.tempItemInfo.value == null){
+                viewModel.setItemInfo(incomingItem)
+                viewModel.setTempItemInfo(incomingItem)
+            }
         }
 
         // click listener on Imagebutton
@@ -241,7 +243,7 @@ class ItemEditFragment : Fragment() {
         viewModel.itemInfo.value  = itemToSave
         viewModel.tempItemInfo.value  = itemToSave
 
-        // Save to DB
+        // Save to DB or update item on DB
         val itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 

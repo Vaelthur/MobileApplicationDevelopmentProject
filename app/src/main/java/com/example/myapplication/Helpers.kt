@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Patterns
 import android.view.View
@@ -14,10 +15,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
+import com.example.myapplication.data.Item
+import com.example.myapplication.main.ItemInfoFactory
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
 import java.io.IOException
+import java.io.Serializable
 
 
 class Helpers(){
@@ -137,6 +141,24 @@ class Helpers(){
 
         fun makeSnackbar(view: View, text: CharSequence) {
             Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
+        }
+
+        fun getDefaultItemBundle() : Bundle {
+
+            val itemInfo = Item(
+                ItemInfoFactory.defaultItemPhoto, "", "",
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
+            val itemBundle = Bundle(1)
+            itemBundle.putSerializable("item", itemInfo as Serializable?)
+
+            return itemBundle
+        }
+
+        fun getDefaultItem() : Item {
+
+            return Item(
+                ItemInfoFactory.defaultItemPhoto, "", "",
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
         }
     }
 }
