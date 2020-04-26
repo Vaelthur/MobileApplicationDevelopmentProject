@@ -47,6 +47,6 @@
     <string name="email_header">Email:</string>
     <string name="location_header">Location:</string>
 
-    <string name="emptylist">You do not have any item. \n\n Click the button below to create a new one!</string>
+    <string name="emptylist">Ooops! Looks like you don\'t have any items.</string>
 
 </resources>

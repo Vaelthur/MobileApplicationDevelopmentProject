@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -33,7 +35,7 @@ class ItemListFragment : Fragment() {
         itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
-        var root = inflater.inflate(R.layout.fragment_itemlist, container, false)
+        val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
         itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {itemList ->
             val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
@@ -42,22 +44,40 @@ class ItemListFragment : Fragment() {
                 ItemInfoAdapter(itemList)
         })
 
+
+
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
-            val itemInfo = Item(ItemInfoFactory.defaultItemPhoto, "", "",
-            "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
-            val itemBundle = Bundle(1)
-            itemBundle.putSerializable("item", itemInfo as Serializable?)
+
+            val itemBundle = getDefaultItemBundle()
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.itemDetailsFragment, itemBundle)
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
         }
 
         if(itemListViewModel.itemListLiveData.value?.size == 0 || itemListViewModel.itemListLiveData.value == null) {
-            return inflater.inflate(R.layout.fragment_itemlist_empty, container, false)
+
+            val emptyView =  inflater.inflate(R.layout.fragment_itemlist_empty, container, false)
+            val editButton : Button = emptyView.findViewById(R.id.newAddButton)
+            editButton.setOnClickListener {
+                val itemBundle = getDefaultItemBundle()
+                requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.itemDetailsFragment, itemBundle)
+                requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
+            }
+
+            return emptyView
         }
 
         return root
     }
 
+    private fun getDefaultItemBundle() : Bundle {
+
+        val itemInfo = Item(ItemInfoFactory.defaultItemPhoto, "", "",
+            "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
+        val itemBundle = Bundle(1)
+        itemBundle.putSerializable("item", itemInfo as Serializable?)
+
+        return itemBundle
+    }
 
 }
