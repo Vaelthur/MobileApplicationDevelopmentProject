@@ -116,13 +116,20 @@ class Helpers(){
             return accountInfo?.let{ JSONObject(accountInfo) }
         }
 
-        fun someEmptyFields(accountInfo: AccountInfo): Boolean {
+        fun someEmptyAccountFields(accountInfo: AccountInfo): Boolean {
             return accountInfo.fullname.isNullOrEmpty() || accountInfo.username.isNullOrEmpty() ||
                     accountInfo.email.isNullOrEmpty() || accountInfo.location.isNullOrEmpty()
         }
 
         fun isEmailValid(email: CharSequence): Boolean {
             return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        }
+
+        fun someEmptyItemFields(itemInfo: Item): Boolean {
+            return itemInfo.title.isNullOrEmpty() || itemInfo.price.isNullOrEmpty() ||
+                    itemInfo.category.isNullOrEmpty() || itemInfo.location.isNullOrEmpty() ||
+                    itemInfo.expDate.isNullOrEmpty() || itemInfo.pictureURIString.isNullOrEmpty() ||
+                    itemInfo.description.isNullOrEmpty()
         }
 
         fun readItemJsonFromPreferences(parentActivity: AppCompatActivity): JSONObject? {

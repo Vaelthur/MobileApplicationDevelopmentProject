@@ -59,7 +59,7 @@ class ItemDetailsFragment : Fragment() {
             item_subcategory_value.text = it.subCategory
             item_expire_date_value.text = it.expDate
             item_location_value.text = it.location
-            item_condition_value.text =it.condition
+            item_condition_value.text = it.condition
             item_description_value.text = it.description
 
             Helpers.updateItemPicture(this.requireContext(),

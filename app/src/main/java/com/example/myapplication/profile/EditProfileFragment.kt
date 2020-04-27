@@ -13,7 +13,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -174,7 +173,7 @@ class EditProfileFragment : Fragment() {
         val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
 
 
-        if(Helpers.someEmptyFields(accountInfo)) {
+        if(Helpers.someEmptyAccountFields(accountInfo)) {
             Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
             return
         }

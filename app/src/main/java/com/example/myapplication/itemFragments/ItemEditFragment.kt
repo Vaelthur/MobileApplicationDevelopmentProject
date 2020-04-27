@@ -195,6 +195,11 @@ class ItemEditFragment : Fragment() {
         viewModel.itemInfo.value  = itemToSave
         viewModel.tempItemInfo.value  = itemToSave
 
+        if(Helpers.someEmptyItemFields(itemToSave)) {
+            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
+            return
+        }
+
         // Save to DB or update item on DB
         val itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
