@@ -5,10 +5,10 @@
     android:id="@+id/cardsLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardElevation="2dp"
     android:layout_margin="8dp"
+    app:cardElevation="2dp"
     app:cardPreventCornerOverlap="false"
-    app:cardUseCompatPadding="true">
+    app:cardUseCompatPadding="false">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +19,11 @@
             android:id="@+id/item_card_picture"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,26 +35,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.4"
+            app:layout_constraintGuide_percent="0.3"
             tools:visibility="visible" />
 
         <TextView
             android:id="@+id/item_card_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
             android:fontFamily="sans-serif-medium"
             android:text="@string/title"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/item_card_location"
+            app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/item_card_location"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
             android:text="@string/location"
+            android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/item_card_price"
+            app:layout_constraintEnd_toStartOf="@+id/editItemButton"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@id/item_card_title" />
 
@@ -59,7 +69,7 @@
             android:layout_height="wrap_content"
             android:text="@string/price"
             android:textColor="#005BA3"
-            android:textSize="24sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@id/item_card_location" />
@@ -68,12 +78,12 @@
             android:id="@+id/price_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
             android:text="@string/currency"
-            android:textSize="24sp"
             android:textColor="#005BA3"
-            app:layout_constraintStart_toEndOf="@id/item_card_price"
+            android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/item_card_price"
-            android:layout_marginStart="6dp"/>
+            app:layout_constraintStart_toEndOf="@id/item_card_price" />
 
 
         <androidx.constraintlayout.widget.Guideline
@@ -85,8 +95,8 @@
 
         <ImageButton
             android:id="@+id/editItemButton"
-            android:layout_width="51dp"
-            android:layout_height="78dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:background="#FFFFFF"
             android:backgroundTint="@color/colorPrimaryDark"
             android:scaleType="centerInside"

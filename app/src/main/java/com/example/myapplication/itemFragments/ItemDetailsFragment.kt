@@ -36,7 +36,6 @@ class ItemDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        // get viewmodel
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
