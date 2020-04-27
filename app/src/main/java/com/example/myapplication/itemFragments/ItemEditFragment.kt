@@ -200,6 +200,12 @@ class ItemEditFragment : Fragment() {
             return
         }
 
+        if(Helpers.titleTooLong(itemToSave)) {
+            Helpers.makeSnackbar(this.requireView(), "Max 45 characters for the title")
+            item_title_edit.requestFocus()
+            return
+        }
+
         // Save to DB or update item on DB
         val itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)

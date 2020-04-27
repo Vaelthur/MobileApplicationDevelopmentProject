@@ -76,26 +76,30 @@
                 app:layout_constraintBottom_toTopOf="@+id/item_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread" />
+                app:layout_constraintVertical_chainStyle="spread_inside" />
 
             <EditText
                 android:id="@+id/item_title_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:inputType="textMultiLine"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:text="@string/title_std"
                 android:textSize="20sp"
-                app:layout_constraintBaseline_toBaselineOf="@id/item_title"
+                app:layout_constraintBottom_toTopOf="@+id/item_price_edit"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
+                app:layout_constraintStart_toStartOf="@id/details_value_guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
 
 
             <TextView
                 android:id="@+id/item_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/price"
                 android:textColor="#005BA3"
@@ -114,9 +118,10 @@
                 android:text="@string/price_val_std"
                 android:textColor="#005BA3"
                 android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/details_guideline"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBaseline_toBaselineOf="@id/item_price"
-                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
+                app:layout_constraintStart_toStartOf="@id/details_value_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/item_title_edit" />
 
             <TextView
                 android:id="@+id/price_currency"

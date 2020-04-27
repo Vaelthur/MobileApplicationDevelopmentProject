@@ -147,7 +147,7 @@ class Helpers(){
         }
 
         fun makeSnackbar(view: View, text: CharSequence) {
-            Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(view, text, Snackbar.LENGTH_LONG).show()
         }
 
         fun getDefaultItemBundle() : Bundle {
@@ -166,6 +166,10 @@ class Helpers(){
             return Item(
                 ItemInfoFactory.defaultItemPhoto, "", "",
                 "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
+        }
+
+        fun titleTooLong(itemToSave: Item): Boolean {
+            return itemToSave.title.length > 45
         }
     }
 }
