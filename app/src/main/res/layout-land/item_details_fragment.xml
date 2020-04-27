@@ -7,15 +7,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         tools:context=".itemFragments.ItemDetailsFragment">
 
         <ImageView
             android:id="@+id/item_picture"
-            android:layout_width="358dp"
-            android:layout_height="295dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/default__item_image"
             app:layout_constraintBottom_toTopOf="@id/picture_guideline"
             app:layout_constraintEnd_toStartOf="@+id/central_guideline"
@@ -99,10 +99,12 @@
 
             <TextView
                 android:id="@+id/item_condition_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/condition_value"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_condition"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -165,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
-                android:text="@string/expire_date"
+                android:text="@string/expire_date_header"
                 app:layout_constraintBottom_toTopOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/item_location_details"
                 app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
@@ -191,15 +193,16 @@
 
             <TextView
                 android:id="@+id/item_category_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/category"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
                 android:id="@+id/item_subcategory_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/sub_cat"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_subcategory"
@@ -209,18 +212,22 @@
 
             <TextView
                 android:id="@+id/item_location_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/location"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
                 android:id="@+id/item_expire_date_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/expire_date"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <androidx.constraintlayout.widget.Guideline
@@ -243,10 +250,12 @@
 
             <TextView
                 android:id="@+id/item_description_value"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/item_description"
                 app:layout_constraintTop_toBottomOf="@+id/item_description" />
 
