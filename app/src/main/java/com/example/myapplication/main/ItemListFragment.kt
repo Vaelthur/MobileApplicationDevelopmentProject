@@ -65,7 +65,6 @@ class ItemListFragment : Fragment() {
         newItem.setOnClickListener { view ->
             defaultItemEdit()
         }
-
         return root
     }
 

@@ -62,7 +62,6 @@ class ItemEditFragment : Fragment() {
         // view necessary to access gui elements
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
 
-        // get viewmodel
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
@@ -71,52 +70,6 @@ class ItemEditFragment : Fragment() {
             viewModel.setTempItemInfo(incomingItem)
         }
 
-        // click listener on Imagebutton
-        view.findViewById<ImageButton>(R.id.imageButtonChangePhoto).setOnClickListener { onImageButtonClickEvent(it) }
-
-        val spinner = view.findViewById<Spinner>(R.id.category_spinner)
-        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getMainCategories())
-        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = ad
-
-        val subspinner = view.findViewById<Spinner>(R.id.subcategory_spinner)
-
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view1: View?,
-                position: Int,
-                id: Long
-            ) {
-                val tempsubcat = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
-                tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                subspinner.adapter = tempsubcat
-
-                if( pos == spinner.selectedItemPosition ) {
-                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
-                }
-            }
-        }
-
-        // open datepicker and set text into textview
-        val BtnDate = view.findViewById<Button>(R.id.button_edit_date)
-        BtnDate.setOnClickListener {
-            val cal = Calendar.getInstance()
-            val y = cal.get(Calendar.YEAR)
-            val m = cal.get(Calendar.MONTH)
-            val d = cal.get(Calendar.DAY_OF_MONTH)
-
-            val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view1, year, month, dayOfMonth ->
-                val monthFinal = month+1
-                val t = "$dayOfMonth/$monthFinal/$year"
-                view.findViewById<TextView>(R.id.item_expire_date_value).text = t
-            }, y, m, d )
-            dpd.show()
-        }
         return view
     }
 
@@ -138,9 +91,10 @@ class ItemEditFragment : Fragment() {
                 item_picture)
         })
 
-        imageButtonChangePhoto.setOnClickListener {
-            onImageButtonClickEvent(it)
-        }
+        // Listener to change profile pic
+        imageButtonChangePhoto.setOnClickListener {  onImageButtonClickEvent(it) }
+        setSpinners(view)
+        setDatePicker(view)
     }
 
     override fun onDestroyView() {
@@ -253,6 +207,8 @@ class ItemEditFragment : Fragment() {
         val itemBundle = Bundle(1)
         itemBundle.putSerializable("item", itemToSave as Serializable?)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
     }
 
     private fun hideSoftKeyboard(activity: Activity?) {
@@ -407,6 +363,57 @@ class ItemEditFragment : Fragment() {
         when(requestCode){
             PERMISSION_CODE_CAMERA -> takePicture()
             PERMISSION_CODE_GALLERY -> takeFromGallery()
+        }
+    }
+
+
+    private fun setDatePicker(view : View) {
+
+        // open datepicker and set text into textview
+        val BtnDate = view.findViewById<Button>(R.id.button_edit_date)
+        BtnDate.setOnClickListener {
+            val cal = Calendar.getInstance()
+            val y = cal.get(Calendar.YEAR)
+            val m = cal.get(Calendar.MONTH)
+            val d = cal.get(Calendar.DAY_OF_MONTH)
+
+            val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view1, year, month, dayOfMonth ->
+                val monthFinal = month+1
+                val t = "$dayOfMonth/$monthFinal/$year"
+                view.findViewById<TextView>(R.id.item_expire_date_value).text = t
+            }, y, m, d )
+             dpd.show()
+        }
+    }
+
+    private fun setSpinners(view: View) {
+
+        val spinner = view.findViewById<Spinner>(R.id.category_spinner)
+        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getMainCategories())
+        ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = ad
+
+        val subspinner = view.findViewById<Spinner>(R.id.subcategory_spinner)
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view1: View?,
+                position: Int,
+                id: Long
+            ) {
+                val tempsubcat = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
+                tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                subspinner.adapter = tempsubcat
+
+                if( pos == spinner.selectedItemPosition ) {
+                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
+                }
+            }
         }
     }
 }

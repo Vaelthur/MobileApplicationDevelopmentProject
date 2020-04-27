@@ -41,10 +41,8 @@ class ItemDetailsFragment : Fragment() {
 
         arguments?. let {
             val incomingItem : Item = it.getSerializable("item") as Item
-            if(viewModel.itemInfo.value == null) {
-                viewModel.setItemInfo(incomingItem)
-                viewModel.setTempItemInfo(incomingItem)
-            }
+            viewModel.setItemInfo(incomingItem)
+            viewModel.setTempItemInfo(incomingItem)
         }
 
         val itemInfo = viewModel.itemInfo
@@ -52,7 +50,6 @@ class ItemDetailsFragment : Fragment() {
             this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
             return
         }
-
 
         viewModel.itemInfo.observe(requireActivity(), Observer {
             item_title.text = it.title
