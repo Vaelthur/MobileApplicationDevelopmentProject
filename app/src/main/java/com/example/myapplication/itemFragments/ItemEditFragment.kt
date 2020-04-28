@@ -42,7 +42,6 @@ class ItemEditFragment : Fragment() {
     private val PERMISSION_CODE_CAMERA = 1000
     private val PERMISSION_CODE_GALLERY = 1001
 
-    //
     // var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
     private var pos=0
 
@@ -78,6 +77,9 @@ class ItemEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        setSpinners(view)
+        setDatePicker(view)
+
         viewModel.tempItemInfo.observe(requireActivity(), Observer{
 
             item_title_edit.setText(it.title)
@@ -96,8 +98,6 @@ class ItemEditFragment : Fragment() {
 
         // Listener to change profile pic
         imageButtonChangePhoto.setOnClickListener {  onImageButtonClickEvent(it) }
-        setSpinners(view)
-        setDatePicker(view)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
