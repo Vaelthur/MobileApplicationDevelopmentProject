@@ -26,7 +26,7 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
 
     /// region DB interactions
 
-    fun addItem() = viewModelScope.launch(Dispatchers.IO){
+/*    fun addItem() = viewModelScope.launch(Dispatchers.IO){
 
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val item = Item(
@@ -39,7 +39,7 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
     fun deleteItem(item: Item) = viewModelScope.launch(Dispatchers.IO){
 
         repository.delete(item)
-    }
+    }*/
 
     fun insertAll(itemToSave: Item) = viewModelScope.launch(Dispatchers.IO){
 

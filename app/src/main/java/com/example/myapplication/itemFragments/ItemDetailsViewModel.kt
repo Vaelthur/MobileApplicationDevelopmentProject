@@ -18,10 +18,6 @@ class ItemDetailsViewModel : ViewModel() {
         itemInfo.value = item
     }
 
-    fun setTempItemInfo(itemJson: JSONObject){
-        tempItemInfo.value = createItemInfoFromJSON(itemJson)
-    }
-
     fun setTempItemInfo(item: Item){
         this.tempItemInfo.value = item
     }

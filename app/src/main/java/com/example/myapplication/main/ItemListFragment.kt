@@ -1,5 +1,6 @@
 package com.example.myapplication.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,12 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.Item
+import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.Serializable
 
 class ItemListFragment : Fragment() {
 
     private lateinit var itemListViewModel: ItemListViewModel
+
+    private lateinit var itemDetailsViewModel: ItemDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +41,12 @@ class ItemListFragment : Fragment() {
         itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
+        itemDetailsViewModel =
+            of(requireActivity()).get(ItemDetailsViewModel::class.java)
+
+        itemDetailsViewModel.tempItemInfo.value = null
+
+
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
         itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {itemList ->
@@ -44,6 +54,7 @@ class ItemListFragment : Fragment() {
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter =
                 ItemInfoAdapter(itemList)
+
             if(itemList.isEmpty()) {
                 root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
                 root.findViewById<TextView>(R.id.new_item_button).visibility = View.VISIBLE
@@ -58,11 +69,14 @@ class ItemListFragment : Fragment() {
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
+            //without the next line if I change the picture then go back, when entering and rotating, the same picture will appear
+            this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("item_picture_editing").apply()
             defaultItemEdit()
         }
 
         val newItem: Button = root.findViewById(R.id.new_item_button)
         newItem.setOnClickListener { view ->
+            this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("item_picture_editing").apply()
             defaultItemEdit()
         }
         return root

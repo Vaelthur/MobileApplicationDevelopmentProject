@@ -22,20 +22,18 @@ import androidx.fragment.app.Fragment
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.ItemCategories
 import androidx.lifecycle.Observer
-import java.util.*
 import com.example.myapplication.main.ItemInfoFactory
 import androidx.lifecycle.ViewModelProviders.of
-import androidx.lifecycle.observe
 import androidx.navigation.findNavController
 import com.example.myapplication.data.Item
 import com.example.myapplication.main.ItemListViewModel
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_item_edit.*
-import kotlinx.android.synthetic.main.fragment_itemlist.*
 import java.io.File
 import java.io.IOException
 import java.io.Serializable
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ItemEditFragment : Fragment() {
     //requests and permissions codes
@@ -49,6 +47,9 @@ class ItemEditFragment : Fragment() {
     private var pos=0
 
     private lateinit var  viewModel: ItemDetailsViewModel
+
+
+    ///region create/destroy
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +68,9 @@ class ItemEditFragment : Fragment() {
         arguments?. let {
             val incomingItem : Item = it.getSerializable("item") as Item
             viewModel.setItemInfo(incomingItem)
-            viewModel.setTempItemInfo(incomingItem)
+            if(viewModel.tempItemInfo.value == null) {
+                viewModel.setTempItemInfo(incomingItem)
+            }
         }
 
         return view
@@ -86,7 +89,7 @@ class ItemEditFragment : Fragment() {
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
             subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
             this.pos = ItemCategories().getPosFromValue(it.category)
-            Helpers.updateItemPicture(this.requireContext(),
+            Helpers.updatePicture(this.requireContext(),
                 Uri.parse(it.pictureURIString),
                 item_picture)
         })
@@ -97,42 +100,36 @@ class ItemEditFragment : Fragment() {
         setDatePicker(view)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        hideSoftKeyboard(requireActivity())
-        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
-        viewModel.setTempItemInfo(tempItemInfo)
-        viewModel.tempItemInfo.removeObservers(requireActivity())
-    }
-
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        activity?.menuInflater?.inflate(R.menu.change_pic, menu)
-    }
-
-    private fun onImageButtonClickEvent(it: View) {
-        registerForContextMenu(it)
-        requireActivity().openContextMenu(it)
-        unregisterForContextMenu(it)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.item_edit_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.save_action -> {
-                saveEdits()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+    override fun onCreateContextMenu(
+        menu: ContextMenu,
+        v: View,
+        menuInfo: ContextMenu.ContextMenuInfo?) {
+        activity?.menuInflater?.inflate(R.menu.change_pic, menu)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        hideSoftKeyboard(requireActivity())
+        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this,
+            viewModel.tempItemInfo.value?.itemId)
+        viewModel.setTempItemInfo(tempItemInfo)
+        viewModel.tempItemInfo.removeObservers(requireActivity())
+    }
+
+    ///endregion functions
+
+
+
+    private fun onImageButtonClickEvent(it: View) {
+        registerForContextMenu(it)
+        requireActivity().openContextMenu(it)
+        unregisterForContextMenu(it)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -151,90 +148,7 @@ class ItemEditFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Update view while editing profile picture
-        if(resultCode == Activity.RESULT_OK) {
-            when(requestCode) {
-                REQUEST_IMAGE_CAPTURE -> imageCaptureHandler()
-                REQUEST_IMAGE_GALLERY -> imageGalleryHandler(data?.data)
-            }
-        }
-    }
-
-    private fun imageGalleryHandler(itemPictureUri : Uri?) {
-        itemPictureUri?.let {
-            this.activity?.grantUriPermission(this.activity?.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            this.activity?.contentResolver?.takePersistableUriPermission(it,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-
-
-            val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
-            with(readFromSharePref.edit()) {
-                putString("item_picture_editing", itemPictureUri.toString())
-                commit()
-            }
-
-            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
-
-        }
-    }
-
-    private fun imageCaptureHandler() {
-
-        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
-    }
-
-    private fun saveEdits(){
-
-        hideSoftKeyboard(requireActivity())
-        val itemID = viewModel.tempItemInfo.value?.itemId
-        val itemToSave  = ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
-        viewModel.itemInfo.value  = itemToSave
-        viewModel.tempItemInfo.value  = itemToSave
-
-        if(Helpers.someEmptyItemFields(itemToSave)) {
-            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
-            return
-        }
-
-        if(Helpers.titleTooLong(itemToSave)) {
-            Helpers.makeSnackbar(this.requireView(), "Max 45 characters for the title")
-            item_title_edit.requestFocus()
-            return
-        }
-
-        // Save to DB or update item on DB
-        val itemListViewModel =
-            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
-
-        if(itemID == 0)
-            itemListViewModel.insertAll(itemToSave)
-        else
-            itemListViewModel.updateItem(itemToSave)
-
-        val itemBundle = Bundle(1)
-        itemBundle.putSerializable("item", itemToSave as Serializable?)
-        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
-    }
-
-    private fun hideSoftKeyboard(activity: Activity?) {
-        activity?.let {
-            val inputManager =
-                it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (activity.currentFocus != null) {
-                inputManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
-                inputManager.hideSoftInputFromInputMethod(
-                    activity.currentFocus!!.windowToken,
-                    0
-                )
-            }
-        }
-    }
+    ///region Camera functions
 
     private fun takePictureHandler(){
 
@@ -287,6 +201,10 @@ class ItemEditFragment : Fragment() {
         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
     }
 
+    ///endregion
+
+    ///region Gallery functions
+
     private fun selectFromGalleryHandler(){
 
         val permissions: Array<String> = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -318,6 +236,112 @@ class ItemEditFragment : Fragment() {
         val mimeTypes = arrayOf("image/jpeg", "image/png")
         galleryIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         startActivityForResult(galleryIntent,  REQUEST_IMAGE_GALLERY)
+    }
+
+    ///endregion
+
+    ///region ImageHandler functions
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Update view while editing profile picture
+        if(resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                REQUEST_IMAGE_CAPTURE -> imageCaptureHandler()
+                REQUEST_IMAGE_GALLERY -> imageGalleryHandler(data?.data)
+            }
+        }
+    }
+
+    private fun imageCaptureHandler() {
+        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+    }
+
+    private fun imageGalleryHandler(itemPictureUri : Uri?) {
+        itemPictureUri?.let {
+            this.activity?.grantUriPermission(this.activity?.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            this.activity?.contentResolver?.takePersistableUriPermission(it,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+
+
+            val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+            with(readFromSharePref.edit()) {
+                putString("item_picture_editing", itemPictureUri.toString())
+                commit()
+            }
+
+            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+
+        }
+    }
+
+    ///endregion
+
+    ///region Save functions
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save_action -> {
+                saveEdits()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun saveEdits(){
+
+        hideSoftKeyboard(requireActivity())
+        val itemID = viewModel.tempItemInfo.value?.itemId
+        val itemToSave  = ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
+        viewModel.itemInfo.value  = itemToSave
+        viewModel.tempItemInfo.value  = itemToSave
+
+        if(Helpers.someEmptyItemFields(itemToSave)) {
+            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
+            return
+        }
+
+        if(Helpers.titleTooLong(itemToSave)) {
+            Helpers.makeSnackbar(this.requireView(), "Max 45 characters for the title")
+            item_title_edit.requestFocus()
+            return
+        }
+
+        // Save to DB or update item on DB
+        val itemListViewModel =
+            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
+
+        if(itemID == 0)
+            itemListViewModel.insertAll(itemToSave)
+        else
+            itemListViewModel.updateItem(itemToSave)
+
+        val itemBundle = Bundle(1)
+        itemBundle.putSerializable("item", itemToSave as Serializable?)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
+    }
+
+    ///endregion
+
+    ///region Helpers
+
+    private fun hideSoftKeyboard(activity: Activity?) {
+        activity?.let {
+            val inputManager =
+                it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (activity.currentFocus != null) {
+                inputManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+                inputManager.hideSoftInputFromInputMethod(
+                    activity.currentFocus!!.windowToken,
+                    0
+                )
+            }
+        }
     }
 
     private fun createImageFile(): File {
@@ -427,4 +451,6 @@ class ItemEditFragment : Fragment() {
             }
         }
     }
+
+    ///endregion
 }

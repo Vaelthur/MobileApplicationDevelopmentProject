@@ -228,7 +228,7 @@
 
                 <Spinner
                     android:id="@+id/category_spinner"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="58dp"
                     app:layout_constraintBottom_toTopOf="@+id/subcategory_spinner"
@@ -240,7 +240,7 @@
 
                 <Spinner
                     android:id="@+id/subcategory_spinner"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintBottom_toTopOf="@+id/item_location_value"
                     app:layout_constraintEnd_toEndOf="parent"

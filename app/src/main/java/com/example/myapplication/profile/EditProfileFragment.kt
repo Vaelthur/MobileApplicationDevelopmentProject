@@ -43,6 +43,8 @@ class EditProfileFragment : Fragment() {
 
     private lateinit var showProfileViewModel: ShowProfileViewModel
 
+    ///region create/destroy functions
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -61,12 +63,12 @@ class EditProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        showProfileViewModel.tempAccountInfo?.observe(requireActivity(), Observer {
+        showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
             editViewUsernameEditProfile.setText(it.username)
             editViewUserEmailEditProfile.setText(it.email)
             editViewUserLocationEditProfile.setText(it.location)
-            Helpers.updateProfilePicture(
+            Helpers.updatePicture(
                 this.requireContext(),
                 Uri.parse(it.profilePicture),
                 profile_picture
@@ -79,13 +81,6 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
-    }
-
     override fun onCreateContextMenu(
         menu: ContextMenu,
         v: View,
@@ -94,25 +89,24 @@ class EditProfileFragment : Fragment() {
         activity?.menuInflater?.inflate(R.menu.change_pic, menu)
     }
 
-    private fun onImageButtonClickEvent(it: View) {
-        registerForContextMenu(it)
-        requireActivity().openContextMenu(it)
-        unregisterForContextMenu(it)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.edit_profile_menu, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.saveIconProfile -> {
-                saveProfile()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
+    }
+
+///endregion
+
+    private fun onImageButtonClickEvent(it: View) {
+        registerForContextMenu(it)
+        requireActivity().openContextMenu(it)
+        unregisterForContextMenu(it)
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -130,96 +124,6 @@ class EditProfileFragment : Fragment() {
             }
             // Default case
             else -> super.onContextItemSelected(item)
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Update view while editing profile picture
-        if(resultCode == Activity.RESULT_OK) {
-            when(requestCode) {
-                REQUEST_IMAGE_CAPTURE -> imageCaptureHandler()
-                REQUEST_IMAGE_GALLERY -> imageGalleryHandler(data?.data)
-            }
-        }
-    }
-
-    private fun imageGalleryHandler(profilePictureUri : Uri?) {
-        profilePictureUri?.let {
-            this.activity?.grantUriPermission(this.activity?.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            this.activity?.contentResolver?.takePersistableUriPermission(it,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-
-
-            val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
-            with(readFromSharePref.edit()) {
-                putString("profile_picture_editing", profilePictureUri.toString())
-                commit()
-            }
-            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-        }
-    }
-
-    private fun imageCaptureHandler() {
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-    }
-
-    private fun saveProfile() {
-
-        hideSoftKeyboard(this.activity)
-
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
-
-
-        if(Helpers.someEmptyAccountFields(accountInfo)) {
-            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
-            return
-        }
-
-        if(!Helpers.isEmailValid(accountInfo.email)) {
-            Helpers.makeSnackbar(this.requireView(), "Email format not valid")
-            editViewUserEmailEditProfile.requestFocus()
-            return
-        }
-
-        // Save content to sharedPreferences
-        val jsonString = Gson().toJson(accountInfo)
-        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
-            putString("account_info", jsonString)
-            commit()
-        }
-
-        showProfileViewModel.setAccountInfo(accountInfo)
-        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
-        setProfileNavHeaderHandler()
-        //Return to ShowProfileActivity
-        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        Helpers.makeSnackbar(requireView(), "Profile changed correctly")
-    }
-
-    private fun setProfileNavHeaderHandler() {
-        val navView : NavigationView? = this.activity?.findViewById(R.id.nav_view)
-        val headerView : View? = navView?.getHeaderView(0)
-        val accountInfo = showProfileViewModel.accountInfo.value
-        accountInfo?.let {
-            Helpers.setNavHeaderView(headerView, it.fullname, it.email, it.profilePicture)
-        }
-    }
-
-    private fun hideSoftKeyboard(activity: Activity?) {
-        activity?.let {
-            val inputManager =
-                it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            if (activity.currentFocus != null) {
-                inputManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
-                inputManager.hideSoftInputFromInputMethod(
-                    activity.currentFocus!!.windowToken,
-                    0
-                )
-            }
         }
     }
 
@@ -315,6 +219,91 @@ class EditProfileFragment : Fragment() {
 
     /// endregion
 
+    ///region ImageHandler functions
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        // Update view while editing profile picture
+        if(resultCode == Activity.RESULT_OK) {
+            when(requestCode) {
+                REQUEST_IMAGE_CAPTURE -> imageCaptureHandler()
+                REQUEST_IMAGE_GALLERY -> imageGalleryHandler(data?.data)
+            }
+        }
+    }
+
+    private fun imageGalleryHandler(profilePictureUri : Uri?) {
+        profilePictureUri?.let {
+            this.activity?.grantUriPermission(this.activity?.packageName, it, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            this.activity?.contentResolver?.takePersistableUriPermission(it,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+
+
+            val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
+            with(readFromSharePref.edit()) {
+                putString("profile_picture_editing", profilePictureUri.toString())
+                commit()
+            }
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        }
+    }
+
+    private fun imageCaptureHandler() {
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+    }
+
+    ///endregion
+
+    ///region Save functions
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.saveIconProfile -> {
+                saveProfile()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun saveProfile() {
+
+        hideSoftKeyboard(this.activity)
+
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+
+
+        if(Helpers.someEmptyAccountFields(accountInfo)) {
+            Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
+            return
+        }
+
+        if(!Helpers.isEmailValid(accountInfo.email)) {
+            Helpers.makeSnackbar(this.requireView(), "Email format not valid")
+            editViewUserEmailEditProfile.requestFocus()
+            return
+        }
+
+        // Save content to sharedPreferences
+        val jsonString = Gson().toJson(accountInfo)
+        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
+        with (sharedPref.edit()) {
+            putString("account_info", jsonString)
+            commit()
+        }
+
+        showProfileViewModel.setAccountInfo(accountInfo)
+        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
+        setProfileNavHeaderHandler()
+        //Return to ShowProfileActivity
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        Helpers.makeSnackbar(requireView(), "Profile changed correctly")
+    }
+
+    ///endregion
+
     /// region Helpers
 
     private fun createImageFile(): File {
@@ -358,8 +347,6 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    /// endregion
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         //called when user presses ALLOW or DENY from Permission Request Popup
 
@@ -375,6 +362,31 @@ class EditProfileFragment : Fragment() {
             PERMISSION_CODE_GALLERY -> takeFromGallery()
         }
     }
+
+    private fun setProfileNavHeaderHandler() {
+        val navView : NavigationView? = this.activity?.findViewById(R.id.nav_view)
+        val headerView : View? = navView?.getHeaderView(0)
+        val accountInfo = showProfileViewModel.accountInfo.value
+        accountInfo?.let {
+            Helpers.setNavHeaderView(headerView, it.fullname, it.email, it.profilePicture)
+        }
+    }
+
+    private fun hideSoftKeyboard(activity: Activity?) {
+        activity?.let {
+            val inputManager =
+                it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            if (activity.currentFocus != null) {
+                inputManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
+                inputManager.hideSoftInputFromInputMethod(
+                    activity.currentFocus!!.windowToken,
+                    0
+                )
+            }
+        }
+    }
+
+    /// endregion
 
 }
 

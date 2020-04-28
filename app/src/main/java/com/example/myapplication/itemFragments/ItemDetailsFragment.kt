@@ -2,11 +2,8 @@ package com.example.myapplication.itemFragments
 
 import android.content.Context
 import android.net.Uri
-import androidx.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -61,7 +58,7 @@ class ItemDetailsFragment : Fragment() {
             item_condition_value.text = it.condition
             item_description_value.text = it.description
 
-            Helpers.updateItemPicture(this.requireContext(),
+            Helpers.updatePicture(this.requireContext(),
                 Uri.parse(it.pictureURIString.toString()),
                 item_picture)
 

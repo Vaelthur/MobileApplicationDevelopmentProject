@@ -223,9 +223,9 @@
 
             <Spinner
                 android:id="@+id/category_spinner"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="50dp"
                 app:layout_constraintBottom_toTopOf="@+id/subcategory_spinner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -234,8 +234,9 @@
 
             <Spinner
                 android:id="@+id/subcategory_spinner"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toTopOf="@+id/item_location_value"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -258,7 +259,7 @@
                 android:id="@+id/item_expire_date_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/expire_date"
+                android:hint="@string/date_edit"
                 android:selectAllOnFocus="true"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
