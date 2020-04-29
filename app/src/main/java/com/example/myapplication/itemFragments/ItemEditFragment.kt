@@ -15,6 +15,7 @@ import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -32,6 +33,9 @@ import java.io.File
 import java.io.IOException
 import java.io.Serializable
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -402,6 +406,7 @@ class ItemEditFragment : Fragment() {
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun setDatePicker(view : View) {
 
         // open datepicker and set text into textview
@@ -414,8 +419,16 @@ class ItemEditFragment : Fragment() {
 
             val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view1, year, month, dayOfMonth ->
                 val monthFinal = month+1
-                val t = "$dayOfMonth/$monthFinal/$year"
-                view.findViewById<TextView>(R.id.item_expire_date_value).text = t
+                // var needed to datecheck
+                val today = LocalDate.now()
+                val buffer = LocalDate.of(year, monthFinal, dayOfMonth)
+
+                if (buffer.isBefore(today))
+                    Helpers.makeSnackbar(requireView(), "Cannot set a date before today as expire date.")
+                else {
+                    val selectedDate = "$dayOfMonth/$monthFinal/$year"
+                    view.findViewById<TextView>(R.id.item_expire_date_value).text = selectedDate
+                }
             }, y, m, d )
              dpd.show()
         }
