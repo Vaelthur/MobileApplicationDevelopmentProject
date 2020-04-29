@@ -33,12 +33,6 @@ class MainActivity : AppCompatActivity() {
         val isTabletLandscape: Boolean = resources.getBoolean(R.bool.isTablet)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
 
-        // check the device type and shows drawer accordingly
-        if (isTabletLandscape) {
-            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            drawerLayout.setScrimColor(0x00000000) // set the rest of the screen without shadow as if drawer and the rest were on the same level
-        }
-
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         // Nav_host_fragment is the fragment container in layout/content_main.xml
@@ -62,6 +56,11 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
+        // check the device type and shows drawer accordingly
+        if (isTabletLandscape) {
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            drawerLayout.setScrimColor(0x00000000) // set the rest of the screen without shadow as if drawer and the rest were on the same level
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
