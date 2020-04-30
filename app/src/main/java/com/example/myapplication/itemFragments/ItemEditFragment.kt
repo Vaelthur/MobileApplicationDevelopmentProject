@@ -34,6 +34,7 @@ import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.random.Random
 
 class ItemEditFragment : Fragment() {
     //requests and permissions codes
@@ -293,11 +294,17 @@ class ItemEditFragment : Fragment() {
         }
     }
 
+    @ExperimentalUnsignedTypes
     private fun saveEdits(){
 
         hideSoftKeyboard(requireActivity())
         val itemID = viewModel.tempItemInfo.value?.itemId
-        val itemToSave  = ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
+        val newItemID = Random.Default.nextInt(0, Int.MAX_VALUE)
+        val itemToSave = if(itemID == 0) {
+            ItemInfoFactory.getItemInfoFromTextEdit(this, newItemID)
+        } else {
+            ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
+        }
         viewModel.itemInfo.value  = itemToSave
         viewModel.tempItemInfo.value  = itemToSave
 
