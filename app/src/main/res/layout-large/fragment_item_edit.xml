@@ -45,10 +45,10 @@
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/picture_guideline"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintVertical_bias="0.0">
 
             <EditText
                 android:id="@+id/item_condition_value"
@@ -73,7 +73,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/item_price"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread_inside" />
+                app:layout_constraintVertical_chainStyle="spread" />
 
             <EditText
                 android:id="@+id/item_title_edit"
@@ -89,14 +89,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread_inside" />
+                app:layout_constraintVertical_chainStyle="spread" />
 
 
             <TextView
                 android:id="@+id/item_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/price"
                 android:textColor="#005BA3"
@@ -139,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="visible"
-                app:layout_constraintGuide_percent="0.15"
+                app:layout_constraintGuide_percent="0.20"
                 tools:visibility="visible" />
 
             <TextView
@@ -173,8 +172,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
-                android:textSize="24sp"
                 android:text="@string/sub_cat"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_location_details"
                 app:layout_constraintStart_toStartOf="@+id/main_characteristics"
                 app:layout_constraintTop_toBottomOf="@+id/item_category" />
@@ -184,9 +183,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:textSize="24sp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/location"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
                 app:layout_constraintStart_toStartOf="@+id/item_subcategory"
                 app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
@@ -195,10 +194,10 @@
                 android:id="@+id/item_expire_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="24sp"
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/expire_date_header"
+                android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/item_location_details"
                 app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
@@ -211,9 +210,9 @@
                 android:fontFamily="sans-serif-light"
                 android:text="@string/item_condition"
                 android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@id/description_guideline"
                 app:layout_constraintStart_toStartOf="@+id/item_title"
-                app:layout_constraintTop_toBottomOf="@+id/item_expire_date"
-                app:layout_constraintBottom_toTopOf="@id/description_guideline"/>
+                app:layout_constraintTop_toBottomOf="@+id/item_expire_date" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/details_value_guideline"
@@ -250,8 +249,8 @@
                 android:imeOptions="actionDone"
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
-                android:textSize="20sp"
                 android:text="@string/location"
+                android:textSize="20sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
