@@ -79,10 +79,12 @@ class ItemEditFragment : Fragment() {
         return view
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         setSpinners(view)
         setDatePicker(view)
+
 
         viewModel.tempItemInfo.observe(requireActivity(), Observer{
 
@@ -406,7 +408,6 @@ class ItemEditFragment : Fragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun setDatePicker(view : View) {
 
         // open datepicker and set text into textview
@@ -420,10 +421,13 @@ class ItemEditFragment : Fragment() {
             val dpd = DatePickerDialog(requireContext(), DatePickerDialog.OnDateSetListener { view1, year, month, dayOfMonth ->
                 val monthFinal = month+1
                 // var needed to datecheck
-                val today = LocalDate.now()
-                val buffer = LocalDate.of(year, monthFinal, dayOfMonth)
+                val today = Calendar.getInstance().time
+                val buffer = Calendar.getInstance()
+                buffer.set(Calendar.YEAR, year)
+                buffer.set(Calendar.MONTH, month)
+                buffer.set(Calendar.DAY_OF_MONTH, dayOfMonth)
 
-                if (buffer.isBefore(today))
+                if (buffer.time <= today)
                     Helpers.makeSnackbar(requireView(), "Cannot set a date before today as expire date.")
                 else {
                     val selectedDate = "$dayOfMonth/$monthFinal/$year"
