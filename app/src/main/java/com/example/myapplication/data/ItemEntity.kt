@@ -105,16 +105,6 @@ abstract class ItemRoomDatabase : RoomDatabase() {
             // Not needed if you only populate on creation.
 
             //itemDao.deleteAll()
-
-//            val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            val timeStamp:String = SimpleDateFormat("dd/MM/yyyy").format(Date())
-
-            /*val item = Item(
-                "android.resource://com.example.myapplication/drawable/default__item_image", "TOLO FIGA",
-                "Torino", "100", "Automotive", "Tools & Equipment", timeStamp, "makle", "descrivo"
-            )
-
-            itemDao.insertAll(item)*/
         }
     }
 }

@@ -3,22 +3,11 @@ package com.example.myapplication.main
 import android.content.Context
 import android.net.Uri
 import android.widget.EditText
-import android.widget.Spinner
-import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
-import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.ItemEditFragment
-import com.example.myapplication.R
 import com.example.myapplication.data.Item
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
-import com.example.myapplication.profile.EditProfileFragment
 import kotlinx.android.synthetic.main.fragment_item_edit.*
-import org.json.JSONObject
-import java.io.Serializable
-import java.net.URI
-import java.util.*
-import java.util.concurrent.locks.Condition
 
 class ItemInfoFactory(){
 

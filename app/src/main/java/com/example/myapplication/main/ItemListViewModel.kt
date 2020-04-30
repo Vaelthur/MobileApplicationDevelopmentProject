@@ -1,17 +1,15 @@
 package com.example.myapplication.main
 
 import android.app.Application
-import androidx.lifecycle.*
-import androidx.room.Room
-import com.example.myapplication.AccountInfo
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.viewModelScope
 import com.example.myapplication.data.Item
 import com.example.myapplication.data.ItemDao
 import com.example.myapplication.data.ItemRepository
 import com.example.myapplication.data.ItemRoomDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ItemListViewModel constructor(application: Application) : AndroidViewModel(application) {
 

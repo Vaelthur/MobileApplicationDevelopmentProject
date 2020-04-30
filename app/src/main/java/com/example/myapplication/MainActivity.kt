@@ -1,22 +1,15 @@
 package com.example.myapplication
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
-import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.myapplication.main.ItemListViewModel
 import com.google.android.material.navigation.NavigationView
 
 

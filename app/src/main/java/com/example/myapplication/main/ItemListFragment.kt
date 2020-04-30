@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -16,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
-import com.example.myapplication.data.Item
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.io.Serializable
 
 class ItemListFragment : Fragment() {
 

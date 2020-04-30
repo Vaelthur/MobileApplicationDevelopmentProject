@@ -8,16 +8,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.os.bundleOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.R.id.nav_host_fragment
 import com.example.myapplication.data.Item
-import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import java.io.Serializable
 
 class ItemInfoAdapter(private val items: List<Item>)
