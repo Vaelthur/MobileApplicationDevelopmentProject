@@ -21,6 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.example.myapplication.AccountInfoFactory
+import com.example.myapplication.FirestoreRepository
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.google.android.material.navigation.NavigationView
@@ -286,6 +287,10 @@ class EditProfileFragment : Fragment() {
             return
         }
 
+
+        //Save content to FireStore Database
+        val firestoreRepository = FirestoreRepository()
+        firestoreRepository.saveAccountInfo(accountInfo)
         // Save content to sharedPreferences
         val jsonString = Gson().toJson(accountInfo)
         val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return

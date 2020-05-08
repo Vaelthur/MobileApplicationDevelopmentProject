@@ -11,11 +11,14 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.FirebaseDatabase
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+
+    lateinit var database: FirebaseDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,10 @@ class MainActivity : AppCompatActivity() {
         // value took from values/attributes, different foreach layout, so it picks the correct one
         val isTabletLandscape: Boolean = resources.getBoolean(R.bool.isTablet)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
+
+        // Write a message to the database
+        database = FirebaseDatabase.getInstance()
+
 
         val navView: NavigationView = findViewById(R.id.nav_view)
         // Nav_host_fragment is the fragment container in layout/content_main.xml

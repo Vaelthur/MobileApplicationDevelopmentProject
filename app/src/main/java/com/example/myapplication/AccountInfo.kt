@@ -14,7 +14,18 @@ import java.io.Serializable
 
 data class AccountInfo (val fullname: String, val username: String,
                         val email: String, val location: String, val profilePicture: String)
-    : Serializable {}
+    : Serializable {
+
+    fun toMap(): Map<String, Any?> {
+        return mapOf(
+            "fullname" to fullname,
+            "username" to username,
+            "email" to email,
+            "location" to location,
+            "profilePicture" to profilePicture
+        )
+    }
+}
 
 class AccountInfoFactory(){
 
@@ -64,38 +75,5 @@ class AccountInfoFactory(){
         }
 
 
-        fun getAccountInfoFromTextView(parentActivity: AppCompatActivity)
-                : AccountInfo {
-
-            val getTextViewText =
-                { id: TextView -> id.text }
-
-            val getProfilePicturePath : () -> Uri =
-                {
-                    val readFromSharePref = parentActivity.getSharedPreferences("account_info", Context.MODE_PRIVATE)
-                    val accountInfo = readFromSharePref.getString("account_info", null)
-
-                    if(!accountInfo.isNullOrBlank()) {
-                        val accountJson = JSONObject(accountInfo)
-                        Uri.parse(accountJson["profilePicture"].toString())
-                    }
-                    else {
-                        Uri.parse(defaultProfilePic)
-                    }
-                }
-
-            val fullname = StringBuffer(getTextViewText(parentActivity.textViewFullNameShowProfile)).toString()
-            val username = StringBuffer(getTextViewText(parentActivity.textViewUsernameShowProfile)).toString()
-            val email = StringBuffer(getTextViewText(parentActivity.textViewUserEmailShowProfile)).toString()
-            val location = StringBuffer(getTextViewText(parentActivity.textViewUserLocationShowProfile)).toString()
-            val profilePicture = getProfilePicturePath().toString()
-
-            return AccountInfo(
-                fullname,
-                username,
-                email,
-                location,
-                profilePicture)
-        }
     }
 }
