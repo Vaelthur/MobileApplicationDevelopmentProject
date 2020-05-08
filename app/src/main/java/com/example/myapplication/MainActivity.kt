@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
         val isTabletLandscape: Boolean = resources.getBoolean(R.bool.isTablet)
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
 
-
         val navView: NavigationView = findViewById(R.id.nav_view)
         // Nav_host_fragment is the fragment container in layout/content_main.xml
         val navController = findNavController(R.id.nav_host_fragment)
