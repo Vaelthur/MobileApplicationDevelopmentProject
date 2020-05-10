@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
@@ -12,5 +13,10 @@
             android:id="@+id/showProfileFragment"
             android:icon="@drawable/ic_launcher_foreground"
             android:title="@string/profile" />
+
+        <item android:title="@string/logout"
+            android:id="@+id/logout_action"
+            android:icon="@drawable/logout_icon"
+            app:showAsAction="always"/>
     </group>
 </menu>

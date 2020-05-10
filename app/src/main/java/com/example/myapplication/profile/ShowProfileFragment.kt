@@ -50,7 +50,7 @@ class ShowProfileFragment : Fragment() {
                 .build()
 
         // Build a GoogleSignInClient with the options specified by gso.
-        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         val currentUser = auth.currentUser
         val account = GoogleSignIn.getLastSignedInAccount(requireActivity())
@@ -101,12 +101,12 @@ class ShowProfileFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.show_profile_menu, menu)
+        // inflater.inflate(R.menu.logout_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.editProfileIcon -> {
-
                 this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment)
                 true
 
