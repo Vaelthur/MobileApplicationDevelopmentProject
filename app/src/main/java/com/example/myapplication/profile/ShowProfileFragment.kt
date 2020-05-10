@@ -29,11 +29,10 @@ class ShowProfileFragment : Fragment() {
 
     private val RC_SIGN_IN = 343
     private lateinit var showProfileViewModel: ShowProfileViewModel
-    private lateinit var auth: FirebaseAuth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
         setHasOptionsMenu(true)
     }
 
@@ -43,17 +42,7 @@ class ShowProfileFragment : Fragment() {
     ): View? {
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        val gso =
-            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
 
-        // Build a GoogleSignInClient with the options specified by gso.
-        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-
-        val currentUser = auth.currentUser
-        val account = GoogleSignIn.getLastSignedInAccount(requireActivity())
 
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
         if(currentUser != null) {

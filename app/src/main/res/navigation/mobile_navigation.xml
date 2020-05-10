@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@id/nav_itemList">
+    app:startDestination="@id/signInFragment">
 
     <fragment
         android:id="@+id/nav_itemList"
@@ -57,5 +57,13 @@
         <action
             android:id="@+id/action_ItemEditFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.myapplication.SignInFragment"
+        android:label="SignInFragment" >
+        <action
+            android:id="@+id/action_signInFragment_to_nav_itemList"
+            app:destination="@id/nav_itemList" />
     </fragment>
 </navigation>
