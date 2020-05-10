@@ -52,6 +52,7 @@
     <string name="location_header">Location:</string>
 
     <string name="edit">Edit</string>
+    <string name="logout">Logout</string>
 
     <string name="emptylist">Ooops! Looks like you don\'t have any items.</string>
 

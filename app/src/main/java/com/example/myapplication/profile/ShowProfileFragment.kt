@@ -48,7 +48,7 @@ class ShowProfileFragment : Fragment() {
                 .build()
 
         // Build a GoogleSignInClient with the options specified by gso.
-        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
+        val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
 
         val account = GoogleSignIn.getLastSignedInAccount(requireActivity())
         firestoreViewModel = of(requireActivity()).get(FirestoreViewModel::class.java)
@@ -97,15 +97,19 @@ class ShowProfileFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.show_profile_menu, menu)
+        inflater.inflate(R.menu.logout_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.editProfileIcon -> {
-
                 this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment)
                 true
 
+            }
+            R.id.logout_btn -> {
+                signOutUser()
+                true
             }
             else -> super.onOptionsItemSelected(item)
         }
@@ -144,6 +148,25 @@ class ShowProfileFragment : Fragment() {
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("problem", "signInResult:failed code=" + e.statusCode)
             //updateUI(null)
+        }
+    }
+
+    private fun signOutUser(){
+
+        val account = GoogleSignIn.getLastSignedInAccount(requireActivity())
+        if(account == null){
+            //already logged out
+        } else {
+            val gso =
+                GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build()
+
+            // Build a GoogleSignInClient with the options specified by gso.
+            val mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+            mGoogleSignInClient.signOut()
+            mGoogleSignInClient.revokeAccess()
         }
     }
 }
