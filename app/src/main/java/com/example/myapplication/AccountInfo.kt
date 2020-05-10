@@ -6,14 +6,20 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapplication.profile.EditProfileFragment
+import com.google.firebase.database.Exclude
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 import org.json.JSONObject
 import java.io.Serializable
 
 
-data class AccountInfo (val fullname: String, val username: String,
-                        val email: String, val location: String, val profilePicture: String)
+data class AccountInfo (
+    var id: String? = null,
+    var fullname: String? = null,
+    var username: String? = null,
+    var email: String? = null,
+    var location: String? = null,
+    var profilePicture: String? = "android.resource://com.example.myapplication/drawable/default_profile_picture")
     : Serializable {
 
     fun toMap(): Map<String, Any?> {

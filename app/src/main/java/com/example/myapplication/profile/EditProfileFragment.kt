@@ -21,7 +21,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.example.myapplication.AccountInfoFactory
-import com.example.myapplication.FirestoreRepository
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.google.android.material.navigation.NavigationView
@@ -281,7 +280,7 @@ class EditProfileFragment : Fragment() {
             return
         }
 
-        if(!Helpers.isEmailValid(accountInfo.email)) {
+        if(!Helpers.isEmailValid(accountInfo.email!!)) {
             Helpers.makeSnackbar(this.requireView(), "Email format not valid")
             editViewUserEmailEditProfile.requestFocus()
             return
@@ -289,8 +288,7 @@ class EditProfileFragment : Fragment() {
 
 
         //Save content to FireStore Database
-        val firestoreRepository = FirestoreRepository()
-        firestoreRepository.saveAccountInfo(accountInfo)
+
         // Save content to sharedPreferences
         val jsonString = Gson().toJson(accountInfo)
         val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
@@ -373,7 +371,7 @@ class EditProfileFragment : Fragment() {
         val headerView : View? = navView?.getHeaderView(0)
         val accountInfo = showProfileViewModel.accountInfo.value
         accountInfo?.let {
-            Helpers.setNavHeaderView(headerView, it.fullname, it.email, it.profilePicture)
+            Helpers.setNavHeaderView(headerView, it.fullname!!, it.email!!, it.profilePicture!!)
         }
     }
 

@@ -99,8 +99,8 @@ class Helpers(){
         ///region checkers functions
 
         fun someEmptyAccountFields(accountInfo: AccountInfo): Boolean {
-            return accountInfo.fullname.isEmpty() || accountInfo.username.isEmpty() ||
-                    accountInfo.email.isEmpty() || accountInfo.location.isEmpty()
+            return accountInfo.fullname!!.isEmpty() || accountInfo.username!!.isEmpty() ||
+                    accountInfo.email!!.isEmpty() || accountInfo.location!!.isEmpty()
         }
 
         fun isEmailValid(email: CharSequence): Boolean {
