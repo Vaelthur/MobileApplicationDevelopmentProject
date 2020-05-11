@@ -1,5 +1,6 @@
 package com.example.myapplication
 
+import android.accounts.Account
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,8 +17,11 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import java.util.*
 
 class SignInFragment : Fragment() {
@@ -87,37 +91,28 @@ class SignInFragment : Fragment() {
         try {
             val account = completedTask.getResult(ApiException::class.java)
             firebaseAuthWithGoogle(account?.idToken!!)
-            val id = account.id
-            val fullname = account.givenName+" "+account.familyName
-            val username = account.givenName?.toLowerCase(Locale.ROOT)+account.familyName?.toLowerCase(
-                Locale.ROOT
-            )
-            val email = account.email
-            val location = "City"
-            val profilePicture = account.photoUrl
-            val googleAccountInfo = AccountInfo(id,fullname,username,
-                email!!,location,profilePicture.toString())
+            val googleAccountInfo = getGoogleSignInInfo(auth.currentUser!!)
+            val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
+            changeNavHeader(navView, auth.currentUser!!)
+
+            //1. search for user in database
+            val db = FirebaseFirestore.getInstance()
+            val accountInfoQueryResult = db.collection("users").document(account.id!!)
+            accountInfoQueryResult.get().addOnSuccessListener { accountDocument ->
+                if(accountDocument == null) {
+                    //no user found => signup
+                    signUp(db, googleAccountInfo)
+                } else {
+                    //user found => sign in
+                    signIn(accountDocument)
+                }
+            }
+
+
 
             //i put the user in the db just for check if everything is alright
-            insertInDb(FirebaseFirestore.getInstance(), googleAccountInfo)
+            //check if user is present in db, if not, add it
 
-            //change drawer baceasue yes
-            val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
-            navView.menu.clear()
-            navView.inflateMenu(R.menu.activity_main_drawer)
-            //updateHeader
-            Helpers.setNavHeaderView(
-                navView.getHeaderView(0),
-                account.displayName!!,
-                account.email!!,
-                account.photoUrl!!.toString())
-
-            //navigate to editProfile with bundle
-            val accountBundle = Bundle()
-            accountBundle.putSerializable("account_info", googleAccountInfo)
-            this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-            this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
-            this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
 
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
@@ -132,19 +127,59 @@ class SignInFragment : Fragment() {
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    //Helpers.makeSnackbar(requireView(), "Authentication Success.")
-                    val user = auth.currentUser
-                    val displayName = user?.displayName
-                    val i = 0
-                    //create accountInfo, put in a bundle, navigate to edit??
-                    //updateUI(user)
+
+
 
                 } else {
                     Helpers.makeSnackbar(requireView(), "Authentication Failed.")
                     //updateUI(null)
                 }
             }
+    }
+
+    private fun signIn(accountDocument: DocumentSnapshot) {
+
+        val accountBundle = Bundle()
+        val accountInfo = accountDocument.toObject(AccountInfo::class.java)
+
+        //3. navigate to showProfile with informazioni corrette in un bundle
+        accountBundle.putSerializable("account_info", accountInfo)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment)
+    }
+
+
+    private fun signUp(db: FirebaseFirestore, googleAccountInfo: AccountInfo) {
+
+        val accountBundle = Bundle()
+        insertInDb(db, googleAccountInfo)
+        //navigate to editProfile with bundle
+        accountBundle.putSerializable("account_info", googleAccountInfo)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
+    }
+
+    private fun changeNavHeader(navView: NavigationView, account: FirebaseUser) {
+        navView.menu.clear()
+        navView.inflateMenu(R.menu.activity_main_drawer)
+        //updateHeader
+        Helpers.setNavHeaderView(
+            navView.getHeaderView(0),
+            account.displayName!!,
+            account.email!!,
+            account.photoUrl!!.toString())
+    }
+
+    private fun getGoogleSignInInfo(currentUser: FirebaseUser): AccountInfo {
+        val id = currentUser.uid
+        val fullname = currentUser.displayName
+        val username = currentUser.displayName
+        val email = currentUser.email
+        val location = "City"
+        val profilePicture = currentUser.photoUrl
+        return AccountInfo(id,fullname,username,
+            email!!,location,profilePicture.toString())
     }
 
     private fun insertInDb(database : FirebaseFirestore, googleAccountInfo: AccountInfo) {
