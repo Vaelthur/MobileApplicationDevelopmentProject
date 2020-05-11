@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.Matrix
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +16,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.myapplication.data.Item
 import com.example.myapplication.main.ItemInfoFactory
 import com.google.android.material.snackbar.Snackbar
@@ -36,17 +40,39 @@ class Helpers(){
         }
 
         fun updatePicture(context: Context, profilePictureUri: Uri, picture: ImageView) {
-
+            
+            var imageBitmap : Bitmap = bitma
             try {
-                val imageBitmap =
+                imageBitmap =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         val source = ImageDecoder.createSource(context.contentResolver, profilePictureUri)
                         ImageDecoder.decodeBitmap(source)
                     }
                     else {
+                        //IT'S AN URL
+                        Glide.with(context).asBitmap().load(profilePictureUri).into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap>?
+                            ) {
+                                imageBitmap = resource
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                                // this is called when imageView is cleared on lifecycle call or for
+                                // some other reason.
+                                // if you are referencing the bitmap somewhere else too other than this imageView
+                                // clear it here as you can no longer have the bitmap
+                            }
+                        })
                         MediaStore.Images.Media.getBitmap(context.contentResolver, profilePictureUri)
                     }
+            }
+            catch(e: IOException) {
+                e.printStackTrace()
 
+                Toast.makeText(context, "Could not set picture", Toast.LENGTH_SHORT).show()
+            }
                 // Rotate if necessary
                 val inputStream = context.contentResolver.openInputStream(profilePictureUri)
                 val exif = inputStream?.let { ExifInterface(it) }
@@ -65,11 +91,6 @@ class Helpers(){
                 val scaled = Bitmap.createScaledBitmap(rotatedBitmap, 512, nh, true)
 
                 picture.setImageBitmap(scaled)
-            }
-            catch(e: IOException) {
-                e.printStackTrace()
-                Toast.makeText(context, "Could not set picture", Toast.LENGTH_SHORT).show()
-            }
         }
 
         ///endregion

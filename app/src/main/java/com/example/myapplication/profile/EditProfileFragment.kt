@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.myapplication.AccountInfo
 import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
@@ -69,6 +70,7 @@ class EditProfileFragment : Fragment() {
             editViewUsernameEditProfile.setText(it.username)
             editViewUserEmailEditProfile.setText(it.email)
             editViewUserLocationEditProfile.setText(it.location)
+            //prova for setting google profile image
             Helpers.updatePicture(
                 this.requireContext(),
                 Uri.parse(it.profilePicture),
