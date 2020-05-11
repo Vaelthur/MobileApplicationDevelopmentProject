@@ -81,6 +81,13 @@ class EditProfileFragment : Fragment() {
                 Uri.parse(it.profilePicture),
                 profile_picture
             )*/
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+            if (sharedPref != null) {
+                with (sharedPref.edit()) {
+                    putString("profile_picture_editing", it.profilePicture.toString())
+                    apply()
+                }
+            }
 
         })
 
@@ -89,6 +96,7 @@ class EditProfileFragment : Fragment() {
         }
         arguments?.let {
             showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
+            arguments = null
         }
     }
 
@@ -251,7 +259,7 @@ class EditProfileFragment : Fragment() {
                 Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
 
-
+            //showProfileViewModel.tempAccountInfo.value?.profilePicture = profilePictureUri.toString()
             val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
             with(readFromSharePref.edit()) {
                 putString("profile_picture_editing", profilePictureUri.toString())
@@ -312,7 +320,7 @@ class EditProfileFragment : Fragment() {
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
-        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
         Helpers.makeSnackbar(requireView(), "Profile changed correctly")
     }
 

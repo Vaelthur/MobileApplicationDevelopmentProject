@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.myapplication.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -22,7 +23,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_show_profile.*
+import kotlinx.android.synthetic.main.fragment_show_profile.profile_picture
 
 
 class ShowProfileFragment : Fragment() {
@@ -46,24 +49,34 @@ class ShowProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val accountInfo = showProfileViewModel.accountInfo
+/*        val accountInfo = showProfileViewModel.accountInfo
 
         if(accountInfo.value == null) {
             //readSharedPreferences()
-        }
+        }*/
 
-        accountInfo.observe(requireActivity(), Observer {
+        showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
             textViewFullNameShowProfile.text = it.fullname
             textViewUsernameShowProfile.text = it.username
             textViewUserEmailShowProfile.text = it.email
             textViewUserLocationShowProfile.text = it.location
-            Helpers.updatePicture(
+            Glide.with(requireContext())
+                .load(it.profilePicture)
+                .centerCrop()
+                .circleCrop()
+                .into(profile_picture)
+            /*Helpers.updatePicture(
                 this.requireContext(),
                 Uri.parse(it.profilePicture),
                 profile_picture
-            )
+            )*/
             showProfileViewModel.setTempAccountInfo(it)
         })
+
+        arguments?.let {
+            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
+            arguments = null
+        }
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
     }

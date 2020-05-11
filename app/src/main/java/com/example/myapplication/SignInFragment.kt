@@ -103,6 +103,8 @@ class SignInFragment : Fragment() {
             //navigate to editProfile with bundle
             val accountBundle = Bundle()
             accountBundle.putSerializable("account_info", googleAccountInfo)
+            this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+            this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
             this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
 
         } catch (e: ApiException) {
