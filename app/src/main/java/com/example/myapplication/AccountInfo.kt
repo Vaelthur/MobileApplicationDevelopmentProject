@@ -39,7 +39,7 @@ class AccountInfoFactory(){
 
         const val defaultProfilePic = "android.resource://com.example.myapplication/drawable/default_profile_picture"
 
-        fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
+        fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment, id: String) : AccountInfo {
 
             val getEditViewText =
                 { id: EditText -> id.text }
@@ -73,6 +73,7 @@ class AccountInfoFactory(){
             val profilePicture = getProfilePicturePath(editProfileFragment).toString()
 
             return AccountInfo(
+                id,
                 fullname,
                 username,
                 email,

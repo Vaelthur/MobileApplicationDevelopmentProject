@@ -41,9 +41,9 @@ class Helpers(){
 
         fun updatePicture(context: Context, profilePictureUri: Uri, picture: ImageView) {
             
-            var imageBitmap : Bitmap = bitma
+            //var imageBitmap : Bitmap = bitma
             try {
-                imageBitmap =
+                val imageBitmap =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         val source = ImageDecoder.createSource(context.contentResolver, profilePictureUri)
                         ImageDecoder.decodeBitmap(source)
@@ -55,7 +55,7 @@ class Helpers(){
                                 resource: Bitmap,
                                 transition: Transition<in Bitmap>?
                             ) {
-                                imageBitmap = resource
+                                //imageBitmap = resource
                             }
 
                             override fun onLoadCleared(placeholder: Drawable?) {
@@ -67,12 +67,7 @@ class Helpers(){
                         })
                         MediaStore.Images.Media.getBitmap(context.contentResolver, profilePictureUri)
                     }
-            }
-            catch(e: IOException) {
-                e.printStackTrace()
 
-                Toast.makeText(context, "Could not set picture", Toast.LENGTH_SHORT).show()
-            }
                 // Rotate if necessary
                 val inputStream = context.contentResolver.openInputStream(profilePictureUri)
                 val exif = inputStream?.let { ExifInterface(it) }
@@ -91,6 +86,12 @@ class Helpers(){
                 val scaled = Bitmap.createScaledBitmap(rotatedBitmap, 512, nh, true)
 
                 picture.setImageBitmap(scaled)
+            }
+            catch(e: IOException) {
+                e.printStackTrace()
+
+                Toast.makeText(context, "Could not set picture", Toast.LENGTH_SHORT).show()
+            }
         }
 
         ///endregion

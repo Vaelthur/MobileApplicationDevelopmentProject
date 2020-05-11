@@ -71,11 +71,16 @@ class EditProfileFragment : Fragment() {
             editViewUserEmailEditProfile.setText(it.email)
             editViewUserLocationEditProfile.setText(it.location)
             //prova for setting google profile image
-            Helpers.updatePicture(
+            Glide.with(requireContext())
+                .load(it.profilePicture)
+                .centerCrop()
+                .circleCrop()
+                .into(profile_picture)
+/*            Helpers.updatePicture(
                 this.requireContext(),
                 Uri.parse(it.profilePicture),
                 profile_picture
-            )
+            )*/
 
         })
 
@@ -103,7 +108,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
         showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
     }
 
@@ -252,12 +257,12 @@ class EditProfileFragment : Fragment() {
                 putString("profile_picture_editing", profilePictureUri.toString())
                 commit()
             }
-            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
         }
     }
 
     private fun imageCaptureHandler() {
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
     }
 
     ///endregion
@@ -278,7 +283,7 @@ class EditProfileFragment : Fragment() {
 
         hideSoftKeyboard(this.activity)
 
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
 
 
         if(Helpers.someEmptyAccountFields(accountInfo)) {
