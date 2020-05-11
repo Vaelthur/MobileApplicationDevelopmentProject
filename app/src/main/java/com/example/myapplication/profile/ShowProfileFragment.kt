@@ -40,23 +40,9 @@ class ShowProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Configure sign-in to request the user's ID, email address, and basic
-        // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-
 
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
-        if(currentUser != null) {
-            //updateUI??
-            return inflater.inflate(R.layout.fragment_show_profile, container, false)
-        } else {
-            val loginView = inflater.inflate(R.layout.fragment_login, container, false)
-            val login : SignInButton = loginView.findViewById(R.id.google_signin_button)
-            login.setOnClickListener { view ->
-                val signInIntent = googleSignInClient.signInIntent
-                startActivityForResult(signInIntent, RC_SIGN_IN)
-            }
-            return loginView
-        }
+        return inflater.inflate(R.layout.fragment_show_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -120,79 +106,4 @@ class ShowProfileFragment : Fragment() {
     }
     /// endregion
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            handleSignInResult(task)
-        }
-    }
-
-    fun handleSignInResult(completedTask : Task<GoogleSignInAccount>) {
-        try {
-            val account = completedTask.getResult(ApiException::class.java)
-            firebaseAuthWithGoogle(account?.idToken!!)
-            val id = account?.id
-            val fullname = account?.givenName+" "+account?.familyName
-            val username = account?.givenName?.toLowerCase()+account?.familyName?.toLowerCase()
-            val email = account?.email
-            val location = ""
-            val profilePicture = account?.photoUrl
-            val googleAccountInfo = AccountInfo(id,fullname,username,
-                    email!!,location,profilePicture.toString())
-
-            //retrieve user from db if exists
-            val db = FirebaseFirestore.getInstance()
-            val usersRef = db.collection("users")
-            val userInDb = usersRef.whereEqualTo("email",email)
-
-            /*userInDb.get().addOnSuccessListener {
-                if(it.documents.isEmpty()) {
-                    //signup
-                    showProfileViewModel.setTempAccountInfo(googleAccountInfo)
-                    insertInDb(db,googleAccountInfo) //TODO: da spostare
-                    this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment)
-                }
-                else {
-                    //signin
-                    for(accountSnapshot in it.documents) {
-                        val accountInfo = accountSnapshot.toObject(AccountInfo::class.java)
-                        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.nav_itemList)
-                    }
-                }
-
-            }*/
-            // Signed in successfully, show authenticated UI.
-            //updateUI(account)
-        } catch (e: ApiException) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("problem", "signInResult:failed code=" + e.statusCode)
-            //updateUI(null)
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Helpers.makeSnackbar(requireView(), "Authentication Success.")
-                    val user = auth.currentUser
-                    val displayName = user?.displayName
-                    val i = 0
-                    //create accountInfo, put in a bundle, navigate to edit??
-                    //updateUI(user)
-
-                } else {
-                    Helpers.makeSnackbar(requireView(), "Authentication Failed.")
-                    //updateUI(null)
-                }
-            }
-    }
-
-    private fun insertInDb(database : FirebaseFirestore, googleAccountInfo: AccountInfo) {
-        val usersRef = database.collection("users")
-        usersRef.document(googleAccountInfo.id!!).set(googleAccountInfo)
-    }
 }

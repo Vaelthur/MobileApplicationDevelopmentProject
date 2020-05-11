@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
+import com.example.myapplication.AccountInfo
 import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
@@ -78,6 +79,9 @@ class EditProfileFragment : Fragment() {
 
         imageButtonChangePic.setOnClickListener {
             onImageButtonClickEvent(it)
+        }
+        arguments?.let {
+            showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
         }
     }
 
