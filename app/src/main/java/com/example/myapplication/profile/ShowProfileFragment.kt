@@ -49,11 +49,11 @@ class ShowProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-/*        val accountInfo = showProfileViewModel.accountInfo
+        val accountInfo = showProfileViewModel.accountInfo
 
         if(accountInfo.value == null) {
             //readSharedPreferences()
-        }*/
+        }
 
         showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
             textViewFullNameShowProfile.text = it.fullname
@@ -73,10 +73,10 @@ class ShowProfileFragment : Fragment() {
             showProfileViewModel.setTempAccountInfo(it)
         })
 
-        arguments?.let {
+/*        arguments?.let {
             showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
             arguments = null
-        }
+        }*/
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
     }

@@ -96,6 +96,7 @@ class EditProfileFragment : Fragment() {
         }
         arguments?.let {
             showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
+            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
             arguments = null
         }
     }

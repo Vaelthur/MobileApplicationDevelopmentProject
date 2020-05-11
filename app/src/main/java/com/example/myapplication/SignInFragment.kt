@@ -14,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
@@ -99,6 +100,17 @@ class SignInFragment : Fragment() {
 
             //i put the user in the db just for check if everything is alright
             insertInDb(FirebaseFirestore.getInstance(), googleAccountInfo)
+
+            //change drawer baceasue yes
+            val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
+            navView.menu.clear()
+            navView.inflateMenu(R.menu.activity_main_drawer)
+            //updateHeader
+            Helpers.setNavHeaderView(
+                navView.getHeaderView(0),
+                account.displayName!!,
+                account.email!!,
+                account.photoUrl!!.toString())
 
             //navigate to editProfile with bundle
             val accountBundle = Bundle()
