@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.Matrix
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +16,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.exifinterface.media.ExifInterface
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.myapplication.data.Item
 import com.example.myapplication.main.ItemInfoFactory
 import com.google.android.material.snackbar.Snackbar
@@ -36,7 +40,8 @@ class Helpers(){
         }
 
         fun updatePicture(context: Context, profilePictureUri: Uri, picture: ImageView) {
-
+            
+            //var imageBitmap : Bitmap = bitma
             try {
                 val imageBitmap =
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -44,6 +49,22 @@ class Helpers(){
                         ImageDecoder.decodeBitmap(source)
                     }
                     else {
+                        //IT'S AN URL
+                        Glide.with(context).asBitmap().load(profilePictureUri).into(object : CustomTarget<Bitmap>() {
+                            override fun onResourceReady(
+                                resource: Bitmap,
+                                transition: Transition<in Bitmap>?
+                            ) {
+                                //imageBitmap = resource
+                            }
+
+                            override fun onLoadCleared(placeholder: Drawable?) {
+                                // this is called when imageView is cleared on lifecycle call or for
+                                // some other reason.
+                                // if you are referencing the bitmap somewhere else too other than this imageView
+                                // clear it here as you can no longer have the bitmap
+                            }
+                        })
                         MediaStore.Images.Media.getBitmap(context.contentResolver, profilePictureUri)
                     }
 
@@ -68,6 +89,7 @@ class Helpers(){
             }
             catch(e: IOException) {
                 e.printStackTrace()
+
                 Toast.makeText(context, "Could not set picture", Toast.LENGTH_SHORT).show()
             }
         }
@@ -99,8 +121,8 @@ class Helpers(){
         ///region checkers functions
 
         fun someEmptyAccountFields(accountInfo: AccountInfo): Boolean {
-            return accountInfo.fullname.isEmpty() || accountInfo.username.isEmpty() ||
-                    accountInfo.email.isEmpty() || accountInfo.location.isEmpty()
+            return accountInfo.fullname!!.isEmpty() || accountInfo.username!!.isEmpty() ||
+                    accountInfo.email!!.isEmpty() || accountInfo.location!!.isEmpty()
         }
 
         fun isEmailValid(email: CharSequence): Boolean {
@@ -133,7 +155,8 @@ class Helpers(){
         fun setNavHeaderView(headerView: View?, fullname: String, email: String, profilePicture: String) {
             headerView?.findViewById<TextView>(R.id.full_name_navheader)?.text = fullname
             headerView?.findViewById<TextView>(R.id.email_navheader)?.text = email
-            headerView?.findViewById<ImageView>(R.id.profile_picture_navheader)?.setImageURI(Uri.parse(profilePicture))
+            //headerView?.findViewById<ImageView>(R.id.profile_picture_navheader)?.setImageURI(Uri.parse(profilePicture))
+            Glide.with(headerView!!).load(profilePicture).into(headerView.findViewById<ImageView>(R.id.profile_picture_navheader))
         }
 
         fun makeSnackbar(view: View, text: CharSequence) {

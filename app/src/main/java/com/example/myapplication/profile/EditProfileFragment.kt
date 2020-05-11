@@ -308,10 +308,6 @@ class EditProfileFragment : Fragment() {
 
 
         //Save content to FireStore Database
-        val db = FirebaseFirestore.getInstance()
-        val infos = db.collection("users").document(showProfileViewModel.tempAccountInfo.value!!.id.toString())
-        // infos.update("profilePicture", "Porcoddio")
-
 
         // Save content to sharedPreferences
         val jsonString = Gson().toJson(accountInfo)

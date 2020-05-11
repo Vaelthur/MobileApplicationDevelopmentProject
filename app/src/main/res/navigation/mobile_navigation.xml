@@ -17,6 +17,9 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_itemList_to_signInFragment"
+            app:destination="@id/signInFragment" />
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
@@ -58,4 +61,8 @@
             android:id="@+id/action_ItemEditFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/signInFragment"
+        android:name="com.example.myapplication.SignInFragment"
+        android:label="SignInFragment" />
 </navigation>

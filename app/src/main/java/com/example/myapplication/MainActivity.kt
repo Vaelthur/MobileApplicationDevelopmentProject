@@ -14,12 +14,14 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var auth: FirebaseAuth
 
     lateinit var database: FirebaseDatabase
 
@@ -34,8 +36,22 @@ class MainActivity : AppCompatActivity() {
 
         // Write a message to the database
         database = FirebaseDatabase.getInstance()
-
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
         val navView: NavigationView = findViewById(R.id.nav_view)
+        if(currentUser == null) {
+            navView.menu.clear()
+            navView.inflateMenu(R.menu.activity_main_drawer_logged_out)
+        } else {
+            navView.menu.clear()
+            navView.inflateMenu(R.menu.activity_main_drawer)
+            //updateHeader
+            Helpers.setNavHeaderView(
+                navView.getHeaderView(0),
+                currentUser.displayName!!,
+                currentUser.email!!,
+                currentUser.photoUrl!!.toString())
+        }
         // Nav_host_fragment is the fragment container in layout/content_main.xml
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
@@ -48,14 +64,14 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        Helpers.readAccountJsonFromPreferences(this)?.let {
+/*        Helpers.readAccountJsonFromPreferences(this)?.let {
             Helpers.setNavHeaderView(
                 navView.getHeaderView(0),
                 it["fullname"].toString(),
                 it["email"].toString(),
                 it["profilePicture"].toString()
             )
-        }
+        }*/
 
         // check the device type and shows drawer accordingly
         if (isTabletLandscape) {
