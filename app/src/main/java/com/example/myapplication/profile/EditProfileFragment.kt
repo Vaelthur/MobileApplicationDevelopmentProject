@@ -20,8 +20,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
+import com.example.myapplication.AccountInfo
 import com.example.myapplication.AccountInfoFactory
-import com.example.myapplication.FirestoreRepository
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.google.android.material.navigation.NavigationView
@@ -69,16 +70,34 @@ class EditProfileFragment : Fragment() {
             editViewUsernameEditProfile.setText(it.username)
             editViewUserEmailEditProfile.setText(it.email)
             editViewUserLocationEditProfile.setText(it.location)
-            Helpers.updatePicture(
+            //prova for setting google profile image
+            Glide.with(requireContext())
+                .load(it.profilePicture)
+                .centerCrop()
+                .circleCrop()
+                .into(profile_picture)
+/*            Helpers.updatePicture(
                 this.requireContext(),
                 Uri.parse(it.profilePicture),
                 profile_picture
-            )
+            )*/
+            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+            if (sharedPref != null) {
+                with (sharedPref.edit()) {
+                    putString("profile_picture_editing", it.profilePicture.toString())
+                    apply()
+                }
+            }
 
         })
 
         imageButtonChangePic.setOnClickListener {
             onImageButtonClickEvent(it)
+        }
+        arguments?.let {
+            showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
+            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
+            arguments = null
         }
     }
 
@@ -98,7 +117,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
         showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
     }
 
@@ -241,18 +260,18 @@ class EditProfileFragment : Fragment() {
                 Intent.FLAG_GRANT_READ_URI_PERMISSION
             )
 
-
+            //showProfileViewModel.tempAccountInfo.value?.profilePicture = profilePictureUri.toString()
             val readFromSharePref = (this.activity as AppCompatActivity).getPreferences(Context.MODE_PRIVATE)
             with(readFromSharePref.edit()) {
                 putString("profile_picture_editing", profilePictureUri.toString())
                 commit()
             }
-            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
         }
     }
 
     private fun imageCaptureHandler() {
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
     }
 
     ///endregion
@@ -273,7 +292,7 @@ class EditProfileFragment : Fragment() {
 
         hideSoftKeyboard(this.activity)
 
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
 
 
         if(Helpers.someEmptyAccountFields(accountInfo)) {
@@ -281,7 +300,7 @@ class EditProfileFragment : Fragment() {
             return
         }
 
-        if(!Helpers.isEmailValid(accountInfo.email)) {
+        if(!Helpers.isEmailValid(accountInfo.email!!)) {
             Helpers.makeSnackbar(this.requireView(), "Email format not valid")
             editViewUserEmailEditProfile.requestFocus()
             return
@@ -289,8 +308,11 @@ class EditProfileFragment : Fragment() {
 
 
         //Save content to FireStore Database
-        val firestoreRepository = FirestoreRepository()
-        firestoreRepository.saveAccountInfo(accountInfo)
+        val db = FirebaseFirestore.getInstance()
+        val infos = db.collection("users").document(showProfileViewModel.tempAccountInfo.value!!.id.toString())
+        // infos.update("profilePicture", "Porcoddio")
+
+
         // Save content to sharedPreferences
         val jsonString = Gson().toJson(accountInfo)
         val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
@@ -303,7 +325,7 @@ class EditProfileFragment : Fragment() {
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
-        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
         Helpers.makeSnackbar(requireView(), "Profile changed correctly")
     }
 
@@ -373,7 +395,7 @@ class EditProfileFragment : Fragment() {
         val headerView : View? = navView?.getHeaderView(0)
         val accountInfo = showProfileViewModel.accountInfo.value
         accountInfo?.let {
-            Helpers.setNavHeaderView(headerView, it.fullname, it.email, it.profilePicture)
+            Helpers.setNavHeaderView(headerView, it.fullname!!, it.email!!, it.profilePicture!!)
         }
     }
 
