@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.accounts.Account
+import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -107,22 +108,25 @@ class SignInFragment : Fragment() {
                 if (task.isSuccessful) {
 
                     val googleAccountInfo = getGoogleSignInInfo(auth.currentUser!!)
+                    // Nav header update
                     val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
                     changeNavHeader(navView, auth.currentUser!!)
 
-                    //1. search for user in database to determine if signup or signin
+                    //Search for user in database to determine if signup or signin
                     val db = FirebaseFirestore.getInstance()
                     val accountInfoQueryResult = db.collection("users").document(auth.currentUser!!.uid)
-                    accountInfoQueryResult.get().addOnSuccessListener { accountDocument ->
-                        if(accountDocument == null) {
-                            //no user found => signup
-                            signUp(db, googleAccountInfo)
-                        } else {
-                            //user found => sign in
-                            signIn(accountDocument)
+                    accountInfoQueryResult.get()
+                        .addOnSuccessListener { accountDocument ->
+                            if(accountDocument.data == null) {
+                                //no user found => signup
+                                signUp(db, googleAccountInfo)
+                            }
+                            else {
+                                //user found => sign in
+                                signIn(accountDocument)
+                            }
                         }
-                    }
-
+                        .addOnFailureListener {  Helpers.makeSnackbar(requireView(), "Authentication Failed.") }
                 }
                 else {
                     Helpers.makeSnackbar(requireView(), "Authentication Failed.")
@@ -133,7 +137,8 @@ class SignInFragment : Fragment() {
     private fun signIn(accountDocument: DocumentSnapshot) {
 
         val accountBundle = Bundle()
-        val accountInfo = accountDocument.toObject(AccountInfo::class.java)
+        val data = accountDocument.data
+        val accountInfo = AccountInfoFactory.fromMapToObj(data)
 
         //3. navigate to showProfile with informazioni corrette in un bundle
         accountBundle.putSerializable("account_info", accountInfo)

@@ -81,6 +81,15 @@ class AccountInfoFactory(){
                 profilePicture)
         }
 
+        fun fromMapToObj(hash : Map<String, Any>?) : AccountInfo {
+            return AccountInfo(
+                hash?.get("id") as String,
+                                hash["fullname"] as String,
+                                hash["username"] as String,
+                                hash["email"] as String,
+                                hash["location"] as String,
+                                hash["profilePicture"] as String)
+        }
 
     }
 }
