@@ -72,5 +72,12 @@
         <action
             android:id="@+id/action_onSaleListFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
+        <action
+            android:id="@+id/action_onSaleListFragment_to_itemDetailsBuyFragment2"
+            app:destination="@id/itemDetailsBuyFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/itemDetailsBuyFragment"
+        android:name="com.example.myapplication.itemFragments.ItemDetailsBuyFragment"
+        android:label="ItemDetailsBuyFragment" />
 </navigation>

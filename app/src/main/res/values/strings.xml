@@ -37,6 +37,7 @@
     <string name="condition_value">Used (2nd hand)</string>
     <string name="btn_str">Change</string>
     <string name="sub_cat">Sub Category</string>
+    <string name="seller">Sold by: </string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
