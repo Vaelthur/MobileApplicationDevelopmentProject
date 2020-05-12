@@ -72,17 +72,12 @@ class EditProfileFragment : Fragment() {
             editViewUsernameEditProfile.setText(it.username)
             editViewUserEmailEditProfile.setText(it.email)
             editViewUserLocationEditProfile.setText(it.location)
-            //prova for setting google profile image
             Glide.with(requireContext())
                 .load(it.profilePicture)
                 .centerCrop()
                 .circleCrop()
                 .into(profile_picture)
-/*            Helpers.updatePicture(
-                this.requireContext(),
-                Uri.parse(it.profilePicture),
-                profile_picture
-            )*/
+
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
             if (sharedPref != null) {
                 with (sharedPref.edit()) {
@@ -96,12 +91,6 @@ class EditProfileFragment : Fragment() {
         imageButtonChangePic.setOnClickListener {
             onImageButtonClickEvent(it)
         }
-
-//        arguments?.let {
-//            showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
-//            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
-//            arguments = null
-//        }
     }
 
     override fun onCreateContextMenu(
@@ -315,12 +304,12 @@ class EditProfileFragment : Fragment() {
         usersRef.document(auth.uid!!).set(accountInfo)
 
         // Save content to sharedPreferences
-        val jsonString = Gson().toJson(accountInfo)
-        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
-            putString("account_info", jsonString)
-            commit()
-        }
+//        val jsonString = Gson().toJson(accountInfo)
+//        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
+//        with (sharedPref.edit()) {
+//            putString("account_info", jsonString)
+//            commit()
+//        }
 
         showProfileViewModel.setAccountInfo(accountInfo)
 
