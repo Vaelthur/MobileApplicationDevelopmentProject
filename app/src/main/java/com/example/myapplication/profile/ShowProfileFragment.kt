@@ -1,10 +1,7 @@
 package com.example.myapplication.profile
 
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,20 +9,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.example.myapplication.*
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.SignInButton
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.example.myapplication.AccountInfoFactory
+import com.example.myapplication.Helpers
+import com.example.myapplication.MainActivity
+import com.example.myapplication.R
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_show_profile.*
-import kotlinx.android.synthetic.main.fragment_show_profile.profile_picture
 
 
 class ShowProfileFragment : Fragment() {
@@ -45,15 +34,16 @@ class ShowProfileFragment : Fragment() {
     ): View? {
 
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
+
+        if(showProfileViewModel.accountInfo.value == null){
+            //Set showProfileViewModel with db info
+            setShowProfileViewModel()
+        }
+
         return inflater.inflate(R.layout.fragment_show_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val accountInfo = showProfileViewModel.accountInfo
-
-        if(accountInfo.value == null) {
-            //readSharedPreferences()
-        }
 
         showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
             textViewFullNameShowProfile.text = it.fullname
@@ -72,11 +62,6 @@ class ShowProfileFragment : Fragment() {
             )*/
             showProfileViewModel.setTempAccountInfo(it)
         })
-
-/*        arguments?.let {
-            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
-            arguments = null
-        }*/
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
     }
@@ -119,4 +104,23 @@ class ShowProfileFragment : Fragment() {
     }
     /// endregion
 
+    private fun setShowProfileViewModel() {
+
+        val auth = (activity as MainActivity).getAuth()
+        //Search for user in database to determine if signup or signin
+        val db = FirebaseFirestore.getInstance()
+        val accountInfoQueryResult = db.collection("users").document(auth.currentUser!!.uid)
+        accountInfoQueryResult.get()
+            .addOnSuccessListener { accountDocument ->
+                if (accountDocument.data != null) {
+                    val accountInfo = AccountInfoFactory.fromMapToObj(accountDocument.data)
+                    showProfileViewModel.accountInfo.value = accountInfo
+                    showProfileViewModel.tempAccountInfo.value = accountInfo
+                }
+                else {
+                    Helpers.makeSnackbar(requireView(), "Could not retrieve user info")
+                }
+            }
+            .addOnFailureListener { Helpers.makeSnackbar(requireView(), "Could not retrieve user info") }
+    }
 }

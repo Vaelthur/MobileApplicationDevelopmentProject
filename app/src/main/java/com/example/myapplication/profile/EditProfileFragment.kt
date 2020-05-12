@@ -26,6 +26,9 @@ import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import java.io.File
@@ -59,7 +62,6 @@ class EditProfileFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
-
         return view
     }
 
@@ -94,11 +96,12 @@ class EditProfileFragment : Fragment() {
         imageButtonChangePic.setOnClickListener {
             onImageButtonClickEvent(it)
         }
-        arguments?.let {
-            showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
-            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
-            arguments = null
-        }
+
+//        arguments?.let {
+//            showProfileViewModel.setTempAccountInfo(requireArguments().get("account_info") as AccountInfo)
+//            showProfileViewModel.setAccountInfo(requireArguments().get("account_info") as AccountInfo)
+//            arguments = null
+//        }
     }
 
     override fun onCreateContextMenu(
@@ -306,6 +309,10 @@ class EditProfileFragment : Fragment() {
         }
 
         //Save content to FireStore Database
+        val db = FirebaseFirestore.getInstance()
+        val auth = FirebaseAuth.getInstance()
+        val usersRef = db.collection("users")
+        usersRef.document(auth.uid!!).set(accountInfo)
 
         // Save content to sharedPreferences
         val jsonString = Gson().toJson(accountInfo)

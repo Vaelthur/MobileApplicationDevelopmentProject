@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.example.myapplication.profile.ShowProfileViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -49,29 +51,10 @@ class SignInFragment : Fragment() {
         // Build a GoogleSignInClient with the options specified by gso.
         val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
         val login = view.findViewById<SignInButton>(R.id.google_signin_button)
-        login.setOnClickListener { view ->
+        login.setOnClickListener {
             val signInIntent = googleSignInClient.signInIntent
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
-        //val currentUser = auth.currentUser
-/*        if(currentUser != null) {
-            //1. search for user in database
-            val db = FirebaseFirestore.getInstance()
-            val currentUserID = currentUser.uid //forse
-            val accountInfoQueryResult = db.collection("users").whereEqualTo("id", currentUserID)
-            accountInfoQueryResult.get().addOnSuccessListener { accountDocument ->
-                if(accountDocument == null) {
-                    Helpers.makeSnackbar(requireView(), "No user found on database")
-                } else {
-                    //2. put info in accountInfo
-                    val accountInfo = accountDocument.documents.first().toObject(AccountInfo::class.java)
-                    val accountBundle = Bundle()
-                    //3. navigate to showProfile with informazioni corrette in un bundlle
-                    accountBundle.putSerializable("account_info", accountInfo)
-                    this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment)
-                }
-            }
-        }*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -136,12 +119,13 @@ class SignInFragment : Fragment() {
 
     private fun signIn(accountDocument: DocumentSnapshot) {
 
-        val accountBundle = Bundle()
         val data = accountDocument.data
         val accountInfo = AccountInfoFactory.fromMapToObj(data)
 
-        //3. navigate to showProfile with informazioni corrette in un bundle
-        accountBundle.putSerializable("account_info", accountInfo)
+        val showProfileViewModel = ViewModelProviders.of(requireActivity()).get(ShowProfileViewModel::class.java)
+        showProfileViewModel.accountInfo.value = accountInfo
+        showProfileViewModel.tempAccountInfo.value = accountInfo
+
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment)
     }
