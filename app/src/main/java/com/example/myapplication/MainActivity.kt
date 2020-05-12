@@ -39,12 +39,19 @@ class MainActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
         val navView: NavigationView = findViewById(R.id.nav_view)
+
+        // different drawer if user logged or not
         if(currentUser == null) {
             navView.menu.clear()
             navView.inflateMenu(R.menu.activity_main_drawer_logged_out)
         } else {
             navView.menu.clear()
             navView.inflateMenu(R.menu.activity_main_drawer)
+
+            // Listener on logout button
+            navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
+                logout(navView)
+            }
             //updateHeader
             Helpers.setNavHeaderView(
                 navView.getHeaderView(0),
@@ -89,6 +96,20 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun logout( navigationView: NavigationView): Boolean {
+        // rough signout - see if something else is needed
+        auth.signOut()
+        // restore drawer menu
+        // TODO: restore header too
+        navigationView.menu.clear()
+        navigationView.inflateMenu(R.menu.activity_main_drawer_logged_out)
+        // navigate to signinFragment
+        this.findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
+        // close drawer
+        this.findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+        return true
     }
 
     fun getAuth() : FirebaseAuth {
