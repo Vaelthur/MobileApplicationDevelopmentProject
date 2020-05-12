@@ -161,6 +161,10 @@ class SignInFragment : Fragment() {
     private fun changeNavHeader(navView: NavigationView, account: FirebaseUser) {
         navView.menu.clear()
         navView.inflateMenu(R.menu.activity_main_drawer)
+        navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
+            (activity as MainActivity).logout(navView)
+        }
+
         //updateHeader
         Helpers.setNavHeaderView(
             navView.getHeaderView(0),

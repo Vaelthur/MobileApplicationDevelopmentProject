@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun logout( navigationView: NavigationView): Boolean {
+    fun logout( navigationView: NavigationView): Boolean {
         // rough signout - see if something else is needed
         auth.signOut()
         // restore drawer menu
