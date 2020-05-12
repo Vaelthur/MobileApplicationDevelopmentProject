@@ -323,10 +323,10 @@ class ItemEditFragment : Fragment() {
         val itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
 
-        if(itemID == 0)
-            itemListViewModel.insertAll(itemToSave)
-        else
-            itemListViewModel.updateItem(itemToSave)
+//        if(itemID == 0)
+//            itemListViewModel.insertAll(itemToSave)
+//        else
+//            itemListViewModel.updateItem(itemToSave)
 
         val itemBundle = Bundle(1)
         itemBundle.putSerializable("item", itemToSave as Serializable?)

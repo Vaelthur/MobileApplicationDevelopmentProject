@@ -24,10 +24,6 @@ class ItemListFragment : Fragment() {
 
     private lateinit var itemDetailsViewModel: ItemDetailsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     @Suppress("DEPRECATION")
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -46,7 +42,10 @@ class ItemListFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
-        itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {itemList ->
+        // HERE TRY
+        itemListViewModel.getAll()
+
+        itemListViewModel.itemListLiveData?.observe(requireActivity(), Observer {itemList ->
             val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter =
