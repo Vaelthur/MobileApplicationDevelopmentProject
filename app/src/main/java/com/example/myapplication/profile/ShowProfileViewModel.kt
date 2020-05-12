@@ -28,6 +28,7 @@ class ShowProfileViewModel : ViewModel() {
     }
 
     private fun createAccountInfoFromJSON(accountJson: JSONObject): AccountInfo {
+
         val fullname = accountJson["fullname"].toString()
         val username = accountJson["username"].toString()
         val email = accountJson["email"].toString()
