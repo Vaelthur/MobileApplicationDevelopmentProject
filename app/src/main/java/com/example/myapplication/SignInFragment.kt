@@ -162,7 +162,7 @@ class SignInFragment : Fragment() {
         navView.menu.clear()
         navView.inflateMenu(R.menu.activity_main_drawer)
         navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
-            (activity as MainActivity).logout(navView)
+            (requireActivity() as MainActivity).logout(navView)
         }
 
         //updateHeader

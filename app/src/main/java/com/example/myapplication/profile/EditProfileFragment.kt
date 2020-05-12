@@ -117,7 +117,7 @@ class EditProfileFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         showProfileViewModel.tempAccountInfo.removeObservers(requireActivity())
     }
 
@@ -266,12 +266,12 @@ class EditProfileFragment : Fragment() {
                 putString("profile_picture_editing", profilePictureUri.toString())
                 commit()
             }
-            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
+            showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         }
     }
 
     private fun imageCaptureHandler() {
-        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
+        showProfileViewModel.tempAccountInfo.value = AccountInfoFactory.getAccountInfoFromTextEdit(this)
     }
 
     ///endregion
@@ -292,8 +292,7 @@ class EditProfileFragment : Fragment() {
 
         hideSoftKeyboard(this.activity)
 
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this, showProfileViewModel.tempAccountInfo.value?.id!!)
-
+        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
 
         if(Helpers.someEmptyAccountFields(accountInfo)) {
             Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
@@ -306,7 +305,6 @@ class EditProfileFragment : Fragment() {
             return
         }
 
-
         //Save content to FireStore Database
 
         // Save content to sharedPreferences
@@ -318,6 +316,7 @@ class EditProfileFragment : Fragment() {
         }
 
         showProfileViewModel.setAccountInfo(accountInfo)
+
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity

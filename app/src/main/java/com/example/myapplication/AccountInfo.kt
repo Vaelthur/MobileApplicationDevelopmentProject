@@ -39,7 +39,7 @@ class AccountInfoFactory(){
 
         const val defaultProfilePic = "android.resource://com.example.myapplication/drawable/default_profile_picture"
 
-        fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment, id: String) : AccountInfo {
+        fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
 
             val getEditViewText =
                 { id: EditText -> id.text }
@@ -71,6 +71,7 @@ class AccountInfoFactory(){
             val email = StringBuffer(getEditViewText(editProfileFragment.editViewUserEmailEditProfile)).toString()
             val location = StringBuffer(getEditViewText(editProfileFragment.editViewUserLocationEditProfile)).toString()
             val profilePicture = getProfilePicturePath(editProfileFragment).toString()
+            val id = (editProfileFragment.requireActivity() as MainActivity).getAuth().currentUser?.uid
 
             return AccountInfo(
                 id,
