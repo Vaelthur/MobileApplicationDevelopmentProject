@@ -27,12 +27,6 @@ import java.util.*
 class SignInFragment : Fragment() {
 
     private val RC_SIGN_IN = 343
-    private lateinit var auth: FirebaseAuth
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        auth = FirebaseAuth.getInstance()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,31 +82,12 @@ class SignInFragment : Fragment() {
 
     //this is called only if currentUser is null because otherwise we navigate to other views 8BUT IT IS Gà NULL BECAUSE THE CONTROL OF IT IS IN THE MAIN ACTIVITY!)
     fun handleSignInResult(completedTask : Task<GoogleSignInAccount>) {
+
         try {
             val account = completedTask.getResult(ApiException::class.java)
-            firebaseAuthWithGoogle(account?.idToken!!)
-            val googleAccountInfo = getGoogleSignInInfo(auth.currentUser!!)
-            val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
-            changeNavHeader(navView, auth.currentUser!!)
-
-            //1. search for user in database
-            val db = FirebaseFirestore.getInstance()
-            val accountInfoQueryResult = db.collection("users").document(account.id!!)
-            accountInfoQueryResult.get().addOnSuccessListener { accountDocument ->
-                if(accountDocument == null) {
-                    //no user found => signup
-                    signUp(db, googleAccountInfo)
-                } else {
-                    //user found => sign in
-                    signIn(accountDocument)
-                }
-            }
-
-
-
+            firebaseAuthWithGoogle(account)
             //i put the user in the db just for check if everything is alright
             //check if user is present in db, if not, add it
-
 
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
@@ -122,17 +97,35 @@ class SignInFragment : Fragment() {
         }
     }
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+    private fun firebaseAuthWithGoogle(accountGoogle : GoogleSignInAccount?) {
+
+        val credential = GoogleAuthProvider.getCredential(accountGoogle?.idToken, null)
+        val auth = (activity as MainActivity).getAuth()
+
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
 
+                    val googleAccountInfo = getGoogleSignInInfo(auth.currentUser!!)
+                    val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
+                    changeNavHeader(navView, auth.currentUser!!)
 
+                    //1. search for user in database to determine if signup or signin
+                    val db = FirebaseFirestore.getInstance()
+                    val accountInfoQueryResult = db.collection("users").document(auth.currentUser!!.uid)
+                    accountInfoQueryResult.get().addOnSuccessListener { accountDocument ->
+                        if(accountDocument == null) {
+                            //no user found => signup
+                            signUp(db, googleAccountInfo)
+                        } else {
+                            //user found => sign in
+                            signIn(accountDocument)
+                        }
+                    }
 
-                } else {
+                }
+                else {
                     Helpers.makeSnackbar(requireView(), "Authentication Failed.")
-                    //updateUI(null)
                 }
             }
     }
