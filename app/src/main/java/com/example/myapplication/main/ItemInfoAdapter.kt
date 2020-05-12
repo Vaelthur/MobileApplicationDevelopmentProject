@@ -38,6 +38,7 @@ class ItemInfoAdapter(private val items: List<Item>)
         holder.setListeners(item)
     }
 
+
     // This class gets the values of fields from the view, it is then
     // responsible to bind these values to a data class object
      class ItemInfoViewHolder(private val v : View) : RecyclerView.ViewHolder(v){
