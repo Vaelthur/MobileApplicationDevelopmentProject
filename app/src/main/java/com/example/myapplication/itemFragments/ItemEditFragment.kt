@@ -27,6 +27,7 @@ import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemInfoFactory
 import com.example.myapplication.main.ItemListViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.io.File
 import java.io.IOException
@@ -322,8 +323,24 @@ class ItemEditFragment : Fragment() {
         // Save to DB or update item on DB
         val itemListViewModel =
             of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
+        val collectionRef = FirebaseFirestore.getInstance().collection("items")
+        val itemInf = hashMapOf(
+            "category" to itemToSave.category,
+            "condition" to itemToSave.condition,
+            "description" to itemToSave.description,
+            "expDate" to itemToSave.expDate,
+            "id" to itemToSave.id,
+            "location" to itemToSave.location,
+            "picture_uri" to itemToSave.pictureURIString,
+            "price" to itemToSave.price,
+            "sub_category" to itemToSave.subCategory,
+            "title" to itemToSave.title
+        )
+        collectionRef.document(itemToSave.id).set(itemInf as Map<String, Any>)
+        // TODO: decidere come gestire itemID, ma per ora inserimento funziona, solo che rimane sempre 800 come id
 
-//        if(itemID == 0)
+
+        //        if(itemID == 0)
 //            itemListViewModel.insertAll(itemToSave)
 //        else
 //            itemListViewModel.updateItem(itemToSave)
