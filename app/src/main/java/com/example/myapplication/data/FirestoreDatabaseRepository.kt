@@ -11,24 +11,24 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class FirestoreRepository {
 
-    var collection  =  FirebaseFirestore.getInstance().collection("items")
-    var allItems: MutableLiveData<List<Item>>? = null
-
-    @WorkerThread
-    suspend fun getAll() {
-        val itemQueryResult = collection.get()
-        itemQueryResult
-            .addOnSuccessListener { accountDocument ->
-                if(accountDocument == null) {
-
-                }
-                else {
-                    for(docSnap in accountDocument.documents){
-                        val item = Item(docSnap.data)
-                    }
-                }
-            }
-        //return items
-    }
+//    var collection  =  FirebaseFirestore.getInstance().collection("items")
+//    var allItems: MutableLiveData<List<Item>>? = null
+//
+//    @WorkerThread
+//    suspend fun getAll() {
+//        val itemQueryResult = collection.get()
+//        itemQueryResult
+//            .addOnSuccessListener { accountDocument ->
+//                if(accountDocument == null) {
+//
+//                }
+//                else {
+//                    for(docSnap in accountDocument.documents){
+//                        val item = Item(docSnap.data)
+//                    }
+//                }
+//            }
+//        //return items
+//    }
 
 }

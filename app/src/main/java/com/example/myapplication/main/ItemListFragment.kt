@@ -15,8 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
+import com.firebase.ui.firestore.SnapshotParser
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ItemListFragment : Fragment() {
 
@@ -43,25 +49,52 @@ class ItemListFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
         // HERE TRY
-        itemListViewModel.getAll()
+        //itemListViewModel.getAll()
 
-        itemListViewModel.itemListLiveData?.observe(requireActivity(), Observer {itemList ->
-            val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
-            recyclerView?.layoutManager = LinearLayoutManager(context)
-            recyclerView?.adapter =
-                ItemInfoAdapter(itemList)
-
-            if(itemList.isEmpty()) {
-                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
-                root.findViewById<TextView>(R.id.new_item_button).visibility = View.VISIBLE
-                root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.GONE
-            } else {
-                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.GONE
-                root.findViewById<TextView>(R.id.new_item_button).visibility = View.GONE
-                root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.VISIBLE
+        class parser : SnapshotParser<FireItem> {
+            override fun parseSnapshot(snapshot: DocumentSnapshot): FireItem {
+                return FireItem.ItemFactory.fromMapToObj(snapshot.data)
             }
+        }
 
-        })
+        val query = FirebaseFirestore.getInstance().collection("items").limit(50)
+
+        val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
+        recyclerView?.layoutManager = LinearLayoutManager(context)
+
+        val builder = FirestoreRecyclerOptions.Builder<FireItem>()
+            .setQuery(query, parser())
+            .setLifecycleOwner(requireActivity())
+            .build()
+
+        recyclerView?.adapter =
+            FirestoreItemAdapter(builder)
+
+//        itemListViewModel.itemListLiveData?.observe(requireActivity(), Observer {itemList ->
+//            val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
+//            recyclerView?.layoutManager = LinearLayoutManager(context)
+//
+//            val builder = FirestoreRecyclerOptions.Builder<Item>()
+//                .setQuery(query, Item::class.java)
+//                .setLifecycleOwner(requireActivity())
+//                .build()
+//
+//            recyclerView?.adapter =
+//                //ItemInfoAdapter(itemList)
+//                FirestoreItemAdapter(builder)
+//
+//
+//            if(itemList.isEmpty()) {
+//                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
+//                root.findViewById<TextView>(R.id.new_item_button).visibility = View.VISIBLE
+//                root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.GONE
+//            } else {
+//                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.GONE
+//                root.findViewById<TextView>(R.id.new_item_button).visibility = View.GONE
+//                root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.VISIBLE
+//            }
+//
+//        })
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->

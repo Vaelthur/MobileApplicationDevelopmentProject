@@ -15,10 +15,10 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
     private val repository: FirestoreRepository = FirestoreRepository()
 
 
-    fun getAll() = viewModelScope.launch(Dispatchers.IO){
-        repository.getAll()
-        itemListLiveData = repository.allItems
-    }
+//    fun getAll() = viewModelScope.launch(Dispatchers.IO){
+//        repository.getAll()
+//        itemListLiveData = repository.allItems
+//    }
 
 //    fun insertAll(itemToSave: Item) = viewModelScope.launch(Dispatchers.IO){
 //
