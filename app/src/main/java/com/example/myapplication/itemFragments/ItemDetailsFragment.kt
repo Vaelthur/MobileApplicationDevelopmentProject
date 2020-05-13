@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import kotlinx.android.synthetic.main.item_details_fragment.*
 
 
@@ -36,7 +36,7 @@ class ItemDetailsFragment : Fragment() {
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
-            val incomingItem : Item = it.getSerializable("item") as Item
+            val incomingItem : FireItem = it.getSerializable("item") as FireItem
             viewModel.setItemInfo(incomingItem)
             viewModel.setTempItemInfo(incomingItem)
         }

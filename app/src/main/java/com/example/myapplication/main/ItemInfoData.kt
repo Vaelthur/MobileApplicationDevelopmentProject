@@ -5,7 +5,7 @@ import android.net.Uri
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.ItemEditFragment
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 
@@ -15,7 +15,7 @@ class ItemInfoFactory(){
 
         const val defaultItemPhoto = "android.resource://com.example.myapplication/drawable/default__item_image"
 
-        fun getItemInfoFromTextEdit(editFrag: ItemEditFragment, id : Int? = null): Item {
+        fun getItemInfoFromTextEdit(editFrag: ItemEditFragment, id : String? = null): FireItem {
             val getEditViewText =
                 {
                         id: EditText -> id.text
@@ -50,10 +50,10 @@ class ItemInfoFactory(){
             val itemPic = getItemPicturePath(editFrag).toString()
 
             id?.let{
-                return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description, id)
+                return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, "800")
             }
 
-            return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description)
+            return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, "50")
         }
     }
 

@@ -26,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 
 class ItemListFragment : Fragment() {
 
-    private lateinit var itemListViewModel: ItemListViewModel
 
     private lateinit var itemDetailsViewModel: ItemDetailsViewModel
 
@@ -37,9 +36,6 @@ class ItemListFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
 
-        itemListViewModel =
-            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
-
         itemDetailsViewModel =
             of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
@@ -48,12 +44,9 @@ class ItemListFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
-        // HERE TRY
-        //itemListViewModel.getAll()
-
         class parser : SnapshotParser<FireItem> {
             override fun parseSnapshot(snapshot: DocumentSnapshot): FireItem {
-                return FireItem.ItemFactory.fromMapToObj(snapshot.data)
+                return FireItem.fromMapToObj(snapshot.data)
             }
         }
 
@@ -70,20 +63,6 @@ class ItemListFragment : Fragment() {
         recyclerView?.adapter =
             FirestoreItemAdapter(builder)
 
-//        itemListViewModel.itemListLiveData?.observe(requireActivity(), Observer {itemList ->
-//            val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
-//            recyclerView?.layoutManager = LinearLayoutManager(context)
-//
-//            val builder = FirestoreRecyclerOptions.Builder<Item>()
-//                .setQuery(query, Item::class.java)
-//                .setLifecycleOwner(requireActivity())
-//                .build()
-//
-//            recyclerView?.adapter =
-//                //ItemInfoAdapter(itemList)
-//                FirestoreItemAdapter(builder)
-//
-//
 //            if(itemList.isEmpty()) {
 //                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
 //                root.findViewById<TextView>(R.id.new_item_button).visibility = View.VISIBLE

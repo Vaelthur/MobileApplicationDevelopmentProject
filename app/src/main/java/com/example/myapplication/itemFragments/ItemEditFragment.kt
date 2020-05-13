@@ -22,7 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemInfoFactory
@@ -66,7 +66,7 @@ class ItemEditFragment : Fragment() {
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
-            val incomingItem : Item = it.getSerializable("item") as Item
+            val incomingItem : FireItem = it.getSerializable("item") as FireItem
             viewModel.setItemInfo(incomingItem)
             if(viewModel.tempItemInfo.value == null) {
                 viewModel.setTempItemInfo(incomingItem)
@@ -119,8 +119,8 @@ class ItemEditFragment : Fragment() {
         super.onDestroyView()
 
         hideSoftKeyboard(requireActivity())
-        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this,
-            viewModel.tempItemInfo.value?.itemId)
+        val tempItemInfo : FireItem= ItemInfoFactory.getItemInfoFromTextEdit(this,
+            viewModel.tempItemInfo.value?.id)
         viewModel.setTempItemInfo(tempItemInfo)
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
@@ -258,7 +258,7 @@ class ItemEditFragment : Fragment() {
     }
 
     private fun imageCaptureHandler() {
-        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.id)
     }
 
     private fun imageGalleryHandler(itemPictureUri : Uri?) {
@@ -275,7 +275,7 @@ class ItemEditFragment : Fragment() {
                 commit()
             }
 
-            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.id)
 
         }
     }
@@ -298,10 +298,10 @@ class ItemEditFragment : Fragment() {
     private fun saveEdits(){
 
         hideSoftKeyboard(requireActivity())
-        val itemID = viewModel.tempItemInfo.value?.itemId
+        val itemID = viewModel.tempItemInfo.value?.id
         val newItemID = Random.Default.nextInt(0, Int.MAX_VALUE)
-        val itemToSave = if(itemID == 0) {
-            ItemInfoFactory.getItemInfoFromTextEdit(this, newItemID)
+        val itemToSave = if(itemID.equals("0")) {
+            ItemInfoFactory.getItemInfoFromTextEdit(this, newItemID.toString())
         } else {
             ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
         }
