@@ -334,7 +334,8 @@ class ItemEditFragment : Fragment() {
             "picture_uri" to itemToSave.picture_uri,
             "price" to itemToSave.price,
             "sub_category" to itemToSave.subCategory,
-            "title" to itemToSave.title
+            "title" to itemToSave.title,
+            "owner" to itemToSave.owner
         )
         collectionRef.document(itemToSave.id).set(itemInf)
         //collectionRef.document(itemToSave.id).set(itemToSave)

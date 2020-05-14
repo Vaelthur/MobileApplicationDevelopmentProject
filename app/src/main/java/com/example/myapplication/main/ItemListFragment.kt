@@ -50,28 +50,9 @@ class ItemListFragment : Fragment() {
             }
         }
 
-//        FirebaseFirestore.getInstance().collection("users").get()
-//            .addOnSuccessListener { result ->
-//                for (document in result) {
-//                    if (document["id"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-//                        val query = document.reference.collection("items") as Query
-//                        val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
-//                        recyclerView?.layoutManager = LinearLayoutManager(context)
-//
-//                        val builder = FirestoreRecyclerOptions.Builder<FireItem>()
-//                            .setQuery(query, parser())
-//                            .setLifecycleOwner(requireActivity())
-//                            .build()
-//
-//                        recyclerView?.adapter =
-//                            FirestoreItemAdapter(builder)
-//
-//                        checkEmptyQueryResult(query, root)
-//                    }
-//                }
-//            }
 
-        val query = FirebaseFirestore.getInstance().collection("items").limit(50)
+        val query = FirebaseFirestore.getInstance().collection("items").
+        whereEqualTo("owner", FirebaseAuth.getInstance().currentUser!!.uid)
 
         val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
         recyclerView?.layoutManager = LinearLayoutManager(context)

@@ -59,7 +59,7 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>)
             }
             else {
                 val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
-                pictureURIView.setImageURI(imageURI)
+                // pictureURIView.setImageURI(imageURI) //fa crashare le mie cose questa causa permessi
             }
 
             title.text = itemInfo.title

@@ -12,7 +12,8 @@ data class FireItem(
      val expDate: String,
      val condition: String,
      val description: String,
-     val id: String
+     val id: String,
+     val owner: String
 )  : Serializable {
 
     companion object ItemFactory {
@@ -29,7 +30,8 @@ data class FireItem(
                 hash["expDate"].toString(),
                 hash["condition"] as String,
                 hash["description"] as String,
-                hash["id"] as String
+                hash["id"] as String,
+                hash["owner"] as String
             )
         }
     }

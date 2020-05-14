@@ -22,6 +22,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.main.ItemInfoFactory
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import org.json.JSONObject
 import java.io.IOException
 import java.io.Serializable
@@ -100,9 +101,11 @@ class Helpers(){
 
         fun getDefaultItemBundle() : Bundle {
 
+            val own = FirebaseAuth.getInstance().currentUser!!.uid
+
             val itemInfo = FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0")
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own)
             val itemBundle = Bundle(1)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
 
@@ -111,9 +114,11 @@ class Helpers(){
 
         fun getDefaultItem() : FireItem {
 
+            val own = FirebaseAuth.getInstance().currentUser!!.uid
+
             return FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0")
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own)
         }
 
         ///endregion
