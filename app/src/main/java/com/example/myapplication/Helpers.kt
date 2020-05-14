@@ -19,7 +19,7 @@ import androidx.exifinterface.media.ExifInterface
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.main.ItemInfoFactory
 import com.google.android.material.snackbar.Snackbar
 import org.json.JSONObject
@@ -100,20 +100,20 @@ class Helpers(){
 
         fun getDefaultItemBundle() : Bundle {
 
-            val itemInfo = Item(
+            val itemInfo = FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0")
             val itemBundle = Bundle(1)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
 
             return itemBundle
         }
 
-        fun getDefaultItem() : Item {
+        fun getDefaultItem() : FireItem {
 
-            return Item(
+            return FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "")
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0")
         }
 
         ///endregion
@@ -129,14 +129,14 @@ class Helpers(){
             return Patterns.EMAIL_ADDRESS.matcher(email).matches()
         }
 
-        fun someEmptyItemFields(itemInfo: Item): Boolean {
+        fun someEmptyItemFields(itemInfo: FireItem): Boolean {
             return itemInfo.title.isEmpty() || itemInfo.price.isEmpty() ||
                     itemInfo.category.isEmpty() || itemInfo.location.isNullOrEmpty() ||
-                    itemInfo.expDate.isEmpty() || itemInfo.pictureURIString.isNullOrEmpty() ||
+                    itemInfo.expDate.isEmpty() || itemInfo.picture_uri.isNullOrEmpty() ||
                     itemInfo.description.isEmpty()
         }
 
-        fun titleTooLong(itemToSave: Item): Boolean {
+        fun titleTooLong(itemToSave: FireItem): Boolean {
             return itemToSave.title.length > 45
         }
 

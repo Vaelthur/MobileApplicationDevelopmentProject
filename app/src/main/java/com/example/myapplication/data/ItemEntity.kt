@@ -2,18 +2,10 @@ package com.example.myapplication.data
 
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
-import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.Serializable
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Entity(tableName = "item_table")
 data class Item(
@@ -26,8 +18,9 @@ data class Item(
     @ColumnInfo(name = "expDate") val expDate: String,
     @ColumnInfo(name = "condition") val condition: String,
     @ColumnInfo(name = "description") val description: String,
-    @PrimaryKey(autoGenerate = true) var itemId: Int = 0
-) : Serializable {}
+    @PrimaryKey(autoGenerate = true) val itemId : Int = 0
+) : Serializable {
+}
 
 @Dao
 interface ItemDao {

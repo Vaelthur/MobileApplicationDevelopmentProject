@@ -22,15 +22,15 @@ data class AccountInfo (
     var profilePicture: String? = "android.resource://com.example.myapplication/drawable/default_profile_picture")
     : Serializable {
 
-    fun toMap(): Map<String, Any?> {
-        return mapOf(
-            "fullname" to fullname,
-            "username" to username,
-            "email" to email,
-            "location" to location,
-            "profilePicture" to profilePicture
-        )
-    }
+//    fun toMap(): Map<String, Any?> {
+//        return mapOf(
+//            "fullname" to fullname,
+//            "username" to username,
+//            "email" to email,
+//            "location" to location,
+//            "profilePicture" to profilePicture
+//        )
+//    }
 }
 
 class AccountInfoFactory(){

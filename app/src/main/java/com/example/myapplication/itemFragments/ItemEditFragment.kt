@@ -22,11 +22,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemInfoFactory
 import com.example.myapplication.main.ItemListViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.io.File
 import java.io.IOException
@@ -66,7 +67,7 @@ class ItemEditFragment : Fragment() {
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
-            val incomingItem : Item = it.getSerializable("item") as Item
+            val incomingItem : FireItem = it.getSerializable("item") as FireItem
             viewModel.setItemInfo(incomingItem)
             if(viewModel.tempItemInfo.value == null) {
                 viewModel.setTempItemInfo(incomingItem)
@@ -82,7 +83,6 @@ class ItemEditFragment : Fragment() {
         setSpinners(view)
         setDatePicker(view)
 
-
         viewModel.tempItemInfo.observe(requireActivity(), Observer{
 
             item_title_edit.setText(it.title)
@@ -95,7 +95,7 @@ class ItemEditFragment : Fragment() {
             subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
             this.pos = ItemCategories().getPosFromValue(it.category)
             Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.pictureURIString),
+                Uri.parse(it.picture_uri),
                 item_picture)
         })
 
@@ -119,8 +119,8 @@ class ItemEditFragment : Fragment() {
         super.onDestroyView()
 
         hideSoftKeyboard(requireActivity())
-        val tempItemInfo = ItemInfoFactory.getItemInfoFromTextEdit(this,
-            viewModel.tempItemInfo.value?.itemId)
+        val tempItemInfo : FireItem= ItemInfoFactory.getItemInfoFromTextEdit(this,
+            viewModel.tempItemInfo.value?.id)
         viewModel.setTempItemInfo(tempItemInfo)
         viewModel.tempItemInfo.removeObservers(requireActivity())
     }
@@ -258,7 +258,7 @@ class ItemEditFragment : Fragment() {
     }
 
     private fun imageCaptureHandler() {
-        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+        viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.id)
     }
 
     private fun imageGalleryHandler(itemPictureUri : Uri?) {
@@ -275,7 +275,7 @@ class ItemEditFragment : Fragment() {
                 commit()
             }
 
-            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.itemId)
+            viewModel.tempItemInfo.value = ItemInfoFactory.getItemInfoFromTextEdit(this, viewModel.tempItemInfo.value?.id)
 
         }
     }
@@ -298,13 +298,14 @@ class ItemEditFragment : Fragment() {
     private fun saveEdits(){
 
         hideSoftKeyboard(requireActivity())
-        val itemID = viewModel.tempItemInfo.value?.itemId
-        val newItemID = Random.Default.nextInt(0, Int.MAX_VALUE)
-        val itemToSave = if(itemID == 0) {
-            ItemInfoFactory.getItemInfoFromTextEdit(this, newItemID)
+        val itemID = viewModel.tempItemInfo.value?.id
+
+        val itemToSave = if(itemID.equals("0")) {
+            ItemInfoFactory.getItemInfoFromTextEdit(this, null)
         } else {
             ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
         }
+
         viewModel.itemInfo.value  = itemToSave
         viewModel.tempItemInfo.value  = itemToSave
 
@@ -320,13 +321,29 @@ class ItemEditFragment : Fragment() {
         }
 
         // Save to DB or update item on DB
-        val itemListViewModel =
-            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
+        val collectionRef = FirebaseFirestore.getInstance().collection("items")
 
-        if(itemID == 0)
-            itemListViewModel.insertAll(itemToSave)
-        else
-            itemListViewModel.updateItem(itemToSave)
+        val itemInf : Map<String, Any?> = hashMapOf(
+            "category" to itemToSave.category,
+            "condition" to itemToSave.condition,
+            "description" to itemToSave.description,
+            "expDate" to itemToSave.expDate,
+            "id" to itemToSave.id,
+            "location" to itemToSave.location,
+            "picture_uri" to itemToSave.picture_uri,
+            "price" to itemToSave.price,
+            "sub_category" to itemToSave.subCategory,
+            "title" to itemToSave.title
+        )
+        collectionRef.document(itemToSave.id).set(itemInf)
+        //collectionRef.document(itemToSave.id).set(itemToSave)
+        // TODO: decidere come gestire itemID, ma per ora inserimento funziona, solo che rimane sempre 800 come id
+
+
+        //        if(itemID == 0)
+//            itemListViewModel.insertAll(itemToSave)
+//        else
+//            itemListViewModel.updateItem(itemToSave)
 
         val itemBundle = Bundle(1)
         itemBundle.putSerializable("item", itemToSave as Serializable?)

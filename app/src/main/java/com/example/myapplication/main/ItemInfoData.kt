@@ -5,8 +5,9 @@ import android.net.Uri
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.ItemEditFragment
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 
 class ItemInfoFactory(){
@@ -15,7 +16,7 @@ class ItemInfoFactory(){
 
         const val defaultItemPhoto = "android.resource://com.example.myapplication/drawable/default__item_image"
 
-        fun getItemInfoFromTextEdit(editFrag: ItemEditFragment, id : Int? = null): Item {
+        fun getItemInfoFromTextEdit(editFrag: ItemEditFragment, id : String? = null): FireItem {
             val getEditViewText =
                 {
                         id: EditText -> id.text
@@ -30,7 +31,7 @@ class ItemInfoFactory(){
                         ViewModelProviders.of(editFrag.requireActivity()).get(ItemDetailsViewModel()::class.java)
 
                     if(tempProfilePicture == null){
-                        tempProfilePicture = itemListViewModel.tempItemInfo.value?.pictureURIString
+                        tempProfilePicture = itemListViewModel.tempItemInfo.value?.picture_uri
                         Uri.parse(tempProfilePicture)
                         //Uri.parse(ItemInfoFactory.defaultItemPhoto)
                     }
@@ -50,10 +51,11 @@ class ItemInfoFactory(){
             val itemPic = getItemPicturePath(editFrag).toString()
 
             id?.let{
-                return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description, id)
+                return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id)
             }
 
-            return Item(itemPic, title, location, price, category, subcategory, expDate, condition, description)
+            val newItemID = FirebaseFirestore.getInstance().collection("items").document().id
+            return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, newItemID)
         }
     }
 
