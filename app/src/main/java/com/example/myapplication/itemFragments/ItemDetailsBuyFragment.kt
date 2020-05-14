@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
+import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.Item
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_details_fragment.*
@@ -46,7 +47,7 @@ class ItemDetailsBuyFragment: Fragment() {
         viewModel = ViewModelProviders.of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
-            val incomingItem : Item = it.getSerializable("item") as Item
+            val incomingItem : FireItem = it.getSerializable("item") as FireItem
             viewModel.setItemInfo(incomingItem)
             viewModel.setTempItemInfo(incomingItem)
         }
@@ -70,7 +71,7 @@ class ItemDetailsBuyFragment: Fragment() {
             item_description_value.text = it.description
 
             Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.pictureURIString.toString()),
+                Uri.parse(it.picture_uri.toString()),
                 item_picture)
 
             viewModel.setTempItemInfo(it)

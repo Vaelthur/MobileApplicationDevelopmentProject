@@ -38,7 +38,7 @@ class OnSaleListFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
-        itemListViewModel.itemListLiveData.observe(requireActivity(), Observer {itemList ->
+        itemListViewModel.itemListLiveData?.observe(requireActivity(), Observer {itemList ->
             val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter = ItemInfoAdapter(itemList)
