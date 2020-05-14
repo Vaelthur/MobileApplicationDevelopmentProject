@@ -27,6 +27,7 @@ import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemInfoFactory
 import com.example.myapplication.main.ItemListViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.io.File
@@ -338,6 +339,11 @@ class ItemEditFragment : Fragment() {
         collectionRef.document(itemToSave.id).set(itemInf)
         //collectionRef.document(itemToSave.id).set(itemToSave)
         // TODO: decidere come gestire itemID, ma per ora inserimento funziona, solo che rimane sempre 800 come id
+
+        //save item in lista di item dell'utente che sta modificando l'item
+        val userID = FirebaseAuth.getInstance().currentUser!!.uid
+        val userItemRef = FirebaseFirestore.getInstance().collection("users").document(userID).collection("items")
+        userItemRef.document(itemToSave.id).set(itemInf)
 
 
         //        if(itemID == 0)

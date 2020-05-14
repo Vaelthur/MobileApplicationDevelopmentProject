@@ -29,12 +29,11 @@ class OnSaleListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        itemListViewModel =
-            ViewModelProviders.of(requireActivity())
-                .get(ItemListViewModel(requireActivity().application)::class.java)
 
         itemDetailsViewModel =
             ViewModelProviders.of(requireActivity()).get(ItemDetailsViewModel::class.java)
+
+        itemDetailsViewModel.tempItemInfo.value = null
 
         val root = inflater.inflate(R.layout.fragment_itemlist, container, false)
 
