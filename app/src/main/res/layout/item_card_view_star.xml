@@ -13,7 +13,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="105dp">
 
         <ImageView
             android:id="@+id/item_card_picture"
@@ -46,7 +46,7 @@
             android:fontFamily="sans-serif-medium"
             android:text="@string/title"
             android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/item_card_location"
+            app:layout_constraintBottom_toTopOf="@+id/Owner"
             app:layout_constraintEnd_toStartOf="@+id/guideline5"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="parent" />
@@ -61,7 +61,7 @@
             app:layout_constraintBottom_toTopOf="@+id/item_card_price"
             app:layout_constraintEnd_toStartOf="@+id/editItemButton"
             app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@id/item_card_title" />
+            app:layout_constraintTop_toBottomOf="@id/Owner" />
 
         <TextView
             android:id="@+id/item_card_price"
@@ -105,6 +105,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/Owner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/seller"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            tools:layout_editor_absoluteX="132dp"
+            tools:layout_editor_absoluteY="27dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

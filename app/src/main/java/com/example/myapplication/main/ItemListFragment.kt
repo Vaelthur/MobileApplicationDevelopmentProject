@@ -2,13 +2,13 @@ package com.example.myapplication.main
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,13 +20,12 @@ import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.firebase.ui.firestore.SnapshotParser
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.database.DataSnapshot
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
 class ItemListFragment : Fragment() {
-
 
     private lateinit var itemDetailsViewModel: ItemDetailsViewModel
 
@@ -51,20 +50,41 @@ class ItemListFragment : Fragment() {
             }
         }
 
-        val query = FirebaseFirestore.getInstance().collection("items").limit(50)
+        FirebaseFirestore.getInstance().collection("users").get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    if (document["id"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                        val query = document.reference.collection("items") as Query
+                        val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
+                        recyclerView?.layoutManager = LinearLayoutManager(context)
 
-        val recyclerView : RecyclerView? = root.findViewById(R.id.recyclerItemList)
-        recyclerView?.layoutManager = LinearLayoutManager(context)
+                        val builder = FirestoreRecyclerOptions.Builder<FireItem>()
+                            .setQuery(query, parser())
+                            .setLifecycleOwner(requireActivity())
+                            .build()
 
-        val builder = FirestoreRecyclerOptions.Builder<FireItem>()
-            .setQuery(query, parser())
-            .setLifecycleOwner(requireActivity())
-            .build()
+                        recyclerView?.adapter =
+                            FirestoreItemAdapter(builder)
 
-        recyclerView?.adapter =
-            FirestoreItemAdapter(builder)
+                        checkEmptyQueryResult(query, root)
+                    }
+                }
+            }
 
-        checkEmptyQueryResult(query, root)
+//        val query = FirebaseFirestore.getInstance().collection("items").limit(50)
+//
+//        val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
+//        recyclerView?.layoutManager = LinearLayoutManager(context)
+//
+//        val builder = FirestoreRecyclerOptions.Builder<FireItem>()
+//            .setQuery(query, parser())
+//            .setLifecycleOwner(requireActivity())
+//            .build()
+//
+//        recyclerView?.adapter =
+//            FirestoreItemAdapter(builder)
+//
+//        checkEmptyQueryResult(query, root)
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
