@@ -3,7 +3,7 @@ package com.example.myapplication.data
 import java.io.Serializable
 
 data class FireItem(
-     val pictureURIString: String?,
+     val picture_uri: String?,
      val title: String,
      val location: String?,
      val price: String,

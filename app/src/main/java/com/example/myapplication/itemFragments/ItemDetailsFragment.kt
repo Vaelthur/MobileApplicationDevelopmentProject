@@ -59,7 +59,7 @@ class ItemDetailsFragment : Fragment() {
             item_description_value.text = it.description
 
             Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.pictureURIString.toString()),
+                Uri.parse(it.picture_uri.toString()),
                 item_picture)
 
             viewModel.setTempItemInfo(it)

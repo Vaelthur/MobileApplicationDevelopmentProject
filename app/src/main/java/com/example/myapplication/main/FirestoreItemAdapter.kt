@@ -54,11 +54,11 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>)
             val location : TextView = containerView.findViewById(R.id.item_card_location)
             val price : TextView = containerView.findViewById(R.id.item_card_price)
 
-            if (itemInfo.pictureURIString == null) {
+            if (itemInfo.picture_uri == null) {
                 pictureURIView.setImageResource(R.drawable.default__item_image)
             }
             else {
-                val imageURI : Uri? = Uri.parse(itemInfo.pictureURIString)
+                val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
                 pictureURIView.setImageURI(imageURI)
             }
 

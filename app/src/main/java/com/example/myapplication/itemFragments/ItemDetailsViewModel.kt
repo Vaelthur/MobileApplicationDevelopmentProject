@@ -31,7 +31,7 @@ class ItemDetailsViewModel : ViewModel() {
         val category = itemJson["category"].toString()
         val subcategory = itemJson["subcategory"].toString()
         val expDate = itemJson["expDate"].toString()
-        val itemPic = itemJson["pictureURIString"].toString()
+        val itemPic = itemJson["picture_uri"].toString()
         val id = itemJson["id"].toString()
 
         return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id)

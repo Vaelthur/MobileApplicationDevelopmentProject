@@ -21,6 +21,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.firebase.ui.firestore.SnapshotParser
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -63,17 +64,7 @@ class ItemListFragment : Fragment() {
         recyclerView?.adapter =
             FirestoreItemAdapter(builder)
 
-//            if(itemList.isEmpty()) {
-//                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
-//                root.findViewById<TextView>(R.id.new_item_button).visibility = View.VISIBLE
-//                root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.GONE
-//            } else {
-//                root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.GONE
-//                root.findViewById<TextView>(R.id.new_item_button).visibility = View.GONE
-//                root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.VISIBLE
-//            }
-//
-//        })
+        checkEmptyQueryResult(query, root)
 
         val fab: FloatingActionButton = root.findViewById(R.id.fabAddItem)
         fab.setOnClickListener { view ->
@@ -88,6 +79,24 @@ class ItemListFragment : Fragment() {
             defaultItemEdit()
         }
         return root
+    }
+
+    private fun checkEmptyQueryResult(query: Query, root : View) {
+
+        query.get()
+            .addOnSuccessListener { listItemDocument ->
+                if (listItemDocument.isEmpty) {
+                    root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
+                    root.findViewById<TextView>(R.id.new_item_button).visibility = View.VISIBLE
+                    root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.GONE
+                }
+                else {
+                    root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.GONE
+                    root.findViewById<TextView>(R.id.new_item_button).visibility = View.GONE
+                    root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.VISIBLE
+                }
+            }
+            .addOnFailureListener { Helpers.makeSnackbar(requireView(), "Could not retrieve item info") }
     }
 
     private fun defaultItemEdit() {

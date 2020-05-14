@@ -83,7 +83,6 @@ class ItemEditFragment : Fragment() {
         setSpinners(view)
         setDatePicker(view)
 
-
         viewModel.tempItemInfo.observe(requireActivity(), Observer{
 
             item_title_edit.setText(it.title)
@@ -96,7 +95,7 @@ class ItemEditFragment : Fragment() {
             subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
             this.pos = ItemCategories().getPosFromValue(it.category)
             Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.pictureURIString),
+                Uri.parse(it.picture_uri),
                 item_picture)
         })
 
@@ -300,12 +299,13 @@ class ItemEditFragment : Fragment() {
 
         hideSoftKeyboard(requireActivity())
         val itemID = viewModel.tempItemInfo.value?.id
-        val newItemID = Random.Default.nextInt(0, Int.MAX_VALUE)
+
         val itemToSave = if(itemID.equals("0")) {
-            ItemInfoFactory.getItemInfoFromTextEdit(this, newItemID.toString())
+            ItemInfoFactory.getItemInfoFromTextEdit(this, null)
         } else {
             ItemInfoFactory.getItemInfoFromTextEdit(this, itemID)
         }
+
         viewModel.itemInfo.value  = itemToSave
         viewModel.tempItemInfo.value  = itemToSave
 
@@ -321,22 +321,22 @@ class ItemEditFragment : Fragment() {
         }
 
         // Save to DB or update item on DB
-        val itemListViewModel =
-            of(requireActivity()).get(ItemListViewModel(requireActivity().application)::class.java)
         val collectionRef = FirebaseFirestore.getInstance().collection("items")
-        val itemInf = hashMapOf(
+
+        val itemInf : Map<String, Any?> = hashMapOf(
             "category" to itemToSave.category,
             "condition" to itemToSave.condition,
             "description" to itemToSave.description,
             "expDate" to itemToSave.expDate,
             "id" to itemToSave.id,
             "location" to itemToSave.location,
-            "picture_uri" to itemToSave.pictureURIString,
+            "picture_uri" to itemToSave.picture_uri,
             "price" to itemToSave.price,
             "sub_category" to itemToSave.subCategory,
             "title" to itemToSave.title
         )
-        collectionRef.document(itemToSave.id).set(itemInf as Map<String, Any>)
+        collectionRef.document(itemToSave.id).set(itemInf)
+        //collectionRef.document(itemToSave.id).set(itemToSave)
         // TODO: decidere come gestire itemID, ma per ora inserimento funziona, solo che rimane sempre 800 come id
 
 

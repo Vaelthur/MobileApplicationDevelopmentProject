@@ -102,7 +102,7 @@ class Helpers(){
 
             val itemInfo = FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "-2")
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0")
             val itemBundle = Bundle(1)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
 
@@ -113,7 +113,7 @@ class Helpers(){
 
             return FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "-1")
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0")
         }
 
         ///endregion
@@ -132,7 +132,7 @@ class Helpers(){
         fun someEmptyItemFields(itemInfo: FireItem): Boolean {
             return itemInfo.title.isEmpty() || itemInfo.price.isEmpty() ||
                     itemInfo.category.isEmpty() || itemInfo.location.isNullOrEmpty() ||
-                    itemInfo.expDate.isEmpty() || itemInfo.pictureURIString.isNullOrEmpty() ||
+                    itemInfo.expDate.isEmpty() || itemInfo.picture_uri.isNullOrEmpty() ||
                     itemInfo.description.isEmpty()
         }
 
