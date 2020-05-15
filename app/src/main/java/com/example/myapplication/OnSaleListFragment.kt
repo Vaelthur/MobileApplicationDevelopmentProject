@@ -139,23 +139,25 @@ class OnSaleListFragment : Fragment() {
         // inflater.inflate(R.menu.logout_menu, menu)
         val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem?.actionView as SearchView //maybe from androidx
+        val searchView = searchItem?.actionView as SearchView
 
         searchView.setSearchableInfo(manager.getSearchableInfo(requireActivity().componentName))
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                class parser : SnapshotParser<FireItem> {
-                    override fun parseSnapshot(snapshot: DocumentSnapshot): FireItem {
-                        return FireItem.fromMapToObj(snapshot.data)
-                    }
+
+            inner class parser : SnapshotParser<FireItem> {
+                override fun parseSnapshot(snapshot: DocumentSnapshot): FireItem {
+                    return FireItem.fromMapToObj(snapshot.data)
                 }
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
                 searchView.setQuery("",false)
                 searchItem.collapseActionView()
                 //search for query in the firestoredb
                 //Toast.makeText(requireContext(), "Gnagna", Toast.LENGTH_LONG).show()
-                val firebaseQuery = FirebaseFirestore.getInstance().collection("items").whereArrayContains("title", query!!)
+                val firebaseQuery = FirebaseFirestore.getInstance().collection("items").whereGreaterThan("title", query!!).whereLessThan("title", query+'\uf8ff')
                 //la riga superiore non va
                 val builder = FirestoreRecyclerOptions.Builder<FireItem>()
                     .setQuery(firebaseQuery, parser())
@@ -166,6 +168,13 @@ class OnSaleListFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
+                val firebaseQuery = FirebaseFirestore.getInstance().collection("items").whereGreaterThan("title", newText!!).whereLessThan("title", newText!!+'\uf8ff')
+                //la riga superiore non va
+                val builder = FirestoreRecyclerOptions.Builder<FireItem>()
+                    .setQuery(firebaseQuery, parser())
+                    .setLifecycleOwner(requireActivity())
+                    .build()
+                recyclerItemList.adapter = FirestoreItemAdapter(builder)
                 return false
             }
         })
