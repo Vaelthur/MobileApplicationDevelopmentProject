@@ -5,24 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewManager
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.FragmentContainerView
-import androidx.lifecycle.LiveData
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.extensions.LayoutContainer
 import java.io.Serializable
 
 
-class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>)
+class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>, filterMyItems : Boolean = false)
     :  FirestoreRecyclerAdapter<FireItem, FirestoreItemAdapter.ItemInfoViewHolder>(options) {
+
+    var userUid : String =     (options.owner as MainActivity).getAuth().currentUser!!.uid
+
+    var filter = filterMyItems
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

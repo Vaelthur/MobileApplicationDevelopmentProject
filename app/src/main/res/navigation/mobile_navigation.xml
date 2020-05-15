@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_itemList"
         android:name="com.example.myapplication.main.ItemListFragment"
-        android:label="Home"
+        android:label="My Items"
         tools:layout="@layout/fragment_itemlist">
         <action
             android:id="@+id/action_nav_itemList_to_showProfileFragment"
@@ -68,7 +68,7 @@
     <fragment
         android:id="@+id/onSaleListFragment"
         android:name="com.example.myapplication.OnSaleListFragment"
-        android:label="OnSaleListFragment" >
+        android:label="Items on sale">
         <action
             android:id="@+id/action_onSaleListFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />

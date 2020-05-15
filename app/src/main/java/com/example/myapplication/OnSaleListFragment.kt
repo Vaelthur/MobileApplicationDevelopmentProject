@@ -68,6 +68,11 @@ class OnSaleListFragment : Fragment() {
                     }
                 }
 
+                if(itemList.isEmpty()) {
+                    empty_list_msg.visibility = View.VISIBLE
+                } else {
+                    empty_list_msg.visibility = View.INVISIBLE
+                }
                 recyclerView?.adapter =
                     ItemInfoAdapter(itemList)
             }
@@ -104,27 +109,49 @@ class OnSaleListFragment : Fragment() {
                 searchItem.collapseActionView()
                 //search for query in the firestoredb
                 //Toast.makeText(requireContext(), "Gnagna", Toast.LENGTH_LONG).show()
-                val firebaseQuery = FirebaseFirestore.getInstance().collection("items").whereGreaterThan("title", query!!).whereLessThan("title", query+'\uf8ff')
-                //la riga superiore non va
-                val builder = FirestoreRecyclerOptions.Builder<FireItem>()
-                    .setQuery(firebaseQuery, parser())
-                    .setLifecycleOwner(requireActivity())
-                    .build()
-                recyclerItemList.adapter = FirestoreItemAdapter(builder)
+                val firebaseQuery = FirebaseFirestore.getInstance()
+                    .collection("items")
+                    .whereGreaterThan("title", query!!)
+                    .whereLessThan("title", query!!+'\uf8ff')
+                    .get().addOnSuccessListener { result ->
+                        val itemList = mutableListOf<FireItem>()
+                        for (document in result) {
+                            if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                                itemList.add(FireItem.fromMapToObj(document.data))
+                            }
+                        }
+                        checkEmptyList(itemList)
+                        recyclerItemList.adapter = ItemInfoAdapter(itemList)
+                    }
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val firebaseQuery = FirebaseFirestore.getInstance().collection("items").whereGreaterThan("title", newText!!).whereLessThan("title", newText!!+'\uf8ff')
-                //la riga superiore non va
-                val builder = FirestoreRecyclerOptions.Builder<FireItem>()
-                    .setQuery(firebaseQuery, parser())
-                    .setLifecycleOwner(requireActivity())
-                    .build()
-                recyclerItemList.adapter = FirestoreItemAdapter(builder)
+                val firebaseQuery = FirebaseFirestore.getInstance()
+                    .collection("items")
+                    .whereGreaterThan("title", newText!!)
+                    .whereLessThan("title", newText!!+'\uf8ff')
+                    .get().addOnSuccessListener { result ->
+                        val itemList = mutableListOf<FireItem>()
+                        for (document in result) {
+                            if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                                itemList.add(FireItem.fromMapToObj(document.data))
+                            }
+                        }
+                        checkEmptyList(itemList)
+                        recyclerItemList.adapter = ItemInfoAdapter(itemList)
+                    }
                 return false
             }
         })
+    }
+
+    private fun checkEmptyList(itemList: MutableList<FireItem>) {
+        if(itemList.isEmpty()) {
+            empty_list_msg.visibility = View.VISIBLE
+        } else {
+            empty_list_msg.visibility = View.INVISIBLE
+        }
     }
 
     private fun checkEmptyQueryResult(query: Query, root : View) {
