@@ -11,10 +11,10 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
-import com.example.myapplication.data.Item
+import com.example.myapplication.data.FireItem
 import java.io.Serializable
 
-class ItemInfoAdapter(private val items: List<Item>)
+class ItemInfoAdapter(private val items: List<FireItem>)
     : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
 
     override fun getItemCount() = items.size
@@ -24,7 +24,7 @@ class ItemInfoAdapter(private val items: List<Item>)
         viewType: Int
     ): ItemInfoViewHolder {
         val view  = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_card_view, parent, false)
+            .inflate(R.layout.item_card_view_star, parent, false)
 
         return ItemInfoViewHolder(view)
     }
@@ -43,18 +43,18 @@ class ItemInfoAdapter(private val items: List<Item>)
     // responsible to bind these values to a data class object
      class ItemInfoViewHolder(private val v : View) : RecyclerView.ViewHolder(v){
 
-        fun bind(itemInfo: Item){
+        fun bind(itemInfo: FireItem){
 
             val pictureURIView : ImageView = v.findViewById(R.id.item_card_picture)
             val title : TextView= v.findViewById(R.id.item_card_title)
             val location : TextView= v.findViewById(R.id.item_card_location)
             val price : TextView= v.findViewById(R.id.item_card_price)
 
-            if (itemInfo.pictureURIString == null) {
+            if (itemInfo.picture_uri == null) {
                 pictureURIView.setImageResource(R.drawable.default__item_image)
             }
             else {
-                val imageURI : Uri? = Uri.parse(itemInfo.pictureURIString)
+                val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
                 pictureURIView.setImageURI(imageURI)
             }
 
@@ -63,7 +63,7 @@ class ItemInfoAdapter(private val items: List<Item>)
             price.text = itemInfo.price
          }
 
-        fun setListeners(itemInfo : Item){
+        fun setListeners(itemInfo : FireItem){
             val itemBundle = Bundle(1)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
 

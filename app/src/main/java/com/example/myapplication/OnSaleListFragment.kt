@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.FirestoreItemAdapter
+import com.example.myapplication.main.ItemInfoAdapter
 import com.example.myapplication.main.ItemListViewModel
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.firebase.ui.firestore.SnapshotParser
@@ -70,28 +71,24 @@ class OnSaleListFragment : Fragment() {
 //        })
 
 
+
 //        // V2
-//        FirebaseFirestore.getInstance().collection("users").get()
-//            .addOnSuccessListener { result ->
-//                for (document in result) {
-//                    if (document["id"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-//                        val query = document.reference.collection("items") as Query
-//                        val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
-//                        recyclerView?.layoutManager = LinearLayoutManager(context)
-//
-//                        val builder = FirestoreRecyclerOptions.Builder<FireItem>()
-//                            .setQuery(query, parser())
-//                            .setLifecycleOwner(requireActivity())
-//                            .build()
-//
-//                        recyclerView?.adapter =
-//                            FirestoreItemAdapter(builder) //ogni volta le recycler view viene rifatta
-//                        //necessario quidni prendere tutti gli item e metterli dentro qualcosa e POI passarli alla recyclerView
-//
-//                        checkEmptyQueryResult(query, root)
-//                    }
-//                }
-//            }
+        FirebaseFirestore.getInstance().collection("items").get()
+            .addOnSuccessListener { result ->
+
+                val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
+                recyclerView?.layoutManager = LinearLayoutManager(context)
+                val itemList = mutableListOf<FireItem>()
+
+                for (document in result) {
+                    if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                        itemList.add(FireItem.fromMapToObj(document.data))
+                    }
+                }
+
+                recyclerView?.adapter =
+                    ItemInfoAdapter(itemList)
+            }
 
         //TODO:
         // 1. query db and retrieve all users
@@ -99,19 +96,18 @@ class OnSaleListFragment : Fragment() {
         // 3. query below should be performed and gives the objects on sale that are not ours
 
 
-        val listUsr = mutableListOf<String>()
 
-
-        // nullcheck to avoid user-less crashes
+/*
+        // nullcheck to avoid user-less crashes TODO: throw exception "not logged in"
         if(FirebaseAuth.getInstance().currentUser != null ) {
-//            val query = FirebaseFirestore.getInstance().collection("items").
-//        whereIn("owner", listUsr)
+//          val q = FirebaseFirestore.getInstance().collection("items")
+//              .get()
+//              .addOnCompleteListener()
 
             // dummy query that should work but does not
             val query = FirebaseFirestore.getInstance().collection("items")
                 .whereLessThan("owner", FirebaseAuth.getInstance().currentUser!!.uid)
                 .whereGreaterThan("owner", FirebaseAuth.getInstance().currentUser!!.uid)
-
 
             val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
             recyclerView?.layoutManager = LinearLayoutManager(context)
@@ -128,7 +124,7 @@ class OnSaleListFragment : Fragment() {
         }
 
 
-
+*/
         // Inflate the layout for this fragment
         return root
     }
