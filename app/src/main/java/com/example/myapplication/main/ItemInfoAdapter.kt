@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.google.android.material.snackbar.Snackbar
 import java.io.Serializable
 
 class ItemInfoAdapter(private val items: List<FireItem>)
@@ -55,7 +56,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             }
             else {
                 val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
-                pictureURIView.setImageURI(imageURI)
+                // pictureURIView.setImageURI(imageURI)
             }
 
             title.text = itemInfo.title
@@ -68,14 +69,16 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
 
             v.setOnClickListener {
-                v.findNavController().navigate(R.id.itemDetailsFragment, itemBundle)
+                v.findNavController().navigate(R.id.itemDetailsBuyFragment, itemBundle)
             }
 
             // Navigate to fragment that allows editing of the selected item
-            val editButton : ImageButton = v.findViewById(R.id.editItemButton)
+            val editButton : ImageButton = v.findViewById(R.id.starItemButton)
             editButton.setOnClickListener {
-                v.findNavController().navigate(R.id.itemDetailsFragment, itemBundle)
-                v.findNavController().navigate(R.id.ItemEditFragment, itemBundle)
+                // TODO: Insert in list of favourites in db
+                Snackbar.make(v, "Item Added to Favourites", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null)
+                    .show()
             }
         }
     }
