@@ -28,6 +28,7 @@ import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemInfoFactory
 import com.example.myapplication.main.ItemListViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import java.io.File
@@ -343,8 +344,7 @@ class ItemEditFragment : Fragment() {
 
         //save item in lista di item dell'utente che sta modificando l'item
         val userID = FirebaseAuth.getInstance().currentUser!!.uid
-        val userItemRef = FirebaseFirestore.getInstance().collection("users").document(userID).collection("items")
-        userItemRef.document(itemToSave.id).set(itemInf)
+        FirebaseFirestore.getInstance().collection("users").document(userID).update("items", FieldValue.arrayUnion(itemToSave.id))
 
 
         //        if(itemID == 0)

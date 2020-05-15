@@ -13,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.Serializable
 
 class ItemInfoAdapter(private val items: List<FireItem>)
@@ -73,9 +76,12 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             }
 
             // Navigate to fragment that allows editing of the selected item
-            val editButton : ImageButton = v.findViewById(R.id.starItemButton)
-            editButton.setOnClickListener {
+            val saveButton : ImageButton = v.findViewById(R.id.starItemButton)
+            saveButton.setOnClickListener {
                 // TODO: Insert in list of favourites in db
+                FirebaseFirestore.getInstance().collection("users")
+                    .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .update("favorites", FieldValue.arrayUnion(itemInfo.id))
                 Snackbar.make(v, "Item Added to Favourites", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .show()

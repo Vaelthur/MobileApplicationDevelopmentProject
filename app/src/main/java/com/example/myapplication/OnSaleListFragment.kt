@@ -27,8 +27,6 @@ import kotlinx.android.synthetic.main.fragment_on_sale_list.*
 
 class OnSaleListFragment : Fragment() {
 
-    private lateinit var itemListViewModel: ItemListViewModel
-
     private lateinit var itemDetailsViewModel: ItemDetailsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,101 +47,78 @@ class OnSaleListFragment : Fragment() {
 
         val root = inflater.inflate(R.layout.fragment_on_sale_list, container, false)
 
-        class parser : SnapshotParser<FireItem> {
-            override fun parseSnapshot(snapshot: DocumentSnapshot): FireItem {
-                return FireItem.fromMapToObj(snapshot.data)
-            }
-        }
-        // V2
-        FirebaseFirestore.getInstance().collection("items").get()
-            .addOnSuccessListener { result ->
+        FirebaseAuth.getInstance().currentUser?.let {
+            FirebaseFirestore.getInstance().collection("items").get()
+                .addOnSuccessListener { result ->
 
-                val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
-                recyclerView?.layoutManager = LinearLayoutManager(context)
-                val itemList = mutableListOf<FireItem>()
+                    val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
+                    recyclerView?.layoutManager = LinearLayoutManager(context)
+                    val itemList = mutableListOf<FireItem>()
 
-                for (document in result) {
-                    if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-                        itemList.add(FireItem.fromMapToObj(document.data))
+                    for (document in result) {
+                        if (document["owner"] != it.uid) {
+                            itemList.add(FireItem.fromMapToObj(document.data))
+                        }
                     }
-                }
 
-                if(itemList.isEmpty()) {
-                    empty_list_msg.visibility = View.VISIBLE
-                } else {
-                    empty_list_msg.visibility = View.INVISIBLE
+                    if(itemList.isEmpty()) {
+                        empty_list_msg.visibility = View.VISIBLE
+                    } else {
+                        empty_list_msg.visibility = View.INVISIBLE
+                    }
+                    recyclerView?.adapter =
+                        ItemInfoAdapter(itemList)
                 }
-                recyclerView?.adapter =
-                    ItemInfoAdapter(itemList)
-            }
+        }
+
 
         // Inflate the layout for this fragment
         return root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu, menu)
-        // inflater.inflate(R.menu.logout_menu, menu)
+
+        //set searchView
         val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
         val searchItem = menu.findItem(R.id.search)
         val searchView = searchItem?.actionView as SearchView
-
         searchView.setSearchableInfo(manager.getSearchableInfo(requireActivity().componentName))
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-
-            inner class parser : SnapshotParser<FireItem> {
-                override fun parseSnapshot(snapshot: DocumentSnapshot): FireItem {
-                    return FireItem.fromMapToObj(snapshot.data)
-                }
-            }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 searchView.clearFocus()
                 searchView.setQuery("",false)
                 searchItem.collapseActionView()
-                //search for query in the firestoredb
-                //Toast.makeText(requireContext(), "Gnagna", Toast.LENGTH_LONG).show()
-                val firebaseQuery = FirebaseFirestore.getInstance()
-                    .collection("items")
-                    .whereGreaterThan("title", query!!)
-                    .whereLessThan("title", query!!+'\uf8ff')
-                    .get().addOnSuccessListener { result ->
-                        val itemList = mutableListOf<FireItem>()
-                        for (document in result) {
-                            if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-                                itemList.add(FireItem.fromMapToObj(document.data))
-                            }
-                        }
-                        checkEmptyList(itemList)
-                        recyclerItemList.adapter = ItemInfoAdapter(itemList)
-                    }
+
+                getSaleItems(query!!)
                 return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                val firebaseQuery = FirebaseFirestore.getInstance()
-                    .collection("items")
-                    .whereGreaterThan("title", newText!!)
-                    .whereLessThan("title", newText!!+'\uf8ff')
-                    .get().addOnSuccessListener { result ->
-                        val itemList = mutableListOf<FireItem>()
-                        for (document in result) {
-                            if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-                                itemList.add(FireItem.fromMapToObj(document.data))
-                            }
-                        }
-                        checkEmptyList(itemList)
-                        recyclerItemList.adapter = ItemInfoAdapter(itemList)
-                    }
+                getSaleItems(newText!!)
                 return false
             }
         })
+    }
+
+    private fun getSaleItems(query: String) {
+        FirebaseFirestore.getInstance()
+            .collection("items")
+            .whereGreaterThan("title", query!!)
+            .whereLessThan("title", query!!+'\uf8ff')
+            .get().addOnSuccessListener { result ->
+                val itemList = mutableListOf<FireItem>()
+                for (document in result) {
+                    if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                        itemList.add(FireItem.fromMapToObj(document.data))
+                    }
+                }
+                checkEmptyList(itemList)
+                recyclerItemList.adapter = ItemInfoAdapter(itemList)
+            }
     }
 
     private fun checkEmptyList(itemList: MutableList<FireItem>) {
@@ -154,17 +129,4 @@ class OnSaleListFragment : Fragment() {
         }
     }
 
-    private fun checkEmptyQueryResult(query: Query, root : View) {
-
-        query.get()
-            .addOnSuccessListener { listItemDocument ->
-                if (listItemDocument.isEmpty) {
-                    root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.VISIBLE
-                }
-                else {
-                    root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.GONE
-                }
-            }
-            .addOnFailureListener { Helpers.makeSnackbar(requireView(), "Could not retrieve item info") }
-    }
 }
