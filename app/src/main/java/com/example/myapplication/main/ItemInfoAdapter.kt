@@ -68,8 +68,9 @@ class ItemInfoAdapter(private val items: List<FireItem>)
          }
 
         fun setListeners(itemInfo : FireItem){
-            val itemBundle = Bundle(1)
+            val itemBundle = Bundle(2)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
+            itemBundle.putBoolean("myitems", false)
 
             v.setOnClickListener {
                 v.findNavController().navigate(R.id.itemDetailsBuyFragment, itemBundle)

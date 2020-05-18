@@ -53,6 +53,7 @@ class OnSaleListFragment : Fragment() {
 
                     val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
                     recyclerView?.layoutManager = LinearLayoutManager(context)
+
                     val itemList = mutableListOf<FireItem>()
 
                     for (document in result) {
@@ -61,11 +62,9 @@ class OnSaleListFragment : Fragment() {
                         }
                     }
 
-                    if(itemList.isEmpty()) {
-                        empty_list_msg.visibility = View.VISIBLE
-                    } else {
-                        empty_list_msg.visibility = View.INVISIBLE
-                    }
+                    checkEmptyList(itemList)
+
+                    //Observe this list for live updates here?
                     recyclerView?.adapter =
                         ItemInfoAdapter(itemList)
                 }
@@ -105,11 +104,13 @@ class OnSaleListFragment : Fragment() {
     }
 
     private fun getSaleItems(query: String) {
+
         FirebaseFirestore.getInstance()
             .collection("items")
-            .whereGreaterThan("title", query!!)
-            .whereLessThan("title", query!!+'\uf8ff')
-            .get().addOnSuccessListener { result ->
+            .whereGreaterThanOrEqualTo("title", query)
+            .whereLessThanOrEqualTo("title", query + '\uf8ff')
+            .get()
+            .addOnSuccessListener { result ->
                 val itemList = mutableListOf<FireItem>()
                 for (document in result) {
                     if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {

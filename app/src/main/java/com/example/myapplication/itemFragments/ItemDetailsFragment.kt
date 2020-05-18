@@ -11,16 +11,31 @@ import androidx.navigation.findNavController
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.item_details_buy_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.*
+import kotlinx.android.synthetic.main.item_details_fragment.item_category_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_condition_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_description_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_expire_date_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_location
+import kotlinx.android.synthetic.main.item_details_fragment.item_location_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_picture
+import kotlinx.android.synthetic.main.item_details_fragment.item_price
+import kotlinx.android.synthetic.main.item_details_fragment.item_subcategory_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_title
 
 
 class ItemDetailsFragment : Fragment() {
 
     private lateinit var viewModel: ItemDetailsViewModel
+    private var myItems : Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        myItems = arguments?.getBoolean("myitems")
     }
 
     override fun onCreateView(
@@ -28,7 +43,10 @@ class ItemDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        return inflater.inflate(R.layout.item_details_fragment, container, false)
+        return if(myItems!!)
+                    inflater.inflate(R.layout.item_details_fragment, container, false)
+                else
+                    inflater.inflate(R.layout.item_details_buy_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,25 +65,64 @@ class ItemDetailsFragment : Fragment() {
             return
         }
 
-        viewModel.itemInfo.observe(requireActivity(), Observer {
-            item_title.text = it.title
-            item_price.text = it.price
-            item_location.text = it.location
-            item_category_value.text = it.category
-            item_subcategory_value.text = it.subCategory
-            item_expire_date_value.text = it.expDate
-            item_location_value.text = it.location
-            item_condition_value.text = it.condition
-            item_description_value.text = it.description
+        if(myItems!!){
+            //Here personal items
+            viewModel.itemInfo.observe(requireActivity(), Observer {
+                item_title.text = it.title
+                item_price.text = it.price
+                item_location.text = it.location
+                item_category_value.text = it.category
+                item_subcategory_value.text = it.subCategory
+                item_expire_date_value.text = it.expDate
+                item_location_value.text = it.location
+                item_condition_value.text = it.condition
+                item_description_value.text = it.description
 
-            Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.picture_uri.toString()),
-                item_picture)
+                Helpers.updatePicture(this.requireContext(),
+                    Uri.parse(it.picture_uri.toString()),
+                    item_picture)
 
-            viewModel.setTempItemInfo(it)
-        })
+                viewModel.setTempItemInfo(it)
+            })
+        }
+        else {
+            val fab: View = requireActivity().findViewById(R.id.fab_star)
+            fab.setOnClickListener { view ->
+                // TODO: Insert in list of favourites in db
+                Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null)
+                    .show()
+            }
+            //Other person items
+            viewModel.itemInfo.observe(requireActivity(), Observer {
+                item_title.text = it.title
+                item_price.text = it.price
+                item_location.text = it.location
+                item_category_value.text = it.category
+                item_subcategory_value.text = it.subCategory
+                item_expire_date_value.text = it.expDate
+                item_location_value.text = it.location
+                item_condition_value.text = it.condition
+                item_description_value.text = it.description
+
+                queryOwnerName(it.owner)
+
+                Helpers.updatePicture(this.requireContext(),
+                    Uri.parse(it.picture_uri.toString()),
+                    item_picture)
+
+                viewModel.setTempItemInfo(it)
+            })
+        }
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("item_picture_editing").apply()
+    }
+
+    private fun queryOwnerName(ownerId: String) {
+
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", ownerId)
+            .get()
+            .addOnSuccessListener { documents ->  seller_usr.text =  documents.first()["username"] as String? }
     }
 
     override fun onDestroyView() {

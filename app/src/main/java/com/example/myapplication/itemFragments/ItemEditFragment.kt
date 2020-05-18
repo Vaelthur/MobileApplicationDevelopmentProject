@@ -352,8 +352,9 @@ class ItemEditFragment : Fragment() {
 //        else
 //            itemListViewModel.updateItem(itemToSave)
 
-        val itemBundle = Bundle(1)
+        val itemBundle = Bundle(2)
         itemBundle.putSerializable("item", itemToSave as Serializable?)
+        itemBundle.putBoolean("myitems", true)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)

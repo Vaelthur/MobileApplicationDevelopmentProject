@@ -71,10 +71,12 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>, filterM
         }
 
         fun setListeners(itemInfo : FireItem){
-            val itemBundle = Bundle(1)
+            val itemBundle = Bundle(2)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
+            itemBundle.putBoolean("myitems", true)
 
             containerView.setOnClickListener {
+
                 containerView.findNavController().navigate(R.id.itemDetailsFragment, itemBundle)
             }
 

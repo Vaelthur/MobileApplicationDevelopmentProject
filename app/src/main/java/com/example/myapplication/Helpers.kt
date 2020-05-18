@@ -106,7 +106,8 @@ class Helpers(){
             val itemInfo = FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
                 "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own)
-            val itemBundle = Bundle(1)
+            val itemBundle = Bundle(2)
+            itemBundle.putBoolean("myitems", true)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
 
             return itemBundle
