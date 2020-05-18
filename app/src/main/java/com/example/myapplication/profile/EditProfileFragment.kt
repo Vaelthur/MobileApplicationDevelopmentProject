@@ -21,10 +21,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.example.myapplication.AccountInfo
-import com.example.myapplication.AccountInfoFactory
-import com.example.myapplication.Helpers
-import com.example.myapplication.R
+import com.example.myapplication.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -66,6 +63,10 @@ class EditProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        if(showProfileViewModel.tempAccountInfo.value == null) {
+            setShowProfileViewModel()
+        }
 
         showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
             editViewFullNameEditProfile.setText(it.fullname)
@@ -402,6 +403,26 @@ class EditProfileFragment : Fragment() {
                 )
             }
         }
+    }
+
+    private fun setShowProfileViewModel() {
+
+        val auth = (activity as MainActivity).getAuth()
+        //Search for user in database to determine if signup or signin
+        val db = FirebaseFirestore.getInstance()
+        val accountInfoQueryResult = db.collection("users").document(auth.currentUser!!.uid)
+        accountInfoQueryResult.get()
+            .addOnSuccessListener { accountDocument ->
+                if (accountDocument.data != null) {
+                    val accountInfo = AccountInfoFactory.fromMapToObj(accountDocument.data)
+                    showProfileViewModel.accountInfo.value = accountInfo
+                    showProfileViewModel.tempAccountInfo.value = accountInfo
+                }
+                else {
+                    Helpers.makeSnackbar(requireView(), "Could not retrieve user info")
+                }
+            }
+            .addOnFailureListener { Helpers.makeSnackbar(requireView(), "Could not retrieve user info") }
     }
 
     /// endregion
