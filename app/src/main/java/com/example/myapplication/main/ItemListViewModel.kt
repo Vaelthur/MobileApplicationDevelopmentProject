@@ -5,30 +5,56 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 import com.example.myapplication.data.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ItemListViewModel constructor(application: Application) : AndroidViewModel(application) {
 
-    var itemListLiveData : MutableLiveData<List<Item>>? = null
-    private val repository: FirestoreRepository = FirestoreRepository()
+    private var itemListLiveData : MutableLiveData<List<FireItem>> = MutableLiveData<List<FireItem>>()
+    private var firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
+    init {
+        firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
+        listenToItems()
+    }
 
-//    fun getAll() = viewModelScope.launch(Dispatchers.IO){
-//        repository.getAll()
-//        itemListLiveData = repository.allItems
-//    }
+    private fun listenToItems(){
 
-//    fun insertAll(itemToSave: Item) = viewModelScope.launch(Dispatchers.IO){
-//
-//        repository.insertAll(itemToSave)
-//    }
-//
-//    fun updateItem(itemToUpdate: Item) = viewModelScope.launch(Dispatchers.IO){
-//
-//        repository.updateItem(itemToUpdate)
-//    }
+        FirebaseAuth.getInstance().currentUser?.let {
 
-    /// endregion
+            firestore.collection("items").addSnapshotListener{
+                snapshot, firestoreException ->
+
+                if(firestoreException != null){
+                    //Make toasst
+                    val a  =  1 + 2
+                }
+
+                if(snapshot != null){
+                    val itemList = mutableListOf<FireItem>()
+
+                    for (document in snapshot.documents) {
+                        if (document["owner"] != it.uid) {
+                            itemList.add(FireItem.fromMapToObj(document.data))
+                        }
+                    }
+
+                    itemListLiveData.value = itemList
+                }
+            }
+
+        }
+    }
+
+    internal var liveItems : MutableLiveData<List<FireItem>>
+        get()       {   return itemListLiveData }
+        set(value)  {   itemListLiveData = value}
+
 }

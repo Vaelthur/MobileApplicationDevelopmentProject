@@ -7,6 +7,7 @@ import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +28,7 @@ import kotlinx.android.synthetic.main.fragment_on_sale_list.*
 
 class OnSaleListFragment : Fragment() {
 
-    private lateinit var itemDetailsViewModel: ItemDetailsViewModel
+    private lateinit var itemListViewModel: ItemListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,40 +40,21 @@ class OnSaleListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+        return inflater.inflate(R.layout.fragment_on_sale_list, container, false)
+    }
 
-        itemDetailsViewModel =
-            ViewModelProviders.of(requireActivity()).get(ItemDetailsViewModel::class.java)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        itemDetailsViewModel.tempItemInfo.value = null
+        itemListViewModel =
+            ViewModelProviders.of(requireActivity()).get(ItemListViewModel::class.java)
 
-        val root = inflater.inflate(R.layout.fragment_on_sale_list, container, false)
-
-        FirebaseAuth.getInstance().currentUser?.let {
-            FirebaseFirestore.getInstance().collection("items").get()
-                .addOnSuccessListener { result ->
-
-                    val recyclerView: RecyclerView? = root.findViewById(R.id.recyclerItemList)
-                    recyclerView?.layoutManager = LinearLayoutManager(context)
-
-                    val itemList = mutableListOf<FireItem>()
-
-                    for (document in result) {
-                        if (document["owner"] != it.uid) {
-                            itemList.add(FireItem.fromMapToObj(document.data))
-                        }
-                    }
-
-                    checkEmptyList(itemList)
-
-                    //Observe this list for live updates here?
-                    recyclerView?.adapter =
-                        ItemInfoAdapter(itemList)
-                }
-        }
-
-
-        // Inflate the layout for this fragment
-        return root
+        itemListViewModel.liveItems.observe(requireActivity(), Observer {
+            val recyclerView: RecyclerView? = view.findViewById(R.id.recyclerItemList)
+            recyclerView?.layoutManager = LinearLayoutManager(context)
+            recyclerView?.adapter =
+                ItemInfoAdapter(it)
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
