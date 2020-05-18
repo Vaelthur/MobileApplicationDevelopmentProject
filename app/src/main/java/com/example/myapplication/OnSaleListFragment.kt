@@ -49,6 +49,8 @@ class OnSaleListFragment : Fragment() {
         itemListViewModel =
             ViewModelProviders.of(requireActivity()).get(ItemListViewModel::class.java)
 
+        itemListViewModel.listenToItems()
+
         itemListViewModel.liveItems.observe(requireActivity(), Observer {
             val recyclerView: RecyclerView? = view.findViewById(R.id.recyclerItemList)
             recyclerView?.layoutManager = LinearLayoutManager(context)

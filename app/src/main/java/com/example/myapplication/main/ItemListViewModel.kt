@@ -22,10 +22,9 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
 
     init {
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
-        listenToItems()
     }
 
-    private fun listenToItems(){
+    fun listenToItems(){
 
         FirebaseAuth.getInstance().currentUser?.let {
 
@@ -43,6 +42,11 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
                     for (document in snapshot.documents) {
                         if (document["owner"] != it.uid) {
                             itemList.add(FireItem.fromMapToObj(document.data))
+                        }
+
+                        if (document["users_favorites"] != null) {
+                            val favs = arrayOf(document["users_favorites"])
+                            val a = 1
                         }
                     }
 
