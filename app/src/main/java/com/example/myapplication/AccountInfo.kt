@@ -1,16 +1,31 @@
 package com.example.myapplication
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.example.myapplication.profile.EditProfileFragment
+import com.google.android.gms.auth.api.signin.internal.Storage
 import com.google.firebase.database.Exclude
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 import org.json.JSONObject
+import java.io.ByteArrayOutputStream
 import java.io.Serializable
+import java.util.*
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.google.firebase.storage.FirebaseStorage
 
 
 data class AccountInfo (
@@ -39,7 +54,9 @@ class AccountInfoFactory(){
 
         const val defaultProfilePic = "android.resource://com.example.myapplication/drawable/default_profile_picture"
 
+
         fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
+
 
             val getEditViewText =
                 { id: EditText -> id.text }
@@ -72,6 +89,7 @@ class AccountInfoFactory(){
             val location = StringBuffer(getEditViewText(editProfileFragment.editViewUserLocationEditProfile)).toString()
             val profilePicture = getProfilePicturePath(editProfileFragment).toString()
             val id = (editProfileFragment.requireActivity() as MainActivity).getAuth().currentUser?.uid
+
 
             return AccountInfo(
                 id,

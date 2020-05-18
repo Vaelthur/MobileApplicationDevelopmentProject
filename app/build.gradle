@@ -34,7 +34,7 @@ android {
     }
 
 // To inline the bytecode built with JVM target 1.8 into
-    // min sdk was 21
+    // min sdk was 24
 // bytecode that is being built with JVM target 1.6. (e.g. navArgs)
 
 
@@ -63,7 +63,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     implementation 'com.google.firebase:firebase-database:19.3.0'
-    implementation 'com.google.firebase:firebase-firestore:21.4.0'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -92,14 +92,15 @@ dependencies {
     // Circular profile picture
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation "androidx.exifinterface:exifinterface:1.2.0"
-    implementation 'androidx.room:room-runtime:2.1.0'
-    annotationProcessor 'androidx.room:room-compiler:2.1.0'
+    implementation 'androidx.room:room-runtime:2.2.5'
+    annotationProcessor 'androidx.room:room-compiler:2.2.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
 
     //Firestore database
     implementation 'com.google.firebase:firebase-database-ktx:19.3.0'
     implementation 'com.google.firebase:firebase-analytics:17.4.1'
     implementation 'com.firebaseui:firebase-ui-firestore:4.3.1'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
 
     //Google oauth
     implementation 'com.google.firebase:firebase-auth:19.3.1'
@@ -107,4 +108,6 @@ dependencies {
 
     //Glide
     implementation 'com.github.bumptech.glide:glide:4.10.0'
+
+    implementation 'com.google.guava:guava:28.2-android'
 }

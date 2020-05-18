@@ -6,6 +6,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,9 +14,11 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -24,10 +27,15 @@ import com.bumptech.glide.Glide
 import com.example.myapplication.*
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
+import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -302,7 +310,28 @@ class EditProfileFragment : Fragment() {
         val db = FirebaseFirestore.getInstance()
         val auth = FirebaseAuth.getInstance()
         val usersRef = db.collection("users")
-        usersRef.document(auth.uid!!).set(accountInfo)
+
+        // V2 - very bad and ugly solution with polling
+        runBlocking {
+            val propicUri = accountInfo.profilePicture?.toUri()
+            val storageReference = FirebaseStorage.getInstance().reference
+            val imageRef = storageReference.child("propic/"+auth.uid!!)
+
+            val uploadTask = propicUri?.let { imageRef.putFile(it) }
+            if (uploadTask != null) {
+                uploadTask.addOnSuccessListener {
+                    val downloadUrl = imageRef.downloadUrl
+                    downloadUrl.addOnSuccessListener {
+                        val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
+                        usersRef.document(auth.uid!!).set(finalAC)
+                        showProfileViewModel.setAccountInfo(finalAC)
+                    }
+                }
+                while(!uploadTask.isComplete){continue}
+            }
+        }
+
+
 
         // Save content to sharedPreferences
 //        val jsonString = Gson().toJson(accountInfo)
@@ -312,13 +341,30 @@ class EditProfileFragment : Fragment() {
 //            commit()
 //        }
 
-        showProfileViewModel.setAccountInfo(accountInfo)
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
         setProfileNavHeaderHandler()
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
         Helpers.makeSnackbar(requireView(), "Profile changed correctly")
+    }
+
+    suspend fun updateData(auth: FirebaseAuth, usersRef:CollectionReference, accountInfo: AccountInfo) {
+        val propicUri = accountInfo.profilePicture?.toUri()
+        val storageReference = FirebaseStorage.getInstance().reference
+        val imageRef = storageReference.child("propic/"+auth.uid!!)
+
+        val uploadTask = propicUri?.let { imageRef.putFile(it) }
+        if (uploadTask != null) {
+            uploadTask.addOnSuccessListener {
+                val downloadUrl = imageRef.downloadUrl
+                downloadUrl.addOnSuccessListener {
+                    val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
+                    usersRef.document(auth.uid!!).set(finalAC)
+                    showProfileViewModel.setAccountInfo(finalAC)
+                }
+            }
+        }
     }
 
     ///endregion
