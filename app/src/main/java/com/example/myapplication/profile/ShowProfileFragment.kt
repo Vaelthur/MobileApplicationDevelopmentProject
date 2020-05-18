@@ -9,10 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.example.myapplication.AccountInfoFactory
-import com.example.myapplication.Helpers
-import com.example.myapplication.MainActivity
-import com.example.myapplication.R
+import com.example.myapplication.*
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 
@@ -21,11 +18,15 @@ class ShowProfileFragment : Fragment() {
 
     private val RC_SIGN_IN = 343
     private lateinit var showProfileViewModel: ShowProfileViewModel
+    private var myProfile : Boolean? = true
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        arguments?.let {
+            myProfile = it.getBoolean("myprofile")
+        }
     }
 
     override fun onCreateView(
@@ -37,7 +38,14 @@ class ShowProfileFragment : Fragment() {
 
         if(showProfileViewModel.accountInfo.value == null){
             //Set showProfileViewModel with db info
-            setShowProfileViewModel()
+            if(!myProfile!!) {
+                val accountInfo = arguments?.get("account_info") as AccountInfo
+                showProfileViewModel.accountInfo.value = accountInfo
+                showProfileViewModel.tempAccountInfo.value = accountInfo
+            }
+            else {
+                setShowProfileViewModel()
+            }
         }
 
         return inflater.inflate(R.layout.fragment_show_profile, container, false)
@@ -45,35 +53,43 @@ class ShowProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
-            textViewFullNameShowProfile.text = it.fullname
-            textViewUsernameShowProfile.text = it.username
-            textViewUserEmailShowProfile.text = it.email
-            textViewUserLocationShowProfile.text = it.location
-            Glide.with(requireContext())
-                .load(it.profilePicture)
-                .centerCrop()
-                .circleCrop()
-                .into(profile_picture)
-            /*Helpers.updatePicture(
-                this.requireContext(),
-                Uri.parse(it.profilePicture),
-                profile_picture
-            )*/
-            showProfileViewModel.setTempAccountInfo(it)
-        })
+        if(myProfile!!) {
 
-        this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
+        }
+        else {
+
+            //not my profile
+            textViewFullNameShowProfile.visibility = View.GONE
+            showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
+                textViewUsernameShowProfile.text = it.username
+                textViewUserEmailShowProfile.text = it.email
+                textViewUserLocationShowProfile.text = it.location
+                Glide.with(requireContext())
+                    .load(it.profilePicture)
+                    .centerCrop()
+                    .circleCrop()
+                    .into(profile_picture)
+                /*Helpers.updatePicture(
+                    this.requireContext(),
+                    Uri.parse(it.profilePicture),
+                    profile_picture
+                )*/
+            })
+        }
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         showProfileViewModel.accountInfo.removeObservers(requireActivity())
+        showProfileViewModel.accountInfo.value = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.show_profile_menu, menu)
+        if(myProfile!!) {
+            inflater.inflate(R.menu.show_profile_menu, menu)
+        }
         // inflater.inflate(R.menu.logout_menu, menu)
     }
 
@@ -116,7 +132,28 @@ class ShowProfileFragment : Fragment() {
                     val accountInfo = AccountInfoFactory.fromMapToObj(accountDocument.data)
                     showProfileViewModel.accountInfo.value = accountInfo
                     showProfileViewModel.tempAccountInfo.value = accountInfo
+
+                    showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
+                        textViewFullNameShowProfile.text = it.fullname
+                        textViewUsernameShowProfile.text = it.username
+                        textViewUserEmailShowProfile.text = it.email
+                        textViewUserLocationShowProfile.text = it.location
+                        Glide.with(requireContext())
+                            .load(it.profilePicture)
+                            .centerCrop()
+                            .circleCrop()
+                            .into(profile_picture)
+                        /*Helpers.updatePicture(
+                            this.requireContext(),
+                            Uri.parse(it.profilePicture),
+                            profile_picture
+                        )*/
+                        showProfileViewModel.setTempAccountInfo(it)
+                    })
+
+                    this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
                 }
+
                 else {
                     Helpers.makeSnackbar(requireView(), "Could not retrieve user info")
                 }

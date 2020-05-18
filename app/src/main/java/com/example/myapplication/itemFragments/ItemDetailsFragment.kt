@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.example.myapplication.main.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_details_buy_fragment.*
@@ -67,6 +70,17 @@ class ItemDetailsFragment : Fragment() {
 
         if(myItems!!){
             //Here personal items
+
+            //get users interested
+
+            viewModel.interestedUsers(itemInfo.value!!.id)
+
+            viewModel.interestedLiveData.observe(requireActivity(), Observer {
+                val recyclerView : RecyclerView? = view.findViewById(R.id.fav_users)
+                recyclerView?.layoutManager = LinearLayoutManager(context)
+                recyclerView?.adapter = UsersListAdapter(it)
+            })
+
             viewModel.itemInfo.observe(requireActivity(), Observer {
                 item_title.text = it.title
                 item_price.text = it.price

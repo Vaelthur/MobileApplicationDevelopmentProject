@@ -79,10 +79,16 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             // Navigate to fragment that allows editing of the selected item
             val saveButton : ImageButton = v.findViewById(R.id.starItemButton)
             saveButton.setOnClickListener {
-                // TODO: Insert in list of favourites in db
+
+                //insert favorite in user
                 FirebaseFirestore.getInstance().collection("users")
                     .document(FirebaseAuth.getInstance().currentUser!!.uid)
                     .update("favorites", FieldValue.arrayUnion(itemInfo.id))
+
+                //insert favorite in item (for other queries)
+                FirebaseFirestore.getInstance().collection("items").document(itemInfo.id)
+                    .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
+
                 Snackbar.make(v, "Item Added to Favourites", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .show()

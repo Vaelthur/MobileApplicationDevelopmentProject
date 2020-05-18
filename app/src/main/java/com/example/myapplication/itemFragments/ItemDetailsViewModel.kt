@@ -2,6 +2,8 @@ package com.example.myapplication.itemFragments
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.myapplication.AccountInfo
+import com.example.myapplication.AccountInfoFactory
 import com.example.myapplication.data.FireItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -11,7 +13,7 @@ import org.json.JSONObject
 class ItemDetailsViewModel : ViewModel() {
     val itemInfo = MutableLiveData<FireItem>()
     val tempItemInfo = MutableLiveData<FireItem>()
-    val interestedLiveData = MutableLiveData<Array<String>>()
+    val interestedLiveData = MutableLiveData<List<AccountInfo>>()
 
     fun setItemInfo(itemJson: JSONObject) {
         itemInfo.value = createItemInfoFromJSON(itemJson)
@@ -55,10 +57,18 @@ class ItemDetailsViewModel : ViewModel() {
                 }
 
                 if(snapshot != null){
-                    val interested = mutableListOf<String>()
+                    val interested = mutableListOf<AccountInfo>()
 
                     if (snapshot["users_favorites"] != null) {
-                            interestedLiveData.value = snapshot["users_favorites"] as Array<String>
+                        val usersID = (snapshot.data?.get("users_favorites")) as ArrayList<String>
+                        for(user in usersID) {
+                            FirebaseFirestore.getInstance().collection("users").document(user).get().addOnSuccessListener {
+                                val accInfo = AccountInfoFactory.fromMapToObj(it.data)
+                                interested.add(accInfo)
+                                interestedLiveData.value = interested
+                            }
+                        }
+
                     }
                 }
             }
