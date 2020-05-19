@@ -36,17 +36,18 @@ class ShowProfileFragment : Fragment() {
 
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
 
-        if(showProfileViewModel.accountInfo.value == null){
-            //Set showProfileViewModel with db info
-            if(!myProfile!!) {
-                val accountInfo = arguments?.get("account_info") as AccountInfo
-                showProfileViewModel.accountInfo.value = accountInfo
-                showProfileViewModel.tempAccountInfo.value = accountInfo
-            }
-            else {
+        //Set showProfileViewModel with db info
+        if(!myProfile!!) {
+            val accountInfo = arguments?.get("account_info") as AccountInfo
+            showProfileViewModel.accountInfo.value = accountInfo
+            //showProfileViewModel.tempAccountInfo.value = accountInfo
+        }
+        else {
+            if(showProfileViewModel.accountInfo.value == null){
                 setShowProfileViewModel()
             }
         }
+
 
         return inflater.inflate(R.layout.fragment_show_profile, container, false)
     }
@@ -54,7 +55,25 @@ class ShowProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         if(myProfile!!) {
+            textViewFullNameShowProfile.visibility = View.VISIBLE
 
+            showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
+                textViewFullNameShowProfile.text = it.fullname
+                textViewUsernameShowProfile.text = it.username
+                textViewUserEmailShowProfile.text = it.email
+                textViewUserLocationShowProfile.text = it.location
+                Glide.with(requireContext())
+                    .load(it.profilePicture)
+                    .centerCrop()
+                    .circleCrop()
+                    .into(profile_picture)
+                /*Helpers.updatePicture(
+                    this.requireContext(),
+                    Uri.parse(it.profilePicture),
+                    profile_picture
+                )*/
+                showProfileViewModel.setTempAccountInfo(it)
+            })
         }
         else {
 
@@ -82,7 +101,7 @@ class ShowProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         showProfileViewModel.accountInfo.removeObservers(requireActivity())
-        showProfileViewModel.accountInfo.value = null
+        //showProfileViewModel.accountInfo.value = null
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -133,23 +152,6 @@ class ShowProfileFragment : Fragment() {
                     showProfileViewModel.accountInfo.value = accountInfo
                     showProfileViewModel.tempAccountInfo.value = accountInfo
 
-                    showProfileViewModel.accountInfo.observe(requireActivity(), Observer {
-                        textViewFullNameShowProfile.text = it.fullname
-                        textViewUsernameShowProfile.text = it.username
-                        textViewUserEmailShowProfile.text = it.email
-                        textViewUserLocationShowProfile.text = it.location
-                        Glide.with(requireContext())
-                            .load(it.profilePicture)
-                            .centerCrop()
-                            .circleCrop()
-                            .into(profile_picture)
-                        /*Helpers.updatePicture(
-                            this.requireContext(),
-                            Uri.parse(it.profilePicture),
-                            profile_picture
-                        )*/
-                        showProfileViewModel.setTempAccountInfo(it)
-                    })
 
                     this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
                 }

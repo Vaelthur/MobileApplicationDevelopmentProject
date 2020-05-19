@@ -126,17 +126,21 @@ class SignInFragment : Fragment() {
         showProfileViewModel.accountInfo.value = accountInfo
         showProfileViewModel.tempAccountInfo.value = accountInfo
 
+        val myBundle = Bundle()
+        myBundle.putBoolean("myprofile", true)
+
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, myBundle)
     }
 
 
     private fun signUp(db: FirebaseFirestore, googleAccountInfo: AccountInfo) {
 
-        val accountBundle = Bundle()
+        val accountBundle = Bundle(2)
         insertInDb(db, googleAccountInfo)
         //navigate to editProfile with bundle
         accountBundle.putSerializable("account_info", googleAccountInfo)
+        accountBundle.putBoolean("myprofile", true)
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)

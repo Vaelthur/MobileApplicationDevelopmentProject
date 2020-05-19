@@ -58,12 +58,12 @@ class ItemDetailsViewModel : ViewModel() {
 
                 if(snapshot != null){
                     val interested = mutableListOf<AccountInfo>()
-
+//RIMANE SOLO UN UTENTE ALLA VOLTA
                     if (snapshot["users_favorites"] != null) {
                         val usersID = (snapshot.data?.get("users_favorites")) as ArrayList<String>
                         for(user in usersID) {
-                            FirebaseFirestore.getInstance().collection("users").document(user).get().addOnSuccessListener {
-                                val accInfo = AccountInfoFactory.fromMapToObj(it.data)
+                            FirebaseFirestore.getInstance().collection("users").document(user).get().addOnCompleteListener {
+                                val accInfo = AccountInfoFactory.fromMapToObj(it.result?.data)
                                 interested.add(accInfo)
                                 interestedLiveData.value = interested
                             }

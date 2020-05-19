@@ -315,7 +315,7 @@ class EditProfileFragment : Fragment() {
         runBlocking {
             val propicUri = accountInfo.profilePicture?.toUri()
             val storageReference = FirebaseStorage.getInstance().reference
-            val imageRef = storageReference.child("propic/"+auth.uid!!)
+            val imageRef = storageReference.child("propic/"+auth.currentUser?.uid!!)
 
             val uploadTask = propicUri?.let { imageRef.putFile(it) }
             if (uploadTask != null) {
@@ -323,10 +323,14 @@ class EditProfileFragment : Fragment() {
                     val downloadUrl = imageRef.downloadUrl
                     downloadUrl.addOnSuccessListener {
                         val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
-                        usersRef.document(auth.uid!!).set(finalAC)
+                        usersRef.document(auth.currentUser?.uid!!).set(finalAC)
                         showProfileViewModel.setAccountInfo(finalAC)
                     }
                 }
+                    .addOnFailureListener {
+                        usersRef.document(auth.currentUser?.uid!!).set(accountInfo)
+                        showProfileViewModel.setAccountInfo(accountInfo)
+                    }
                 while(!uploadTask.isComplete){continue}
             }
         }
