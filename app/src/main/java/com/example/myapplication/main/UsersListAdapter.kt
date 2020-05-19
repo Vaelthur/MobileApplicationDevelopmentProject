@@ -8,10 +8,12 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.AccountInfo
 import com.example.myapplication.R
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.Serializable
+import kotlin.coroutines.coroutineContext
 
 class UsersListAdapter(private val users: List<AccountInfo>)
     : RecyclerView.Adapter<UsersListAdapter.AccountInfoViewHolder>() {
@@ -51,7 +53,11 @@ class UsersListAdapter(private val users: List<AccountInfo>)
             }
             else {
                 val imageURI : Uri? = Uri.parse(accountInfo.profilePicture)
-                // pictureURIView.setImageURI(imageURI) //fa crashare le mie cose questa causa permessi
+                Glide.with(v)
+                    .load(imageURI)
+                    .centerCrop()
+                    .circleCrop()
+                    .into(pictureURIView)
             }
 
             username.text = accountInfo.username
