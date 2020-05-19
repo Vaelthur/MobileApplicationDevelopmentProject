@@ -158,7 +158,7 @@ class Helpers(){
             return accountInfo?.let{ JSONObject(accountInfo) }
         }
 
-        fun setNavHeaderView(headerView: View?, fullname: String, email: String, profilePicture: String) {
+        fun setNavHeaderView(headerView: View?, fullname: String?, email: String?, profilePicture: String?) {
             headerView?.findViewById<TextView>(R.id.full_name_navheader)?.text = fullname
             headerView?.findViewById<TextView>(R.id.email_navheader)?.text = email
             //headerView?.findViewById<ImageView>(R.id.profile_picture_navheader)?.setImageURI(Uri.parse(profilePicture))

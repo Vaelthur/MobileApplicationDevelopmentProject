@@ -93,7 +93,7 @@ class SignInFragment : Fragment() {
                     val googleAccountInfo = getGoogleSignInInfo(auth.currentUser!!)
                     // Nav header update
                     val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
-                    changeNavHeader(navView, auth.currentUser!!)
+                    // changeNavHeader(navView, auth.currentUser!!)
 
                     //Search for user in database to determine if signup or signin
                     val db = FirebaseFirestore.getInstance()
@@ -126,6 +126,10 @@ class SignInFragment : Fragment() {
         showProfileViewModel.accountInfo.value = accountInfo
         showProfileViewModel.tempAccountInfo.value = accountInfo
 
+        val auth = (activity as MainActivity).getAuth()
+        val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
+        changeNavHeader(navView, auth.currentUser!!, existing = true)
+
         val myBundle = Bundle()
         myBundle.putBoolean("myprofile", true)
 
@@ -141,12 +145,17 @@ class SignInFragment : Fragment() {
         //navigate to editProfile with bundle
         accountBundle.putSerializable("account_info", googleAccountInfo)
         accountBundle.putBoolean("myprofile", true)
+
+        val auth = (activity as MainActivity).getAuth()
+        val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
+        changeNavHeader(navView, auth.currentUser!!, existing = false)
+
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
     }
 
-    private fun changeNavHeader(navView: NavigationView, account: FirebaseUser) {
+    private fun changeNavHeader(navView: NavigationView, account: FirebaseUser, existing: Boolean) {
         navView.menu.clear()
         navView.inflateMenu(R.menu.activity_main_drawer)
         navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
@@ -158,11 +167,23 @@ class SignInFragment : Fragment() {
         }
 
         //updateHeader
-        Helpers.setNavHeaderView(
-            navView.getHeaderView(0),
-            account.displayName!!,
-            account.email!!,
-            account.photoUrl!!.toString())
+
+        if(!existing) {
+            Helpers.setNavHeaderView(
+                navView.getHeaderView(0),
+                account.displayName!!,
+                account.email!!,
+                account.photoUrl!!.toString()
+            )
+        } else {
+            val showProfileViewModel = ViewModelProviders.of(requireActivity()).get(ShowProfileViewModel::class.java)
+            Helpers.setNavHeaderView(
+                navView.getHeaderView(0),
+                showProfileViewModel.accountInfo.value?.fullname,
+                showProfileViewModel.accountInfo.value?.email,
+                showProfileViewModel.accountInfo.value?.profilePicture
+            )
+        }
     }
 
     private fun getGoogleSignInInfo(currentUser: FirebaseUser): AccountInfo {

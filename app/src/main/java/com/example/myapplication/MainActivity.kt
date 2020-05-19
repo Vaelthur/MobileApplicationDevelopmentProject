@@ -16,6 +16,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,11 +54,22 @@ class MainActivity : AppCompatActivity() {
                 logout(navView)
             }
             //updateHeader
-            Helpers.setNavHeaderView(
-                navView.getHeaderView(0),
-                currentUser.displayName!!,
-                currentUser.email!!,
-                currentUser.photoUrl!!.toString())
+//            Helpers.setNavHeaderView(
+//                navView.getHeaderView(0),
+//                currentUser.displayName!!,
+//                currentUser.email!!,
+//                currentUser.photoUrl!!.toString())
+
+            val usrRef= FirebaseFirestore.getInstance().collection("users").document(auth.currentUser!!.uid)
+            usrRef.get().addOnSuccessListener {doc ->
+                val info = AccountInfoFactory.fromMapToObj(doc.data)
+                Helpers.setNavHeaderView(
+                    navView.getHeaderView(0),
+                    info.fullname,
+                    info.email,
+                    info.profilePicture
+                    )
+            }
         }
         // Nav_host_fragment is the fragment container in layout/content_main.xml
         val navController = findNavController(R.id.nav_host_fragment)

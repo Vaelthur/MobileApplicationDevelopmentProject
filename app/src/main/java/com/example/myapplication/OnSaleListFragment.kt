@@ -57,6 +57,8 @@ class OnSaleListFragment : Fragment() {
             recyclerView?.adapter =
                 ItemInfoAdapter(it)
         })
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
