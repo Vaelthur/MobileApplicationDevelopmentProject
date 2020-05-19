@@ -102,12 +102,17 @@ class MainActivity : AppCompatActivity() {
     fun logout( navigationView: NavigationView): Boolean {
         // rough signout - see if something else is needed
         auth.signOut()
+
+        // restore header
+        Helpers.setNavHeaderView(navigationView.getHeaderView(0), "Android Studio", "android.studio@android.com", "android.resource://com.example.myapplication/drawable/default_profile_picture")
+
         // restore drawer menu
-        // TODO: restore header too
         navigationView.menu.clear()
         navigationView.inflateMenu(R.menu.activity_main_drawer_logged_out)
+
         // navigate to signinFragment
         this.findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
+
         // close drawer
         this.findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
         return true

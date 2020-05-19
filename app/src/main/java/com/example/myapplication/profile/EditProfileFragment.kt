@@ -325,11 +325,13 @@ class EditProfileFragment : Fragment() {
                         val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
                         usersRef.document(auth.currentUser?.uid!!).set(finalAC)
                         showProfileViewModel.setAccountInfo(finalAC)
+                        setProfileNavHeaderHandler()
                     }
                 }
                     .addOnFailureListener {
                         usersRef.document(auth.currentUser?.uid!!).set(accountInfo)
                         showProfileViewModel.setAccountInfo(accountInfo)
+                        setProfileNavHeaderHandler()
                     }
                 while(!uploadTask.isComplete){continue}
             }
@@ -347,28 +349,10 @@ class EditProfileFragment : Fragment() {
 
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
-        setProfileNavHeaderHandler()
+
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
         Helpers.makeSnackbar(requireView(), "Profile changed correctly")
-    }
-
-    suspend fun updateData(auth: FirebaseAuth, usersRef:CollectionReference, accountInfo: AccountInfo) {
-        val propicUri = accountInfo.profilePicture?.toUri()
-        val storageReference = FirebaseStorage.getInstance().reference
-        val imageRef = storageReference.child("propic/"+auth.uid!!)
-
-        val uploadTask = propicUri?.let { imageRef.putFile(it) }
-        if (uploadTask != null) {
-            uploadTask.addOnSuccessListener {
-                val downloadUrl = imageRef.downloadUrl
-                downloadUrl.addOnSuccessListener {
-                    val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
-                    usersRef.document(auth.uid!!).set(finalAC)
-                    showProfileViewModel.setAccountInfo(finalAC)
-                }
-            }
-        }
     }
 
     ///endregion
