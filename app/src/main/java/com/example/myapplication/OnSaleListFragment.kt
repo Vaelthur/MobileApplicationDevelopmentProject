@@ -4,29 +4,23 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.data.FireItem
-import com.example.myapplication.itemFragments.ItemDetailsViewModel
-import com.example.myapplication.main.FirestoreItemAdapter
+import com.example.myapplication.main.ItemCategories
 import com.example.myapplication.main.ItemInfoAdapter
 import com.example.myapplication.main.ItemListViewModel
-import com.firebase.ui.firestore.FirestoreRecyclerOptions
-import com.firebase.ui.firestore.SnapshotParser
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import kotlinx.android.synthetic.main.fragment_on_sale_list.*
 
 
-class OnSaleListFragment : Fragment() {
+class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
 
     private lateinit var itemListViewModel: ItemListViewModel
 
@@ -64,11 +58,27 @@ class OnSaleListFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu, menu)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.search -> {
+                searchHandler(item)
+                true
+            }
+            R.id.filter -> {
+                val filter = FilterItemFragment(this)
+                filter.show(this.parentFragmentManager, "filterItems")
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun searchHandler(searchItem: MenuItem) {
         //set searchView
         val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val searchItem = menu.findItem(R.id.search)
-        val searchView = searchItem?.actionView as SearchView
+        val searchView = searchItem.actionView as SearchView
         searchView.setSearchableInfo(manager.getSearchableInfo(requireActivity().componentName))
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -91,11 +101,12 @@ class OnSaleListFragment : Fragment() {
 
     private fun getSaleItems(query: String) {
 
-        FirebaseFirestore.getInstance()
+        val queryTitle = FirebaseFirestore.getInstance()
             .collection("items")
             .whereGreaterThanOrEqualTo("title", query)
             .whereLessThanOrEqualTo("title", query + '\uf8ff')
-            .get()
+
+        queryTitle.get()
             .addOnSuccessListener { result ->
                 val itemList = mutableListOf<FireItem>()
                 for (document in result) {
@@ -106,6 +117,8 @@ class OnSaleListFragment : Fragment() {
                 checkEmptyList(itemList)
                 recyclerItemList.adapter = ItemInfoAdapter(itemList)
             }
+
+
     }
 
     private fun checkEmptyList(itemList: MutableList<FireItem>) {
@@ -116,4 +129,26 @@ class OnSaleListFragment : Fragment() {
         }
     }
 
+    override fun onDialogPositiveClick(dialog: DialogFragment, selectedCategories: ArrayList<Int>) {
+        val itemList = mutableListOf<FireItem>()
+        val categoryList = ArrayList<String>()
+        for(categoryIndex in selectedCategories) {
+            val category = ItemCategories().getValueFromNum(categoryIndex)
+            categoryList.add(category)
+        }
+        FirebaseFirestore.getInstance().collection("items").whereArrayContainsAny("category", categoryList)
+            .get().addOnSuccessListener { result ->
+                for(document in result) {
+                    if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                        itemList.add(FireItem.fromMapToObj(document.data))
+                    }
+                }
+                checkEmptyList(itemList)
+                recyclerItemList.adapter = ItemInfoAdapter(itemList)
+                }
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        //penso che non si debba fare niente
+    }
 }

@@ -4,9 +4,15 @@
 
     <item
         android:id="@+id/search"
-        android:icon="@android:drawable/ic_menu_search"
+        android:icon="@drawable/search"
+        android:title="Search Item"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/filter"
+        android:icon="@drawable/filter"
         app:showAsAction="always"
-        android:title="Search Item" />
+        android:title="Filter Item" />
 
 </menu>

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.myapplication.*
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 
@@ -73,6 +74,7 @@ class ShowProfileFragment : Fragment() {
                     profile_picture
                 )*/
                 showProfileViewModel.setTempAccountInfo(it)
+                setProfileNavHeaderHandler()
             })
         }
         else {
@@ -161,5 +163,14 @@ class ShowProfileFragment : Fragment() {
                 }
             }
             .addOnFailureListener { Helpers.makeSnackbar(requireView(), "Could not retrieve user info") }
+    }
+
+    private fun setProfileNavHeaderHandler() {
+        val navView : NavigationView? = requireActivity().findViewById(R.id.nav_view)
+        val headerView : View? = navView?.getHeaderView(0)
+        val accountInfo = showProfileViewModel.accountInfo.value
+        accountInfo?.let {
+            Helpers.setNavHeaderView(headerView, it.fullname!!, it.email!!, it.profilePicture!!)
+        }
     }
 }

@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        appBarConfiguration = AppBarConfiguration(
+        appBarConfiguration = AppBarConfiguration( //è IMPORTANTE, SETTA LA START DESTINATION
             setOf(
                 //R.id.nav_itemList //(now is commented for debug puropsooeoses
                 R.id.onSaleListFragment

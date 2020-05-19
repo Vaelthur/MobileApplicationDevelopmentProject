@@ -325,13 +325,11 @@ class EditProfileFragment : Fragment() {
                         val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
                         usersRef.document(auth.currentUser?.uid!!).set(finalAC)
                         showProfileViewModel.setAccountInfo(finalAC)
-                        setProfileNavHeaderHandler()
                     }
                 }
                     .addOnFailureListener {
                         usersRef.document(auth.currentUser?.uid!!).set(accountInfo)
                         showProfileViewModel.setAccountInfo(accountInfo)
-                        setProfileNavHeaderHandler()
                     }
                 while(!uploadTask.isComplete){continue}
             }
@@ -416,14 +414,7 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private fun setProfileNavHeaderHandler() {
-        val navView : NavigationView? = this.activity?.findViewById(R.id.nav_view)
-        val headerView : View? = navView?.getHeaderView(0)
-        val accountInfo = showProfileViewModel.accountInfo.value
-        accountInfo?.let {
-            Helpers.setNavHeaderView(headerView, it.fullname!!, it.email!!, it.profilePicture!!)
-        }
-    }
+
 
     private fun hideSoftKeyboard(activity: Activity?) {
         activity?.let {
