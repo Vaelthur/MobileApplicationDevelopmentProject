@@ -164,8 +164,6 @@ class SignInFragment : Fragment() {
         navView.menu.clear()
         navView.inflateMenu(R.menu.activity_main_drawer)
         navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
-            // TODO: fix logout crash, activity is not attached to signin fragment
-            val activity = getActivity()
             if (isAdded && activity != null) {
                 (activity as MainActivity).logout(navView)
             } else false

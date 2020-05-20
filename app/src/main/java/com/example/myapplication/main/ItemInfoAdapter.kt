@@ -107,7 +107,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
                 FirebaseFirestore.getInstance().collection("items").document(itemInfo.id)
                     .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
 
-                //Insert notification
+                //Notify owner
                 val notificationStore : NotificationStore =
                     NotificationStore()
                 notificationStore.apply {

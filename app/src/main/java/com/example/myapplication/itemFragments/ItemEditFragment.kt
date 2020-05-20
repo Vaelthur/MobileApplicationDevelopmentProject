@@ -393,53 +393,12 @@ class ItemEditFragment : Fragment() {
                     }
             }
         }
-//
-//        val itemInf : Map<String, Any?> = hashMapOf(
-//            "category" to itemToSave.category,
-//            "condition" to itemToSave.condition,
-//            "description" to itemToSave.description,
-//            "expDate" to itemToSave.expDate,
-//            "id" to itemToSave.id,
-//            "location" to itemToSave.location,
-//            "picture_uri" to itemToSave.picture_uri,
-//            "price" to itemToSave.price,
-//            "sub_category" to itemToSave.subCategory,
-//            "title" to itemToSave.title,
-//            "owner" to itemToSave.owner
-//        )
-//
-//        collectionRef.document(itemToSave.id).set(itemInf)
-//        //collectionRef.document(itemToSave.id).set(itemToSave)
-//        // TODO: decidere come gestire itemID, ma per ora inserimento funziona, solo che rimane sempre 800 come id
-//
-//        //save item in lista di item dell'utente che sta modificando l'item
-//        val userID = FirebaseAuth.getInstance().currentUser!!.uid
-//        FirebaseFirestore.getInstance().collection("users").document(userID).update("items", FieldValue.arrayUnion(itemToSave.id))
-//
-//
-//        //        if(itemID == 0)
-////            itemListViewModel.insertAll(itemToSave)
-////        else
-////            itemListViewModel.updateItem(itemToSave)
-//
-//        val itemBundle = Bundle(2)
-//        itemBundle.putSerializable("item", itemToSave as Serializable?)
-//        itemBundle.putBoolean("myitems", true)
-//        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-//        this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-//        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.itemDetailsFragment, itemBundle)
     }
 
     private fun endingSave(finalItem: FireItem) {
         //save item in lista di item dell'utente che sta modificando l'item
         val userID = FirebaseAuth.getInstance().currentUser!!.uid
         FirebaseFirestore.getInstance().collection("users").document(userID).update("items", FieldValue.arrayUnion(finalItem.id))
-
-
-        //        if(itemID == 0)
-//            itemListViewModel.insertAll(itemToSave)
-//        else
-//            itemListViewModel.updateItem(itemToSave)
 
         val itemBundle = Bundle(2)
         itemBundle.putSerializable("item", finalItem as Serializable?)

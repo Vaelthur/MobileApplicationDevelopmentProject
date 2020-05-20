@@ -14,7 +14,12 @@ import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.Item
+import com.example.myapplication.notifications.NOTIFICATION_TYPE
+import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_details_fragment.*
 
 class ItemDetailsBuyFragment: Fragment() {
@@ -37,14 +42,6 @@ class ItemDetailsBuyFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val fab: View = requireActivity().findViewById(R.id.fab_star)
-        fab.setOnClickListener { view ->
-            // TODO: Insert in list of favourites in db
-            Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .show()
-        }
-
         viewModel = ViewModelProviders.of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
         arguments?. let {
@@ -57,6 +54,28 @@ class ItemDetailsBuyFragment: Fragment() {
         if(itemInfo.value == Helpers.getDefaultItem()){
             this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
             return
+        }
+
+        val fab: View = requireActivity().findViewById(R.id.fab_star)
+        fab.setOnClickListener { view ->
+            //insert favorite in user
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .update("favorites", FieldValue.arrayUnion(viewModel.itemInfo.value?.id!!))
+
+            //insert favorite in item (for other queries)
+            FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value?.id!!)
+                .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
+
+            val notificationStore : NotificationStore =
+                NotificationStore()
+            notificationStore.apply {
+                postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.INTERESTED)
+            }
+
+            Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
         }
 
         viewModel.itemInfo.observe(requireActivity(), Observer {
@@ -76,9 +95,6 @@ class ItemDetailsBuyFragment: Fragment() {
                 .centerCrop()
                 .into(item_picture)
 
-//            Helpers.updatePicture(this.requireContext(),
-//                Uri.parse(it.picture_uri.toString()),
-//                item_picture)
 
             viewModel.setTempItemInfo(it)
         })
