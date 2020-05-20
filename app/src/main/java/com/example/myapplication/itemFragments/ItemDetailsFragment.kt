@@ -40,8 +40,13 @@ class ItemDetailsFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
         myItems = arguments?.getBoolean("myitems")
+        if(myItems!!) {
+            setHasOptionsMenu(true)
+        } else {
+            setHasOptionsMenu(false)
+        }
+
     }
 
     override fun onCreateView(
