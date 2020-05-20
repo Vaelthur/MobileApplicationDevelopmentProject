@@ -106,9 +106,6 @@ class ShowProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         showProfileViewModel.accountInfo.removeObservers(requireActivity())
-        if(!myProfile!!) {
-            showProfileViewModel.accountInfo.value = null
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
