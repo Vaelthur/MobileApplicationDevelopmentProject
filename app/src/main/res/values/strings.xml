@@ -55,6 +55,7 @@
     <string name="edit">Edit</string>
     <string name="logout">Logout</string>
 
+    <string name="btn_loggedout">Uh-oh! You need to sign in to see items on sale.</string>
     <string name="emptylist">Ooops! Looks like you don\'t have any items.</string>
 
 </resources>

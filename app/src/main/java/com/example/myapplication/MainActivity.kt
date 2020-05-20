@@ -3,10 +3,13 @@ package com.example.myapplication
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -48,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         } else {
             navView.menu.clear()
             navView.inflateMenu(R.menu.activity_main_drawer)
-
             // Listener on logout button
             navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
                 logout(navView)
@@ -75,12 +77,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration( //è IMPORTANTE, SETTA LA START DESTINATION
             setOf(
                 //R.id.nav_itemList //(now is commented for debug puropsooeoses
                 R.id.onSaleListFragment
             ), drawerLayout
         )
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 

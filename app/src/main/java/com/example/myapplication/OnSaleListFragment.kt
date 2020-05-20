@@ -4,11 +4,13 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.myapplication.data.FireItem
@@ -34,7 +36,6 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         return inflater.inflate(R.layout.fragment_on_sale_list, container, false)
     }
 
@@ -53,7 +54,13 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
                 ItemInfoAdapter(it)
         })
 
+        requireActivity().findViewById<Button>(R.id.btn_list_log).setOnClickListener { v ->
+            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
+        }
 
+        if(FirebaseAuth.getInstance().currentUser != null ) {
+            requireActivity().findViewById<Button>(R.id.btn_list_log).visibility = View.GONE
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -111,8 +118,6 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
             .addOnSuccessListener { result ->
                 fillAndShowItemList(result)
             }
-
-
     }
 
     private fun checkEmptyList(itemList: MutableList<FireItem>) {
