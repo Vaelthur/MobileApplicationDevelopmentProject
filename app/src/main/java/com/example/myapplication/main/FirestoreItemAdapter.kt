@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.MainActivity
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
@@ -62,6 +63,10 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>, filterM
             }
             else {
                 val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
+                Glide.with(containerView.context)
+                    .load(imageURI)
+                    .centerCrop()
+                    .into(containerView.findViewById(R.id.item_card_picture))
                 // pictureURIView.setImageURI(imageURI) //fa crashare le mie cose questa causa permessi
             }
 

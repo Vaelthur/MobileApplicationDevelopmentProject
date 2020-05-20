@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.google.android.material.snackbar.Snackbar
@@ -59,6 +60,10 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             }
             else {
                 val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
+                Glide.with(v.context)
+                    .load(imageURI)
+                    .centerCrop()
+                    .into(v.findViewById(R.id.item_card_picture))
                 // pictureURIView.setImageURI(imageURI)
             }
 
@@ -73,7 +78,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             itemBundle.putBoolean("myitems", false)
 
             v.setOnClickListener {
-                v.findNavController().navigate(R.id.itemDetailsBuyFragment, itemBundle)
+                v.findNavController().navigate(R.id.itemDetailsFragment, itemBundle)
             }
 
             // Navigate to fragment that allows editing of the selected item

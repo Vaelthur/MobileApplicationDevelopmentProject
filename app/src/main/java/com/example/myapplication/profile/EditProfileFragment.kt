@@ -328,6 +328,7 @@ class EditProfileFragment : Fragment() {
                     }
                 }
                     .addOnFailureListener {
+                        //if picture is not changed
                         usersRef.document(auth.currentUser?.uid!!).set(accountInfo)
                         showProfileViewModel.setAccountInfo(accountInfo)
                     }

@@ -10,11 +10,14 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.main.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.item_details_buy_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.*
@@ -92,9 +95,13 @@ class ItemDetailsFragment : Fragment() {
                 item_condition_value.text = it.condition
                 item_description_value.text = it.description
 
-                Helpers.updatePicture(this.requireContext(),
-                    Uri.parse(it.picture_uri.toString()),
-                    item_picture)
+                Glide.with(requireContext())
+                    .load(it.picture_uri)
+                    .centerCrop()
+                    .into(item_picture)
+//                Helpers.updatePicture(this.requireContext(),
+//                    Uri.parse(it.picture_uri.toString()),
+//                    item_picture)
 
                 viewModel.setTempItemInfo(it)
             })
@@ -102,7 +109,16 @@ class ItemDetailsFragment : Fragment() {
         else {
             val fab: View = requireActivity().findViewById(R.id.fab_star)
             fab.setOnClickListener { view ->
-                // TODO: Insert in list of favourites in db
+
+                //insert favorite in user
+                FirebaseFirestore.getInstance().collection("users")
+                    .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .update("favorites", FieldValue.arrayUnion(viewModel.itemInfo.value?.id))
+
+                //insert favorite in item (for other queries)
+                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id)
+                    .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
+
                 Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .show()
@@ -121,9 +137,14 @@ class ItemDetailsFragment : Fragment() {
 
                 queryOwnerName(it.owner)
 
-                Helpers.updatePicture(this.requireContext(),
-                    Uri.parse(it.picture_uri.toString()),
-                    item_picture)
+                Glide.with(requireContext())
+                    .load(it.picture_uri)
+                    .centerCrop()
+                    .into(item_picture)
+
+//                Helpers.updatePicture(this.requireContext(),
+//                    Uri.parse(it.picture_uri.toString()),
+//                    item_picture)
 
                 viewModel.setTempItemInfo(it)
             })

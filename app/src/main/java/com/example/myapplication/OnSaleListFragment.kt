@@ -17,6 +17,7 @@ import com.example.myapplication.main.ItemInfoAdapter
 import com.example.myapplication.main.ItemListViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.fragment_on_sale_list.*
 
 
@@ -108,14 +109,7 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
 
         queryTitle.get()
             .addOnSuccessListener { result ->
-                val itemList = mutableListOf<FireItem>()
-                for (document in result) {
-                    if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-                        itemList.add(FireItem.fromMapToObj(document.data))
-                    }
-                }
-                checkEmptyList(itemList)
-                recyclerItemList.adapter = ItemInfoAdapter(itemList)
+                fillAndShowItemList(result)
             }
 
 
@@ -130,25 +124,40 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
     }
 
     override fun onDialogPositiveClick(dialog: DialogFragment, selectedCategories: ArrayList<Int>) {
-        val itemList = mutableListOf<FireItem>()
         val categoryList = ArrayList<String>()
+        val query = FirebaseFirestore.getInstance().collection("items")
         for(categoryIndex in selectedCategories) {
             val category = ItemCategories().getValueFromNum(categoryIndex)
             categoryList.add(category)
         }
-        FirebaseFirestore.getInstance().collection("items").whereArrayContainsAny("category", categoryList)
-            .get().addOnSuccessListener { result ->
-                for(document in result) {
-                    if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-                        itemList.add(FireItem.fromMapToObj(document.data))
-                    }
+        if(categoryList.isEmpty()) {
+            query.get().addOnSuccessListener {result ->
+                fillAndShowItemList(result)
+            }
+        } else {
+            query.whereIn("category", categoryList)
+                .get().addOnSuccessListener { result ->
+                    fillAndShowItemList(result)
                 }
-                checkEmptyList(itemList)
-                recyclerItemList.adapter = ItemInfoAdapter(itemList)
-                }
+        }
     }
 
     override fun onDialogNegativeClick(dialog: DialogFragment) {
-        //penso che non si debba fare niente
+        //show all items in case of cancel
+        val query = FirebaseFirestore.getInstance().collection("items")
+        query.get().addOnSuccessListener {result ->
+            fillAndShowItemList(result)
+        }
+    }
+
+    private fun fillAndShowItemList(result: QuerySnapshot) {
+        val itemList = mutableListOf<FireItem>()
+        for(document in result) {
+            if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
+                itemList.add(FireItem.fromMapToObj(document.data))
+            }
+        }
+        checkEmptyList(itemList)
+        recyclerItemList.adapter = ItemInfoAdapter(itemList)
     }
 }
