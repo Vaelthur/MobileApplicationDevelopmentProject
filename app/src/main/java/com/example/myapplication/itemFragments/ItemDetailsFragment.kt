@@ -140,7 +140,7 @@ class ItemDetailsFragment : Fragment() {
                 item_location_value.text = it.location
                 item_condition_value.text = it.condition
                 item_description_value.text = it.description
-                item_status.text = it.status
+                item_status_buy.text = it.status
 
                 queryOwnerName(it.owner)
 
