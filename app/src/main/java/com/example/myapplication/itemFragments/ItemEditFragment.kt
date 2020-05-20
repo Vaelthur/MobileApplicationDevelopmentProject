@@ -356,7 +356,8 @@ class ItemEditFragment : Fragment() {
                             "price" to itemToSave.price,
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
-                            "owner" to itemToSave.owner
+                            "owner" to itemToSave.owner,
+                            "status" to itemToSave.status
                         )
                         val finalItem = FireItem(it.toString(),
                             itemToSave.title,
@@ -368,7 +369,8 @@ class ItemEditFragment : Fragment() {
                             itemToSave.condition,
                             itemToSave.description,
                             itemToSave.id,
-                            itemToSave.owner)
+                            itemToSave.owner,
+                            itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = finalItem
                         endingSave(finalItem)
@@ -386,7 +388,8 @@ class ItemEditFragment : Fragment() {
                             "price" to itemToSave.price,
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
-                            "owner" to itemToSave.owner)
+                            "owner" to itemToSave.owner,
+                            "status" to itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = itemToSave
                         endingSave(itemToSave)

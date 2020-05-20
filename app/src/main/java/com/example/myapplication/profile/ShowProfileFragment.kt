@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.myapplication.*
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 
@@ -44,9 +45,11 @@ class ShowProfileFragment : Fragment() {
             //showProfileViewModel.tempAccountInfo.value = accountInfo
         }
         else {
-            if(showProfileViewModel.accountInfo.value == null){
-                setShowProfileViewModel()
-            }
+            showProfileViewModel.accountInfo.value?.let {
+                if(it.id != FirebaseAuth.getInstance().currentUser?.uid) {
+                    setShowProfileViewModel()
+                }
+            } ?: setShowProfileViewModel()
         }
 
 
@@ -103,7 +106,9 @@ class ShowProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         showProfileViewModel.accountInfo.removeObservers(requireActivity())
-        //showProfileViewModel.accountInfo.value = null
+        if(!myProfile!!) {
+            showProfileViewModel.accountInfo.value = null
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
