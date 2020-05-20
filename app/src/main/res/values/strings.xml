@@ -41,6 +41,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_item_msg">There are no items on sale</string>
 
     //user strings
     <string name="full_name">Full Name</string>

@@ -5,8 +5,10 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -52,7 +54,9 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter =
                 ItemInfoAdapter(it)
-            checkEmptyList(it as MutableList<FireItem>)
+            // performs this check only when onsale is visible, otherwise crashes
+            if(view.isShown)
+                checkEmptyList(it as MutableList<FireItem>)
         })
 
         // set on click listener for login button - visible when we are logged out

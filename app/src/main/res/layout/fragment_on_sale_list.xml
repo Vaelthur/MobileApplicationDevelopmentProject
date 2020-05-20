@@ -17,11 +17,11 @@
         android:id="@+id/empty_list_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="There are no items on sale"
+        android:text="@string/no_item_msg"
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/recyclerItemList"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/recyclerItemList"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
