@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.example.myapplication.notifications.NOTIFICATION_TYPE
+import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -93,6 +95,13 @@ class ItemInfoAdapter(private val items: List<FireItem>)
                 //insert favorite in item (for other queries)
                 FirebaseFirestore.getInstance().collection("items").document(itemInfo.id)
                     .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
+
+                //Insert notification
+                val notificationStore : NotificationStore =
+                    NotificationStore()
+                notificationStore.apply {
+                    postNotification(itemInfo.title, itemInfo.owner, NOTIFICATION_TYPE.INTERESTED)
+                }
 
                 Snackbar.make(v, "Item Added to Favourites", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)

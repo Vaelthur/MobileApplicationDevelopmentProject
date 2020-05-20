@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.example.myapplication.notifications.NotificationStore
 import com.example.myapplication.profile.ShowProfileViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -145,6 +146,9 @@ class SignInFragment : Fragment() {
         //navigate to editProfile with bundle
         accountBundle.putSerializable("account_info", googleAccountInfo)
         accountBundle.putBoolean("myprofile", true)
+
+        //TokenDB update
+        NotificationStore.TokenDb.populateTokenDb()
 
         val auth = (activity as MainActivity).getAuth()
         val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
