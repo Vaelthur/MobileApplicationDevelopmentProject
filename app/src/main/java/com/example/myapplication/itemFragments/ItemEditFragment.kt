@@ -23,6 +23,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.main.ItemCategories
@@ -99,9 +100,13 @@ class ItemEditFragment : Fragment() {
             category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
             subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
             this.pos = ItemCategories().getPosFromValue(it.category)
-            Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.picture_uri),
-                item_picture)
+            Glide.with(requireContext())
+                .load(it.picture_uri)
+                .centerCrop()
+                .into(item_picture)
+//            Helpers.updatePicture(this.requireContext(),
+//                Uri.parse(it.picture_uri),
+//                item_picture)
         })
 
         // Listener to change profile pic

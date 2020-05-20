@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.bumptech.glide.Glide
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
@@ -70,9 +71,14 @@ class ItemDetailsBuyFragment: Fragment() {
             item_condition_value.text = it.condition
             item_description_value.text = it.description
 
-            Helpers.updatePicture(this.requireContext(),
-                Uri.parse(it.picture_uri.toString()),
-                item_picture)
+            Glide.with(requireContext())
+                .load(it.picture_uri)
+                .centerCrop()
+                .into(item_picture)
+
+//            Helpers.updatePicture(this.requireContext(),
+//                Uri.parse(it.picture_uri.toString()),
+//                item_picture)
 
             viewModel.setTempItemInfo(it)
         })
