@@ -52,6 +52,7 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
             recyclerView?.layoutManager = LinearLayoutManager(context)
             recyclerView?.adapter =
                 ItemInfoAdapter(it)
+            checkEmptyList(it as MutableList<FireItem>)
         })
 
         requireActivity().findViewById<Button>(R.id.btn_list_log).setOnClickListener { v ->

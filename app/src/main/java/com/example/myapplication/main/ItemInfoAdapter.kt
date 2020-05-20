@@ -39,10 +39,18 @@ class ItemInfoAdapter(private val items: List<FireItem>)
     override fun onBindViewHolder(holder: ItemInfoViewHolder, position: Int) {
         // Get the item
         val item = items[position]
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", item.owner)
+            .get()
+            .addOnSuccessListener { documents ->
+                val usernameOwner = documents.first()["username"] as String?
 
-        //Bind to viewHolder, which sets the view contents
-        holder.bind(item)
-        holder.setListeners(item)
+                //Bind to viewHolder, which sets the view contents
+                holder.bind(item, usernameOwner)
+                holder.setListeners(item)
+            }
+
+
+
     }
 
 
@@ -50,12 +58,13 @@ class ItemInfoAdapter(private val items: List<FireItem>)
     // responsible to bind these values to a data class object
      class ItemInfoViewHolder(private val v : View) : RecyclerView.ViewHolder(v){
 
-        fun bind(itemInfo: FireItem){
+        fun bind(itemInfo: FireItem, usernameOwner: String?){
 
             val pictureURIView : ImageView = v.findViewById(R.id.item_card_picture)
             val title : TextView= v.findViewById(R.id.item_card_title)
             val location : TextView= v.findViewById(R.id.item_card_location)
             val price : TextView= v.findViewById(R.id.item_card_price)
+            val seller : TextView = v.findViewById(R.id.Owner)
 
             if (itemInfo.picture_uri == null) {
                 pictureURIView.setImageResource(R.drawable.default__item_image)
@@ -72,7 +81,9 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             title.text = itemInfo.title
             location.text = itemInfo.location
             price.text = itemInfo.price
+            seller.text = "Sold by: "+usernameOwner
          }
+
 
         fun setListeners(itemInfo : FireItem){
             val itemBundle = Bundle(2)

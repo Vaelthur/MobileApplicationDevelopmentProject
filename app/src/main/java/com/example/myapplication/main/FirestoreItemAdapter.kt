@@ -67,7 +67,7 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>, filterM
                     .load(imageURI)
                     .centerCrop()
                     .into(containerView.findViewById(R.id.item_card_picture))
-                // pictureURIView.setImageURI(imageURI) //fa crashare le mie cose questa causa permessi
+                
             }
 
             title.text = itemInfo.title

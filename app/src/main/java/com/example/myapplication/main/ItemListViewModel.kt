@@ -33,7 +33,6 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
 
                 if(firestoreException != null){
                     //Make toasst
-                    val a  =  1 + 2
                 }
 
                 if(snapshot != null){
@@ -45,8 +44,7 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
                         }
 
                         if (document["users_favorites"] != null) {
-                            val favs = arrayOf(document["users_favorites"])
-                            val a = 1
+                            //val favs = arrayOf(document["users_favorites"])
                         }
                     }
 
