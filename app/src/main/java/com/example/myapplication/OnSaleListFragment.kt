@@ -55,10 +55,12 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
             checkEmptyList(it as MutableList<FireItem>)
         })
 
+        // set on click listener for login button - visible when we are logged out
         requireActivity().findViewById<Button>(R.id.btn_list_log).setOnClickListener { v ->
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
         }
 
+        // check for user and if logged button no more needed => make it disappear
         if(FirebaseAuth.getInstance().currentUser != null ) {
             requireActivity().findViewById<Button>(R.id.btn_list_log).visibility = View.GONE
         }

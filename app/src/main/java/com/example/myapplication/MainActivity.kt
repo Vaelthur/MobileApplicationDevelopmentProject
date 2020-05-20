@@ -120,7 +120,7 @@ class MainActivity : AppCompatActivity() {
         auth.signOut()
 
         // restore header
-        Helpers.setNavHeaderView(navigationView.getHeaderView(0), "Android Studio", "android.studio@android.com", "android.resource://com.example.myapplication/drawable/default_profile_picture")
+        Helpers.setNavHeaderView(navigationView.getHeaderView(0), getString(R.string.nav_header_title), getString(R.string.nav_header_subtitle), "android.resource://com.example.myapplication/drawable/default_profile_picture")
 
         // restore drawer menu
         navigationView.menu.clear()
