@@ -13,12 +13,21 @@ data class FireItem(
      val condition: String,
      val description: String,
      val id: String    ,
-     val owner: String
+     val owner: String,
+     val status: String = "Available"
 )  : Serializable {
 
     companion object ItemFactory {
 
         fun fromMapToObj(hash: Map<String, Any>?): FireItem {
+
+            var status : String? = null
+            if(hash?.get("status") is String){
+                status =  hash?.get("status") as String
+            }
+            else {
+                status =  "Available"
+            }
 
             return FireItem(
                 hash?.get("picture_uri") as String,
@@ -31,7 +40,8 @@ data class FireItem(
                 hash["condition"] as String,
                 hash["description"] as String,
                 hash["id"] as String,
-                hash["owner"] as String
+                hash["owner"] as String,
+                status
             )
         }
     }

@@ -99,6 +99,7 @@ class ItemDetailsFragment : Fragment() {
                 item_location_value.text = it.location
                 item_condition_value.text = it.condition
                 item_description_value.text = it.description
+                item_status.text = it.status
 
                 Glide.with(requireContext())
                     .load(it.picture_uri)
@@ -139,6 +140,7 @@ class ItemDetailsFragment : Fragment() {
                 item_location_value.text = it.location
                 item_condition_value.text = it.condition
                 item_description_value.text = it.description
+                item_status.text = it.status
 
                 queryOwnerName(it.owner)
 
