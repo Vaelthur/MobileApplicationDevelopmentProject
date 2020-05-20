@@ -90,6 +90,17 @@ class ItemDetailsFragment : Fragment() {
                 recyclerView?.adapter = UsersListAdapter(it)
             })
 
+            //set listener block button
+            blockButton.setOnClickListener { v ->
+                val blockedItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
+                    viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
+                    viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
+                    viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner, "Blocked")
+                viewModel.setItemInfo(blockedItem)
+                item_status.text = "Blocked"
+                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).set(blockedItem)
+            }
+
             viewModel.itemInfo.observe(requireActivity(), Observer {
                 item_title.text = it.title
                 item_price.text = it.price
@@ -114,6 +125,8 @@ class ItemDetailsFragment : Fragment() {
             })
         }
         else {
+
+            //set listeners
             val fab: View = requireActivity().findViewById(R.id.fab_star)
             fab.setOnClickListener { view ->
 

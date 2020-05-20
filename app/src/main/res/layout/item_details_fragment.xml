@@ -293,6 +293,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
+            <Button
+                android:id="@+id/blockButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toTopOf="@id/fav_users_title"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:background="#D0E61717"
+                android:text="BLOCK"
+                android:textColor="#FFFFFF" />
+
             <TextView
                 android:id="@+id/fav_users_title"
                 android:layout_width="wrap_content"
@@ -302,7 +316,7 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@id/fav_users"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/blockButton" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fav_users"
