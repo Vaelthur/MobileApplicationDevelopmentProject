@@ -12,7 +12,7 @@ data class FireItem(
      val expDate: String,
      val condition: String,
      val description: String,
-     val id: String,
+     val id: String    ,
      val owner: String
 )  : Serializable {
 

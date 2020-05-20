@@ -11,11 +11,11 @@ data class Notification(
 
     companion object NotificationFactory{
 
-        fun NotificationFactory(myToken: String?,
-                                ownerToken: String?,
-                                title: String?,
-                                senderUsername: String?,
-                                type : NOTIFICATION_TYPE): Notification {
+        fun newNotificationFactory(myToken: String?,
+                                   ownerToken: String?,
+                                   title: String?,
+                                   senderUsername: String?,
+                                   type : NOTIFICATION_TYPE): Notification {
 
             val notificationBody : String? =  when(type) {
 
@@ -25,7 +25,9 @@ data class Notification(
                                     else -> "Error"
             }
 
-            return Notification(myToken, ownerToken, notificationBody, title)
+            val header = "SellBackApp"
+
+            return Notification(myToken, ownerToken, notificationBody, header)
         }
     }
 }

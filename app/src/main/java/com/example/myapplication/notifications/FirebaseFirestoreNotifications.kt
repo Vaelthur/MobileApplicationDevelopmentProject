@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.example.myapplication.R
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
@@ -53,6 +54,7 @@ class FirebaseFirestoreNotifications : FirebaseMessagingService() {
             setContentTitle(notification?.title)
             setContentText(notification?.body)
             setContentInfo("Info")
+            setSmallIcon(R.drawable.ic_stat_name)
         }
 
         notificationManager.notify(Random.nextInt(), notificationBuilder.build())

@@ -3,7 +3,6 @@ package com.example.myapplication.notifications
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.ktx.Firebase
 
 class NotificationStore() {
 
@@ -20,7 +19,7 @@ class NotificationStore() {
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 val ownerToken : String? = documentSnapshot.data?.get("token") as String?
-                val notification = Notification.NotificationFactory(userToken, ownerToken, title, username, NOTIFICATION_TYPE.INTERESTED)
+                val notification = Notification.newNotificationFactory(userToken, ownerToken, title, username, NOTIFICATION_TYPE.INTERESTED)
                 firestore.collection("notifications").document(userToken!!).set(notification)
             }
     }
