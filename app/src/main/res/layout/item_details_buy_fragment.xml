@@ -317,10 +317,10 @@
                 app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/buyButton"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="Button"
+                android:text="BUY"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toBottomOf="@+id/seller_usr"
                 app:layout_constraintEnd_toEndOf="@+id/item_status_buy"

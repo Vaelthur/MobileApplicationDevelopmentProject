@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -128,6 +129,18 @@ class ItemDetailsFragment : Fragment() {
                 Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .show()
+            }
+
+            buyButton.setOnClickListener { v ->
+                // TEMPORARY
+                //TODO: handle Sold status: if sold other cannot like it anymore
+                val soldItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
+                    viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
+                    viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
+                    viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner, "Sold")
+                viewModel.setItemInfo(soldItem)
+                item_status_buy.text = "Sold"
+                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).set(soldItem)
             }
             //Other person items
             viewModel.itemInfo.observe(requireActivity(), Observer {
