@@ -11,7 +11,7 @@
             android:title="@string/items" />
         <item
             android:id="@+id/showProfileFragment"
-            android:icon="@drawable/ic_launcher_foreground"
+            android:icon="@drawable/profile_icon"
             android:title="@string/profile" />
 
         <item android:title="@string/logout"
