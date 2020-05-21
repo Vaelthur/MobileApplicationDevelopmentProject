@@ -26,10 +26,10 @@ class FirebaseFirestoreNotifications : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        val id = FirebaseAuth.getInstance().currentUser?.uid
-        val map = HashMap<String, String>(1)
-        map["token"] = token
-        FirebaseFirestore.getInstance().collection("tokens").document(id!!).set(map)
+//        val id = FirebaseAuth.getInstance().currentUser?.uid
+//        val map = HashMap<String, String>(1)
+//        map["token"] = token
+//        FirebaseFirestore.getInstance().collection("tokens").document(id!!).set(map)
     }
 
 

@@ -102,12 +102,12 @@ class AccountInfoFactory(){
 
         fun fromMapToObj(hash : Map<String, Any>?) : AccountInfo {
             return AccountInfo(
-                hash?.get("id") as String,
-                                hash["fullname"] as String,
-                                hash["username"] as String,
-                                hash["email"] as String,
-                                hash["location"] as String,
-                                hash["profilePicture"] as String)
+                hash?.get("id") as String?,
+                                hash?.get("fullname") as String?,
+                                hash?.get("username") as String?,
+                                hash?.get("email") as String?,
+                                hash?.get("location") as String?,
+                                hash?.get("profilePicture") as String?)
         }
 
     }
