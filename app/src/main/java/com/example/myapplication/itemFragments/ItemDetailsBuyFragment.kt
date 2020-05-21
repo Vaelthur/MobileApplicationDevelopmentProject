@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -20,7 +21,18 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.item_details_buy_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.*
+import kotlinx.android.synthetic.main.item_details_fragment.item_category_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_condition_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_description_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_expire_date_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_location
+import kotlinx.android.synthetic.main.item_details_fragment.item_location_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_picture
+import kotlinx.android.synthetic.main.item_details_fragment.item_price
+import kotlinx.android.synthetic.main.item_details_fragment.item_subcategory_value
+import kotlinx.android.synthetic.main.item_details_fragment.item_title
 
 class ItemDetailsBuyFragment: Fragment() {
 

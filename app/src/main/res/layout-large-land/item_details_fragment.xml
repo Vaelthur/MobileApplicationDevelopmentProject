@@ -21,6 +21,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:src="@drawable/default__item_image"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toTopOf="@id/picture_guideline"
                 app:layout_constraintEnd_toStartOf="@+id/central_guideline"
                 app:layout_constraintHorizontal_weight="1"
@@ -73,6 +74,29 @@
                 android:layout_marginStart="4dp"
                 app:layout_constraintStart_toEndOf="@id/item_price"/>
 
+            <TextView
+                android:id="@+id/statusView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:textSize="24sp"
+                android:text="@string/status_header"
+                app:layout_constraintBottom_toTopOf="@+id/picture_guideline"
+                app:layout_constraintStart_toStartOf="@id/item_title"
+                app:layout_constraintTop_toBottomOf="@+id/price_currency" />
+
+            <TextView
+                android:id="@+id/item_status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/status"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/statusView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/statusView" />
+
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/central_guideline"
                 android:layout_width="wrap_content"
@@ -95,11 +119,11 @@
                 android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/constraintLayout_fav"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/picture_guideline"
+                app:layout_constraintTop_toTopOf="@+id/picture_guideline"
                 app:layout_constraintVertical_bias="1.0">
 
                 <androidx.constraintlayout.widget.Guideline
@@ -274,6 +298,49 @@
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout_fav"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                <Button
+                    android:id="@+id/blockButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintBottom_toTopOf="@id/fav_users_title"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="#D0E61717"
+                    android:text="BLOCK"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/fav_users_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Users interested"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toTopOf="@id/fav_users"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/blockButton" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/fav_users"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="@id/fav_users_title"
+                    app:layout_constraintTop_toBottomOf="@+id/fav_users_title" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
