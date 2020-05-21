@@ -1,21 +1,17 @@
 package com.example.myapplication
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -131,6 +127,11 @@ class MainActivity : AppCompatActivity() {
 
         // close drawer
         this.findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()
+
+        // clear data
+//        (this.applicationContext.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager)
+//            .clearApplicationUserData()
+
         return true
     }
 

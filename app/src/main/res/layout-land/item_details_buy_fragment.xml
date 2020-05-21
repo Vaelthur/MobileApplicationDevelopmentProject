@@ -52,6 +52,7 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/title_std"
                 android:textSize="24sp"
+                android:layout_marginStart="16dp"
                 app:layout_constraintStart_toStartOf="@+id/central_guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/item_location"/>
