@@ -19,7 +19,7 @@ import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.ITEMSTATUS
-import com.example.myapplication.data.ItemStatus
+import com.example.myapplication.data.ItemStatusCreator
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
@@ -56,9 +56,6 @@ class ItemInfoAdapter(private val items: List<FireItem>)
                 holder.bind(item, usernameOwner)
                 holder.setListeners(item)
             }
-
-
-
     }
 
 
@@ -91,7 +88,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             price.text = itemInfo.price
             seller.text = "Sold by: " +  usernameOwner
 
-            if(itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.SOLD) || itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.BLOCKED)){
+            if(itemInfo.status == ItemStatusCreator.getStatus(ITEMSTATUS.SOLD) || itemInfo.status == ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)){
                 val starBtn : ImageButton = v.findViewById(R.id.starItemButton)
                 starBtn.isClickable = false
                 starBtn.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
@@ -111,7 +108,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             // Navigate to fragment that allows editing of the selected item
             val saveButton : ImageButton = v.findViewById(R.id.starItemButton)
 
-            if(itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.SOLD) || itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.BLOCKED)){
+            if(itemInfo.status == ItemStatusCreator.getStatus(ITEMSTATUS.SOLD) || itemInfo.status == ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)){
                 saveButton.setOnClickListener{
                     Snackbar.make(v, "Item is already sold or blocked", Snackbar.LENGTH_LONG)
                         .setAction("Action", null)

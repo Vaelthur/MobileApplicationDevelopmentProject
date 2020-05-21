@@ -16,7 +16,7 @@ import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.ITEMSTATUS
-import com.example.myapplication.data.ItemStatus
+import com.example.myapplication.data.ItemStatusCreator
 import com.example.myapplication.main.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -98,7 +98,7 @@ class ItemDetailsFragment : Fragment() {
                     viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner, "Blocked")
                 viewModel.setItemInfo(blockedItem)
                 //TODO: solo update dello status
-                item_status.text = ItemStatus.getStatus(ITEMSTATUS.BLOCKED)
+                item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
                 FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).set(blockedItem)
             }
 
@@ -123,6 +123,7 @@ class ItemDetailsFragment : Fragment() {
             })
         }
         else {
+            //Other person items
 
             //set listeners
             val fab: View = requireActivity().findViewById(R.id.fab_star)
@@ -143,8 +144,8 @@ class ItemDetailsFragment : Fragment() {
             }
 
             val status = viewModel.itemInfo.value?.status
-            val isItemSoldOrBlocked : Boolean = (status != ItemStatus.getStatus(ITEMSTATUS.SOLD)) ||
-                    (status != ItemStatus.getStatus(ITEMSTATUS.BLOCKED))
+            val isItemSoldOrBlocked : Boolean = (status == ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)) ||
+                    (status == ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
 
             if(isItemSoldOrBlocked){
                 buyButton.isClickable = false
@@ -153,13 +154,12 @@ class ItemDetailsFragment : Fragment() {
                 buyButton.setOnClickListener { v ->
 
                     val updatedStatus = HashMap<String, Any>()
-                    updatedStatus["status"] = ItemStatus.getStatus(ITEMSTATUS.SOLD)
+                    updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)
                     FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
                     buyButton.isClickable = false
                 }
             }
 
-            //Other person items
             viewModel.itemInfo.observe(requireActivity(), Observer {
                 item_title.text = it.title
                 item_price.text = it.price
