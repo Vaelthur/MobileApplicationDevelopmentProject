@@ -164,6 +164,7 @@ class SignInFragment : Fragment() {
         navView.menu.clear()
         navView.inflateMenu(R.menu.activity_main_drawer)
         navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
+            //TODO: see how to attach activity
             if (isAdded && activity != null) {
                 (activity as MainActivity).logout(navView)
             } else false
