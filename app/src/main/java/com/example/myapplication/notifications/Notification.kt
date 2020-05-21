@@ -22,6 +22,12 @@ data class Notification(
                                     NOTIFICATION_TYPE.INTERESTED ->
                                             "$senderUsername is interested in your item: $title"
 
+                                    NOTIFICATION_TYPE.SOLD ->
+                                            "$senderUsername bought your item: $title"
+
+                                    NOTIFICATION_TYPE.NO_LONGER_AVAILABLE ->
+                                            "$title item is no longer available"
+
                                     else -> "Error"
             }
 

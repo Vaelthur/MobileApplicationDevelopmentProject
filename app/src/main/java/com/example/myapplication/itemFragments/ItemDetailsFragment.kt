@@ -1,6 +1,8 @@
 package com.example.myapplication.itemFragments
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
@@ -167,6 +169,7 @@ class ItemDetailsFragment : Fragment() {
 
             if(isItemSoldOrBlocked){
                 buyButton.isClickable = false
+                buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
             }
             else {
                 buyButton.setOnClickListener { v ->
@@ -182,6 +185,16 @@ class ItemDetailsFragment : Fragment() {
                     updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)
                     FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
                     buyButton.isClickable = false
+                    buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
+                    //Notify owner that item has been sold
+                    val notificationStore : NotificationStore =
+                        NotificationStore()
+                    notificationStore.apply {
+                        postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.SOLD)
+                    }
+
+
                     Snackbar.make(v, "Item bought, congratulations:)", Snackbar.LENGTH_LONG)
                         .setAction("Action", null)
                         .show()
