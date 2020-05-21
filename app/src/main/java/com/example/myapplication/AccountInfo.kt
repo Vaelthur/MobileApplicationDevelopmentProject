@@ -109,6 +109,5 @@ class AccountInfoFactory(){
                                 hash?.get("location") as String?,
                                 hash?.get("profilePicture") as String?)
         }
-
     }
 }
