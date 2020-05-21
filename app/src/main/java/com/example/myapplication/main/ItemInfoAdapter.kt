@@ -1,24 +1,32 @@
 package com.example.myapplication.main
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.example.myapplication.data.ITEMSTATUS
+import com.example.myapplication.data.ItemStatus
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.item_card_view_star.view.*
 import java.io.Serializable
 
 class ItemInfoAdapter(private val items: List<FireItem>)
@@ -81,7 +89,13 @@ class ItemInfoAdapter(private val items: List<FireItem>)
             title.text = itemInfo.title
             location.text = itemInfo.location
             price.text = itemInfo.price
-            seller.text = "Sold by: "+usernameOwner
+            seller.text = "Sold by: " +  usernameOwner
+
+            if(itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.SOLD) || itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.BLOCKED)){
+                val starBtn : ImageButton = v.findViewById(R.id.starItemButton)
+                starBtn.isClickable = false
+                starBtn.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+            }
          }
 
 
@@ -96,7 +110,22 @@ class ItemInfoAdapter(private val items: List<FireItem>)
 
             // Navigate to fragment that allows editing of the selected item
             val saveButton : ImageButton = v.findViewById(R.id.starItemButton)
+
+            if(itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.SOLD) || itemInfo.status == ItemStatus.getStatus(ITEMSTATUS.BLOCKED)){
+                saveButton.setOnClickListener{
+                    Snackbar.make(v, "Item is already sold or blocked", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show()
+                }
+                return
+            }
+
+
             saveButton.setOnClickListener {
+
+                //Make item not clickable anymore
+                saveButton.isClickable = false
+                saveButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
                 //insert favorite in user
                 FirebaseFirestore.getInstance().collection("users")

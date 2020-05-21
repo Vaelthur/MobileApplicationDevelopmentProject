@@ -15,6 +15,8 @@ import com.bumptech.glide.Glide
 import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.example.myapplication.data.ITEMSTATUS
+import com.example.myapplication.data.ItemStatus
 import com.example.myapplication.main.UsersListAdapter
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -78,10 +80,8 @@ class ItemDetailsFragment : Fragment() {
         }
 
         if(myItems!!){
-            //Here personal items
-
+            //Here personal item
             //get users interested
-
             viewModel.interestedUsers(itemInfo.value!!.id)
 
             viewModel.interestedLiveData.observe(requireActivity(), Observer {
@@ -97,7 +97,8 @@ class ItemDetailsFragment : Fragment() {
                     viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
                     viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner, "Blocked")
                 viewModel.setItemInfo(blockedItem)
-                item_status.text = "Blocked"
+                //TODO: solo update dello status
+                item_status.text = ItemStatus.getStatus(ITEMSTATUS.BLOCKED)
                 FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).set(blockedItem)
             }
 
@@ -117,9 +118,6 @@ class ItemDetailsFragment : Fragment() {
                     .load(it.picture_uri)
                     .centerCrop()
                     .into(item_picture)
-//                Helpers.updatePicture(this.requireContext(),
-//                    Uri.parse(it.picture_uri.toString()),
-//                    item_picture)
 
                 viewModel.setTempItemInfo(it)
             })
@@ -144,17 +142,23 @@ class ItemDetailsFragment : Fragment() {
                     .show()
             }
 
-            buyButton.setOnClickListener { v ->
-                // TEMPORARY
-                //TODO: handle Sold status: if sold other cannot like it anymore
-                val soldItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
-                    viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
-                    viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
-                    viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner, "Sold")
-                viewModel.setItemInfo(soldItem)
-                item_status_buy.text = "Sold"
-                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).set(soldItem)
+            val status = viewModel.itemInfo.value?.status
+            val isItemSoldOrBlocked : Boolean = (status != ItemStatus.getStatus(ITEMSTATUS.SOLD)) ||
+                    (status != ItemStatus.getStatus(ITEMSTATUS.BLOCKED))
+
+            if(isItemSoldOrBlocked){
+                buyButton.isClickable = false
             }
+            else {
+                buyButton.setOnClickListener { v ->
+
+                    val updatedStatus = HashMap<String, Any>()
+                    updatedStatus["status"] = ItemStatus.getStatus(ITEMSTATUS.SOLD)
+                    FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
+                    buyButton.isClickable = false
+                }
+            }
+
             //Other person items
             viewModel.itemInfo.observe(requireActivity(), Observer {
                 item_title.text = it.title
@@ -174,10 +178,6 @@ class ItemDetailsFragment : Fragment() {
                     .load(it.picture_uri)
                     .centerCrop()
                     .into(item_picture)
-
-//                Helpers.updatePicture(this.requireContext(),
-//                    Uri.parse(it.picture_uri.toString()),
-//                    item_picture)
 
                 viewModel.setTempItemInfo(it)
             })

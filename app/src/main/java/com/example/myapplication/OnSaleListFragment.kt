@@ -75,6 +75,7 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
         inflater.inflate(R.menu.search_menu, menu)
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.search -> {
