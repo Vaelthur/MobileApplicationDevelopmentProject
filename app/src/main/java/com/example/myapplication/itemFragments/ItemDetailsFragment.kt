@@ -215,6 +215,7 @@ class ItemDetailsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.itemInfo.removeObservers(requireActivity())
+        viewModel.interestedLiveData.removeObservers(requireActivity())
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

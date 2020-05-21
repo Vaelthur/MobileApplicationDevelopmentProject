@@ -58,6 +58,7 @@ class ItemDetailsViewModel : ViewModel() {
                 }
 
                 if(snapshot != null){
+                    interestedLiveData.value = mutableListOf()
                     val interested = mutableListOf<AccountInfo>()
 //RIMANE SOLO UN UTENTE ALLA VOLTA
                     if (snapshot["users_favorites"] != null) {
