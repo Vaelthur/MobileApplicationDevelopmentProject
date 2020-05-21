@@ -8,6 +8,9 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.myapplication.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlin.random.Random
@@ -23,7 +26,10 @@ class FirebaseFirestoreNotifications : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        Log.d("MSG", token)
+        val id = FirebaseAuth.getInstance().currentUser?.uid
+        val map = HashMap<String, String>(1)
+        map["token"] = token
+        FirebaseFirestore.getInstance().collection("tokens").document(id!!).set(map)
     }
 
 

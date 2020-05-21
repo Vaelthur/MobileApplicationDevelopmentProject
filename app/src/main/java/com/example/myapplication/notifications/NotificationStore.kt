@@ -9,7 +9,7 @@ class NotificationStore() {
     private val userToken : String? = FirebaseInstanceId.getInstance().getToken()
     private val firestore = FirebaseFirestore.getInstance()
 
-    fun postNotification(title: String, owner: String, interested: NOTIFICATION_TYPE) {
+    fun postNotification(title: String, owner: String, notificationType: NOTIFICATION_TYPE) {
 
         //Query for username, now just taking google display name
         val username = FirebaseAuth.getInstance().currentUser?.displayName
@@ -19,7 +19,7 @@ class NotificationStore() {
             .get()
             .addOnSuccessListener { documentSnapshot ->
                 val ownerToken : String? = documentSnapshot.data?.get("token") as String?
-                val notification = Notification.newNotificationFactory(userToken, ownerToken, title, username, NOTIFICATION_TYPE.INTERESTED)
+                val notification = Notification.newNotificationFactory(userToken, ownerToken, title, username, notificationType)
                 firestore.collection("notifications").document(userToken!!).set(notification)
             }
     }
