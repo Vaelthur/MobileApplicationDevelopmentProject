@@ -1,149 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:layout_marginStart="320dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            tools:context=".itemFragments.ItemDetailsBuyFragment">
+            tools:context=".itemFragments.ItemDetailsFragment">
 
             <ImageView
                 android:id="@+id/item_picture"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:scaleType="fitCenter"
                 android:src="@drawable/default__item_image"
                 app:layout_constraintBottom_toTopOf="@id/picture_guideline"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintEnd_toStartOf="@+id/central_guideline"
+                app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0"
-                app:layout_constraintVertical_chainStyle="packed"
-                app:layout_constraintVertical_weight="1" />
+                app:layout_constraintVertical_chainStyle="packed" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/picture_guideline"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.4" />
+                app:layout_constraintGuide_percent="0.29" />
+
+            <TextView
+                android:id="@+id/item_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/title"
+                android:textSize="34sp"
+                app:layout_constraintBottom_toTopOf="@+id/item_location"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/central_guideline"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread" />
+
+            <TextView
+                android:id="@+id/item_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/price"
+                android:textColor="#005BA3"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="@+id/item_location"
+                app:layout_constraintTop_toBottomOf="@+id/item_location"
+                app:layout_constraintBottom_toTopOf="@+id/seller"/>
+
+            <TextView
+                android:id="@+id/price_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/currency"
+                android:textColor="#005BA3"
+                android:textSize="24sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/item_price"
+                app:layout_constraintStart_toEndOf="@+id/item_price" />
+
+            <TextView
+                android:id="@+id/seller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/seller"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/statusView2"
+                app:layout_constraintStart_toStartOf="@+id/item_price"
+                app:layout_constraintTop_toBottomOf="@+id/item_price" />
+
+            <TextView
+                android:id="@+id/seller_usr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/username"
+                android:textSize="24sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/seller"
+                app:layout_constraintStart_toEndOf="@+id/seller" />
+
+            <TextView
+                android:id="@+id/statusView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status_header"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/picture_guideline"
+                app:layout_constraintStart_toStartOf="@+id/seller"
+                app:layout_constraintTop_toBottomOf="@+id/seller" />
+
+            <TextView
+                android:id="@+id/item_status_buy"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/status"
+                android:textSize="24sp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/statusView2"
+                app:layout_constraintStart_toEndOf="@+id/statusView2" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/central_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <TextView
+                android:id="@+id/item_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/location"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/item_price"
+                app:layout_constraintStart_toStartOf="@+id/item_title"
+                app:layout_constraintTop_toBottomOf="@+id/item_title" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/picture_guideline">
-
-                <TextView
-                    android:id="@+id/statusView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/status_header"
-                    app:layout_constraintBottom_toBottomOf="@+id/item_price"
-                    app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
-
-                <TextView
-                    android:id="@+id/item_status_buy"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/status"
-                    app:layout_constraintBottom_toBottomOf="@+id/statusView2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/statusView2" />
-
-                <TextView
-                    android:id="@+id/item_condition_value"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/condition_value"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/item_condition"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
-
-                <TextView
-                    android:id="@+id/item_title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/title_std"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/item_location"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="spread" />
-
-                <TextView
-                    android:id="@+id/item_location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/location"
-                    app:layout_constraintBottom_toTopOf="@+id/item_price"
-                    app:layout_constraintEnd_toStartOf="@+id/details_value_guideline"
-                    app:layout_constraintStart_toStartOf="@+id/item_title"
-                    app:layout_constraintTop_toBottomOf="@+id/item_title" />
-
-                <TextView
-                    android:id="@+id/item_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/price"
-                    android:textColor="#005BA3"
-                    android:textSize="24sp"
-                    app:layout_constraintBottom_toTopOf="@+id/seller"
-                    app:layout_constraintStart_toStartOf="@+id/item_location"
-                    app:layout_constraintTop_toBottomOf="@+id/item_location" />
-
-                <TextView
-                    android:id="@+id/price_currency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/currency"
-                    android:textColor="#005BA3"
-                    android:textSize="24sp"
-                    app:layout_constraintBaseline_toBaselineOf="@+id/item_price"
-                    android:layout_marginStart="4dp"
-                    app:layout_constraintStart_toEndOf="@id/item_price"/>
+                app:layout_constraintTop_toBottomOf="@+id/picture_guideline"
+                app:layout_constraintVertical_bias="1.0">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/details_guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:visibility="visible"
-                    app:layout_constraintGuide_percent="0.35"
-                    tools:visibility="visible" />
+                    android:visibility="invisible"
+                    app:layout_constraintGuide_begin="0dp" />
 
                 <TextView
                     android:id="@+id/main_characteristics"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/main_characteristics"
-                    android:textSize="20sp"
+                    android:textSize="34sp"
                     app:layout_constraintBottom_toTopOf="@+id/item_category"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/buyButton"
@@ -156,6 +169,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/category"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/item_subcategory"
                     app:layout_constraintStart_toStartOf="@+id/main_characteristics"
                     app:layout_constraintTop_toBottomOf="@+id/main_characteristics" />
@@ -167,6 +181,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/sub_cat"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/item_location_details"
                     app:layout_constraintStart_toStartOf="@+id/main_characteristics"
                     app:layout_constraintTop_toBottomOf="@+id/item_category" />
@@ -177,7 +192,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-light"
-                    android:text="@string/location_header"
+                    android:text="@string/location"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
                     app:layout_constraintStart_toStartOf="@+id/item_subcategory"
                     app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
@@ -189,6 +205,8 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/expire_date_header"
+                    android:textAlignment="viewEnd"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/item_condition"
                     app:layout_constraintStart_toStartOf="@+id/item_location_details"
                     app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
@@ -201,8 +219,9 @@
                     android:layout_marginBottom="16dp"
                     android:fontFamily="sans-serif-light"
                     android:text="@string/item_condition"
+                    android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/description_guideline"
-                    app:layout_constraintStart_toStartOf="@+id/item_title"
+                    app:layout_constraintStart_toStartOf="@+id/item_expire_date"
                     app:layout_constraintTop_toBottomOf="@+id/item_expire_date" />
 
                 <androidx.constraintlayout.widget.Guideline
@@ -210,13 +229,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.40" />
+                    app:layout_constraintGuide_percent="0.5" />
 
                 <TextView
                     android:id="@+id/item_category_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/category"
+                    android:textSize="24sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/item_category"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -227,6 +247,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/sub_cat"
+                    android:textSize="24sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/item_subcategory"
                     app:layout_constraintEnd_toEndOf="@id/constraintLayout"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -237,9 +258,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/location"
+                    android:textSize="24sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
                 <TextView
@@ -247,6 +268,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@string/expire_date"
+                    android:textSize="24sp"
                     app:layout_constraintBaseline_toBaselineOf="@+id/item_expire_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -257,7 +279,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_constraintGuide_percent="0.8" />
+                    app:layout_constraintGuide_percent="0.50" />
 
                 <TextView
                     android:id="@+id/item_description"
@@ -266,7 +288,7 @@
                     android:layout_marginTop="16dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/description_header"
-                    android:textSize="20sp"
+                    android:textSize="34sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/description_guideline" />
 
@@ -276,63 +298,38 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/description"
+                    android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="@+id/item_description"
                     app:layout_constraintTop_toBottomOf="@+id/item_description" />
 
                 <TextView
-                    android:id="@+id/seller"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/item_condition_value"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@string/seller"
-                    android:layout_marginBottom="16dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/details_guideline"/>
-
-                <TextView
-                    android:id="@+id/seller_usr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/username"
-                    app:layout_constraintBaseline_toBaselineOf="@id/seller"
-                    app:layout_constraintStart_toStartOf="@id/details_value_guideline"
+                    android:text="@string/condition_value"
+                    android:textSize="24sp"
+                    app:layout_constraintBaseline_toBaselineOf="@id/item_condition"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fab_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:background="#FFFFFF"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:paddingBottom="8dp"
-                    android:scaleType="center"
-                    android:src="@android:drawable/btn_star"
-                    app:fabSize="normal"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent" />
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
                 <Button
                     android:id="@+id/buyButton"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:backgroundTint="#FFC107"
                     android:text="BUY"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/details_guideline"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="BUY" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </ScrollView>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
