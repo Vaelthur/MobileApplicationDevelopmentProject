@@ -18,6 +18,8 @@ import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.ITEMSTATUS
 import com.example.myapplication.data.ItemStatusCreator
 import com.example.myapplication.main.UsersListAdapter
+import com.example.myapplication.notifications.NOTIFICATION_TYPE
+import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -146,6 +148,13 @@ class ItemDetailsFragment : Fragment() {
                 //insert favorite in item (for other queries)
                 FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id)
                     .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
+
+                //Notify owner
+                val notificationStore : NotificationStore =
+                    NotificationStore()
+                notificationStore.apply {
+                    postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.INTERESTED)
+                }
 
                 Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
