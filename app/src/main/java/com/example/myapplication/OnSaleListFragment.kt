@@ -44,20 +44,7 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        itemListViewModel =
-            ViewModelProviders.of(requireActivity()).get(ItemListViewModel::class.java)
 
-        itemListViewModel.listenToItems()
-
-        itemListViewModel.liveItems.observe(requireActivity(), Observer {
-            val recyclerView: RecyclerView? = view.findViewById(R.id.recyclerItemList)
-            recyclerView?.layoutManager = LinearLayoutManager(context)
-            recyclerView?.adapter =
-                ItemInfoAdapter(it)
-            // performs this check only when onsale is visible, otherwise crashes
-            if(view.isShown)
-                checkEmptyList(it as MutableList<FireItem>)
-        })
 
         // set on click listener for login button - visible when we are logged out
         requireActivity().findViewById<Button>(R.id.btn_list_log).setOnClickListener { v ->
@@ -67,6 +54,21 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
         // check for user and if logged button no more needed => make it disappear
         if(FirebaseAuth.getInstance().currentUser != null ) {
             requireActivity().findViewById<Button>(R.id.btn_list_log).visibility = View.GONE
+
+            itemListViewModel =
+                ViewModelProviders.of(requireActivity()).get(ItemListViewModel::class.java)
+
+            itemListViewModel.listenToItems()
+
+            itemListViewModel.liveItems.observe(requireActivity(), Observer {
+                val recyclerView: RecyclerView? = view.findViewById(R.id.recyclerItemList)
+                recyclerView?.layoutManager = LinearLayoutManager(context)
+                recyclerView?.adapter =
+                    ItemInfoAdapter(it)
+                // performs this check only when onsale is visible, otherwise crashes
+                if(view.isShown)
+                    checkEmptyList(it as MutableList<FireItem>)
+            })
         }
     }
 
