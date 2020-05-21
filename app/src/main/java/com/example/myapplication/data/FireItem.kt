@@ -35,7 +35,7 @@ data class FireItem(
                 hash["location"] as String,
                 hash["price"].toString(),
                 hash["category"] as String,
-                hash["subCategory"].toString(),
+                hash["sub_category"].toString(),
                 hash["expDate"].toString(),
                 hash["condition"] as String,
                 hash["description"] as String,
