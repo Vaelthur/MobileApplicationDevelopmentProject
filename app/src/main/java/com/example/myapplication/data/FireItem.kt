@@ -3,18 +3,18 @@ package com.example.myapplication.data
 import java.io.Serializable
 
 data class FireItem(
-     val picture_uri: String?,
-     val title: String,
-     val location: String?,
-     val price: String,
-     val category: String,
-     val subCategory: String,
-     val expDate: String,
-     val condition: String,
-     val description: String,
-     val id: String    ,
-     val owner: String,
-     val status: String = "Available"
+    val picture_uri: String?,
+    val title: String,
+    val location: String?,
+    val price: String,
+    val category: String,
+    val subCategory: String,
+    val expDate: String,
+    val condition: String,
+    val description: String,
+    val id: String,
+    val owner: String,
+    val status: String = "Available"
 )  : Serializable {
 
     companion object ItemFactory {

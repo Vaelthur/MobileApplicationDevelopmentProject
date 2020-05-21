@@ -92,14 +92,23 @@ class ItemDetailsFragment : Fragment() {
 
             //set listener block button
             blockButton.setOnClickListener { v ->
-                val blockedItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
+
+                val blockItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
                     viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
                     viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
-                    viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner, "Blocked")
-                viewModel.setItemInfo(blockedItem)
-                //TODO: solo update dello status
+                    viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
+                    ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
+
+                viewModel.setItemInfo(blockItem)
+
+                val updatedStatus = HashMap<String, Any>()
+                updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
                 item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
-                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).set(blockedItem)
+                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
+
+                Snackbar.make(view, "Item is no longer on sale", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null)
+                    .show()
             }
 
             viewModel.itemInfo.observe(requireActivity(), Observer {
@@ -153,10 +162,20 @@ class ItemDetailsFragment : Fragment() {
             else {
                 buyButton.setOnClickListener { v ->
 
+                    val soldItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
+                        viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
+                        viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
+                        viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
+                        ItemStatusCreator.getStatus(ITEMSTATUS.SOLD))
+
+                    viewModel.setItemInfo(soldItem)
                     val updatedStatus = HashMap<String, Any>()
                     updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)
                     FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
                     buyButton.isClickable = false
+                    Snackbar.make(v, "Item bought, congratulations:)", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show()
                 }
             }
 

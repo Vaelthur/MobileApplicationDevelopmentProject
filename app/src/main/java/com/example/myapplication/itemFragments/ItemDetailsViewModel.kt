@@ -11,9 +11,9 @@ import com.google.firebase.ktx.Firebase
 import org.json.JSONObject
 
 class ItemDetailsViewModel : ViewModel() {
-    val itemInfo = MutableLiveData<FireItem>()
-    val tempItemInfo = MutableLiveData<FireItem>()
-    val interestedLiveData = MutableLiveData<List<AccountInfo>>()
+    var itemInfo = MutableLiveData<FireItem>()
+    var tempItemInfo = MutableLiveData<FireItem>()
+    var interestedLiveData = MutableLiveData<List<AccountInfo>>()
 
     fun setItemInfo(itemJson: JSONObject) {
         itemInfo.value = createItemInfoFromJSON(itemJson)
