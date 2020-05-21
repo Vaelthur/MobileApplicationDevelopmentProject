@@ -93,8 +93,8 @@ class ItemDetailsFragment : Fragment() {
             //set listener block button
             blockButton.setOnClickListener { v ->
 
-                val blockItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
-                    viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
+                val blockItem = FireItem(viewModel.itemInfo.value?.picture_uri, viewModel.itemInfo.value!!.title,
+                    viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
                     viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
                     viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
                     ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
@@ -162,8 +162,8 @@ class ItemDetailsFragment : Fragment() {
             else {
                 buyButton.setOnClickListener { v ->
 
-                    val soldItem = FireItem(viewModel.itemInfo.value!!.picture_uri, viewModel.itemInfo.value!!.title,
-                        viewModel.itemInfo.value!!.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
+                    val soldItem = FireItem(viewModel.itemInfo.value?.picture_uri, viewModel.itemInfo.value!!.title,
+                        viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
                         viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
                         viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
                         ItemStatusCreator.getStatus(ITEMSTATUS.SOLD))
