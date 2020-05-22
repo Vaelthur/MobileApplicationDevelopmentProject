@@ -130,7 +130,7 @@ class SignInFragment : Fragment() {
 
         val auth = (activity as MainActivity).getAuth()
         val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
-        changeNavHeader(navView, auth.currentUser!!, existing = true)
+        changeNavHeader(navView, auth.currentUser!!, existing = true, activity = this.activity as MainActivity?)
 
         val myBundle = Bundle()
         myBundle.putBoolean("myprofile", true)
@@ -153,21 +153,18 @@ class SignInFragment : Fragment() {
 
         val auth = (activity as MainActivity).getAuth()
         val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
-        changeNavHeader(navView, auth.currentUser!!, existing = false)
+        changeNavHeader(navView, auth.currentUser!!, existing = false, activity = this.activity as MainActivity?)
 
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
     }
 
-    private fun changeNavHeader(navView: NavigationView, account: FirebaseUser, existing: Boolean) {
+    private fun changeNavHeader(navView: NavigationView, account: FirebaseUser, existing: Boolean, activity: MainActivity?) {
         navView.menu.clear()
         navView.inflateMenu(R.menu.activity_main_drawer)
         navView.menu.findItem(R.id.logout_action).setOnMenuItemClickListener {
-            //TODO: see how to attach activity
-            if (isAdded && activity != null) {
-                (activity as MainActivity).logout(navView)
-            } else false
+            (activity)?.logout(navView) ?: false
         }
 
         //updateHeader
