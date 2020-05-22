@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         if(currentUser == null) {
             navView.menu.clear()
             navView.inflateMenu(R.menu.activity_main_drawer_logged_out)
+
         } else {
             navView.menu.clear()
             navView.inflateMenu(R.menu.activity_main_drawer)
@@ -68,11 +69,8 @@ class MainActivity : AppCompatActivity() {
                     info.profilePicture
                     )
             }
+
         }
-        // Nav_host_fragment is the fragment container in layout/content_main.xml
-        val navController = findNavController(R.id.nav_host_fragment)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
 
         appBarConfiguration = AppBarConfiguration( //è IMPORTANTE, SETTA LA START DESTINATION
             setOf(
@@ -80,6 +78,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.onSaleListFragment
             ), drawerLayout
         )
+        // Nav_host_fragment is the fragment container in layout/content_main.xml
+        val navController = findNavController(R.id.nav_host_fragment)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+
+
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.get
 import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -73,15 +74,12 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu, menu)
+        searchHandler(menu)
     }
 
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.search -> {
-                searchHandler(item)
-                true
-            }
             R.id.filter -> {
                 val filter = FilterItemFragment(this)
                 filter.show(this.parentFragmentManager, "filterItems")
@@ -91,9 +89,10 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
         }
     }
 
-    private fun searchHandler(searchItem: MenuItem) {
+    private fun searchHandler(searchMenu: Menu) {
         //set searchView
         val manager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchItem = searchMenu.findItem(R.id.search)
         val searchView = searchItem.actionView as SearchView
         searchView.setSearchableInfo(manager.getSearchableInfo(requireActivity().componentName))
 
