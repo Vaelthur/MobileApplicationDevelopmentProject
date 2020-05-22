@@ -166,12 +166,16 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
 
     private fun fillAndShowItemList(result: QuerySnapshot) {
         val itemList = mutableListOf<FireItem>()
-        for(document in result) {
-            if (document["owner"] != FirebaseAuth.getInstance().currentUser!!.uid) {
-                itemList.add(FireItem.fromMapToObj(document.data))
+        FirebaseAuth.getInstance().currentUser?.let {
+            for(document in result) {
+                if (document["owner"] != it.uid) {
+                    itemList.add(FireItem.fromMapToObj(document.data))
+                }
             }
+            checkEmptyList(itemList)
+            recyclerItemList.adapter = ItemInfoAdapter(itemList)
         }
-        checkEmptyList(itemList)
-        recyclerItemList.adapter = ItemInfoAdapter(itemList)
+
+
     }
 }
