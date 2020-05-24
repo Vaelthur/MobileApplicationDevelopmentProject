@@ -80,45 +80,70 @@ class ItemDetailsFragment : Fragment() {
             return
         }
 
-        if(myItems!!){
+        val status = viewModel.itemInfo.value?.status
+        val isItemSoldOrBlocked : Boolean = (status == ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)) ||
+                (status == ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
+
+        if(myItems!!) {
             //Here personal item
             //get users interested
             viewModel.interestedUsers(itemInfo.value!!.id)
 
             viewModel.interestedLiveData.observe(requireActivity(), Observer {
-                val recyclerView : RecyclerView? = view.findViewById(R.id.fav_users)
+                val recyclerView: RecyclerView? = view.findViewById(R.id.fav_users)
                 recyclerView?.layoutManager = LinearLayoutManager(context)
                 recyclerView?.adapter =
                     UsersListAdapter(it)
             })
 
-            //set listener block button
-            blockButton.setOnClickListener { v ->
+            if (isItemSoldOrBlocked) {
+                blockButton.isClickable = false
+                blockButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+            } else {
+                //set listener block button
+                blockButton.setOnClickListener { v ->
 
-                val blockItem = FireItem(viewModel.itemInfo.value?.picture_uri, viewModel.itemInfo.value!!.title,
-                    viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
-                    viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
-                    viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
-                    ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
+                    val blockItem = FireItem(
+                        viewModel.itemInfo.value?.picture_uri,
+                        viewModel.itemInfo.value!!.title,
+                        viewModel.itemInfo.value?.location,
+                        viewModel.itemInfo.value!!.price,
+                        viewModel.itemInfo.value!!.category,
+                        viewModel.itemInfo.value!!.subCategory,
+                        viewModel.itemInfo.value!!.expDate,
+                        viewModel.itemInfo.value!!.condition,
+                        viewModel.itemInfo.value!!.description,
+                        viewModel.itemInfo.value!!.id,
+                        viewModel.itemInfo.value!!.owner,
+                        ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
+                    )
 
-                viewModel.setItemInfo(blockItem)
+                    viewModel.setItemInfo(blockItem)
 
-                val updatedStatus = HashMap<String, Any>()
-                updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
-                item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
-                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
+                    val updatedStatus = HashMap<String, Any>()
+                    updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
+                    item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
+                    FirebaseFirestore.getInstance().collection("items")
+                        .document(viewModel.itemInfo.value!!.id).update(updatedStatus)
 
-                //Notify interested users that item has been blocked
-                val notificationStore : NotificationStore =
-                    NotificationStore()
-                notificationStore.postNotificationMultipleUsers(viewModel.itemInfo.value?.title!!,
-                    viewModel.itemInfo.value?.id!!,
-                    NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
+                    //Notify interested users that item has been blocked
+                    val notificationStore: NotificationStore =
+                        NotificationStore()
+                    notificationStore.postNotificationMultipleUsers(
+                        viewModel.itemInfo.value?.title!!,
+                        viewModel.itemInfo.value?.id!!,
+                        NOTIFICATION_TYPE.NO_LONGER_AVAILABLE
+                    )
 
-                Snackbar.make(view, "Item is no longer on sale", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null)
-                    .show()
+                    blockButton.isClickable = false
+                    blockButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
+                    Snackbar.make(view, "Item is no longer on sale", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null)
+                        .show()
+                }
             }
+
 
             viewModel.itemInfo.observe(requireActivity(), Observer {
                 item_title.text = it.title
@@ -167,10 +192,6 @@ class ItemDetailsFragment : Fragment() {
                     .setAction("Action", null)
                     .show()
             }
-
-            val status = viewModel.itemInfo.value?.status
-            val isItemSoldOrBlocked : Boolean = (status == ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)) ||
-                    (status == ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
 
             if(isItemSoldOrBlocked){
                 buyButton.isClickable = false
