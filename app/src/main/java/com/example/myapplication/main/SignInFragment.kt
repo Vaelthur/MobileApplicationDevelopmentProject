@@ -1,7 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.main
 
-import android.accounts.Account
-import android.content.ContentValues
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -9,9 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
+import com.example.myapplication.R
+import com.example.myapplication.data.AccountInfo
+import com.example.myapplication.data.AccountInfoFactory
 import com.example.myapplication.notifications.NotificationStore
 import com.example.myapplication.profile.ShowProfileViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -21,13 +21,10 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.android.material.navigation.NavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import java.util.*
 
 class SignInFragment : Fragment() {
 
@@ -74,12 +71,10 @@ class SignInFragment : Fragment() {
             firebaseAuthWithGoogle(account)
             //i put the user in the db just for check if everything is alright
             //check if user is present in db, if not, add it
-
         } catch (e: ApiException) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("problem", "signInResult:failed code=" + e.statusCode)
-            //updateUI(null)
         }
     }
 
@@ -90,12 +85,9 @@ class SignInFragment : Fragment() {
 
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
 
+                if (task.isSuccessful) {
                     val googleAccountInfo = getGoogleSignInInfo(auth.currentUser!!)
-                    // Nav header update
-                    val navView: NavigationView = requireActivity().findViewById(R.id.nav_view)
-                    // changeNavHeader(navView, auth.currentUser!!)
 
                     //Search for user in database to determine if signup or signin
                     val db = FirebaseFirestore.getInstance()
@@ -111,10 +103,18 @@ class SignInFragment : Fragment() {
                                 signIn(accountDocument)
                             }
                         }
-                        .addOnFailureListener {  Helpers.makeSnackbar(requireView(), "Authentication Failed.") }
+                        .addOnFailureListener {
+                            Helpers.makeSnackbar(
+                                requireView(),
+                                "Authentication Failed."
+                            )
+                        }
                 }
                 else {
-                    Helpers.makeSnackbar(requireView(), "Authentication Failed.")
+                    Helpers.makeSnackbar(
+                        requireView(),
+                        "Authentication Failed."
+                    )
                 }
             }
     }
@@ -136,7 +136,8 @@ class SignInFragment : Fragment() {
         myBundle.putBoolean("myprofile", true)
 
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, myBundle)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(
+            R.id.showProfileFragment, myBundle)
     }
 
 
@@ -156,8 +157,10 @@ class SignInFragment : Fragment() {
         changeNavHeader(navView, auth.currentUser!!, existing = false, activity = this.activity as MainActivity?)
 
         this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
-        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.showProfileFragment, accountBundle)
-        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(R.id.editProfileFragment, accountBundle)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(
+            R.id.showProfileFragment, accountBundle)
+        this.activity?.findNavController(R.id.nav_host_fragment)?.navigate(
+            R.id.editProfileFragment, accountBundle)
     }
 
     private fun changeNavHeader(navView: NavigationView, account: FirebaseUser, existing: Boolean, activity: MainActivity?) {
@@ -194,8 +197,10 @@ class SignInFragment : Fragment() {
         val email = currentUser.email
         val location = "City"
         val profilePicture = currentUser.photoUrl
-        return AccountInfo(id,fullname,username,
-            email!!,location,profilePicture.toString())
+        return AccountInfo(
+            id, fullname, username,
+            email!!, location, profilePicture.toString()
+        )
     }
 
     private fun insertInDb(database : FirebaseFirestore, googleAccountInfo: AccountInfo) {

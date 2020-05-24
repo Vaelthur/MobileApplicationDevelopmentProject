@@ -1,13 +1,10 @@
-package com.example.myapplication
+package com.example.myapplication.itemLists
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import com.example.myapplication.main.ItemCategories
-import java.lang.ClassCastException
+import com.example.myapplication.data.ItemCategories
 
 class FilterItemFragment(onSaleListFragment: OnSaleListFragment) : DialogFragment() {
 

@@ -1,8 +1,7 @@
-package com.example.myapplication.main
+package com.example.myapplication.itemLists
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +12,10 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
+import com.example.myapplication.main.Helpers
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.firebase.ui.firestore.SnapshotParser
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -97,11 +96,17 @@ class ItemListFragment : Fragment() {
                     root.findViewById<FloatingActionButton>(R.id.fabAddItem).visibility = View.VISIBLE
                 }
             }
-            .addOnFailureListener { Helpers.makeSnackbar(requireView(), "Could not retrieve item info") }
+            .addOnFailureListener {
+                Helpers.makeSnackbar(
+                    requireView(),
+                    "Could not retrieve item info"
+                )
+            }
     }
 
     private fun defaultItemEdit() {
-        val itemBundle = Helpers.getDefaultItemBundle()
+        val itemBundle =
+            Helpers.getDefaultItemBundle()
         requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.itemDetailsFragment, itemBundle)
         requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.ItemEditFragment, itemBundle)
     }

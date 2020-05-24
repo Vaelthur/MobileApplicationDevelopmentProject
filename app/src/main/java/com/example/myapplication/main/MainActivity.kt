@@ -1,7 +1,5 @@
-package com.example.myapplication
+package com.example.myapplication.main
 
-import android.app.ActivityManager
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +10,8 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.example.myapplication.R
+import com.example.myapplication.data.AccountInfoFactory
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
                     info.fullname,
                     info.email,
                     info.profilePicture
-                    )
+                )
             }
 
         }
@@ -88,14 +88,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-/*        Helpers.readAccountJsonFromPreferences(this)?.let {
-            Helpers.setNavHeaderView(
-                navView.getHeaderView(0),
-                it["fullname"].toString(),
-                it["email"].toString(),
-                it["profilePicture"].toString()
-            )
-        }*/
 
         // check the device type and shows drawer accordingly
         if (isTabletLandscape) {
@@ -120,14 +112,23 @@ class MainActivity : AppCompatActivity() {
         auth.signOut()
 
         // restore header
-        Helpers.setNavHeaderView(navigationView.getHeaderView(0), getString(R.string.nav_header_title), getString(R.string.nav_header_subtitle), "android.resource://com.example.myapplication/drawable/default_profile_picture")
+        Helpers.setNavHeaderView(
+            navigationView.getHeaderView(
+                0
+            ),
+            getString(R.string.nav_header_title),
+            getString(R.string.nav_header_subtitle),
+            "android.resource://com.example.myapplication/drawable/default_profile_picture"
+        )
 
         // restore drawer menu
         navigationView.menu.clear()
         navigationView.inflateMenu(R.menu.activity_main_drawer_logged_out)
 
         // navigate to signinFragment
-        this.findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
+        this.findNavController(R.id.nav_host_fragment).navigate(
+            R.id.signInFragment
+        )
 
         // close drawer
         this.findViewById<DrawerLayout>(R.id.drawer_layout).closeDrawers()

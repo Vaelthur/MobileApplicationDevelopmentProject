@@ -1,4 +1,4 @@
-package com.example.myapplication.main
+package com.example.myapplication.data
 
 class ItemCategories() {
     private val mainCat = arrayOf("Arts & Crafts", "Sports & Hobby", "Baby", "Women's fashion", "Men's fashion", "Electronics", "Games & Videogames", "Automotive")

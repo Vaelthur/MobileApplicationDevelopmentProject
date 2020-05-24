@@ -3,10 +3,8 @@ package com.example.myapplication.itemFragments
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -14,12 +12,11 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myapplication.Helpers
+import com.example.myapplication.main.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.ITEMSTATUS
 import com.example.myapplication.data.ItemStatusCreator
-import com.example.myapplication.main.UsersListAdapter
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
@@ -91,7 +88,8 @@ class ItemDetailsFragment : Fragment() {
             viewModel.interestedLiveData.observe(requireActivity(), Observer {
                 val recyclerView : RecyclerView? = view.findViewById(R.id.fav_users)
                 recyclerView?.layoutManager = LinearLayoutManager(context)
-                recyclerView?.adapter = UsersListAdapter(it)
+                recyclerView?.adapter =
+                    UsersListAdapter(it)
             })
 
             //set listener block button

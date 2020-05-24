@@ -1,32 +1,29 @@
-package com.example.myapplication
+package com.example.myapplication.itemLists
 
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.get
-import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
-import com.example.myapplication.main.ItemCategories
-import com.example.myapplication.main.ItemInfoAdapter
-import com.example.myapplication.main.ItemListViewModel
+import com.example.myapplication.data.ItemCategories
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.android.synthetic.main.fragment_on_sale_list.*
 
 
-class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
+class OnSaleListFragment : Fragment(),
+    FilterItemFragment.FilterItemListener {
 
     private lateinit var itemListViewModel: ItemListViewModel
 
@@ -49,7 +46,9 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
 
         // set on click listener for login button - visible when we are logged out
         requireActivity().findViewById<Button>(R.id.btn_list_log).setOnClickListener { v ->
-            requireActivity().findNavController(R.id.nav_host_fragment).navigate(R.id.signInFragment)
+            requireActivity().findNavController(R.id.nav_host_fragment).navigate(
+                R.id.signInFragment
+            )
         }
 
         // check for user and if logged button no more needed => make it disappear
@@ -83,7 +82,8 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
             R.id.filter -> {
-                val filter = FilterItemFragment(this)
+                val filter =
+                    FilterItemFragment(this)
                 filter.show(this.parentFragmentManager, "filterItems")
                 true
             }
@@ -173,7 +173,8 @@ class OnSaleListFragment : Fragment(), FilterItemFragment.FilterItemListener {
                 }
             }
             checkEmptyList(itemList)
-            recyclerItemList.adapter = ItemInfoAdapter(itemList)
+            recyclerItemList.adapter =
+                ItemInfoAdapter(itemList)
         }
 
 

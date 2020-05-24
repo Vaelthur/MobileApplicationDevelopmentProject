@@ -1,4 +1,4 @@
-package com.example.myapplication.main
+package com.example.myapplication.itemLists
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -7,12 +7,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatImageButton
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -26,7 +23,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.item_card_view_star.view.*
 import java.io.Serializable
 
 class ItemInfoAdapter(private val items: List<FireItem>)
@@ -41,7 +37,9 @@ class ItemInfoAdapter(private val items: List<FireItem>)
         val view  = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_card_view_star, parent, false)
 
-        return ItemInfoViewHolder(view)
+        return ItemInfoViewHolder(
+            view
+        )
     }
 
     override fun onBindViewHolder(holder: ItemInfoViewHolder, position: Int) {

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_itemList"
-        android:name="com.example.myapplication.main.ItemListFragment"
+        android:name="com.example.myapplication.itemLists.ItemListFragment"
         android:label="My Items"
         tools:layout="@layout/fragment_itemlist">
         <action
@@ -63,21 +63,14 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.example.myapplication.SignInFragment"
+        android:name="com.example.myapplication.main.SignInFragment"
         android:label="SignInFragment" />
     <fragment
         android:id="@+id/onSaleListFragment"
-        android:name="com.example.myapplication.OnSaleListFragment"
+        android:name="com.example.myapplication.itemLists.OnSaleListFragment"
         android:label="Items on sale">
         <action
             android:id="@+id/action_onSaleListFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
-        <action
-            android:id="@+id/action_onSaleListFragment_to_itemDetailsBuyFragment2"
-            app:destination="@id/itemDetailsBuyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/itemDetailsBuyFragment"
-        android:name="com.example.myapplication.itemFragments.ItemDetailsBuyFragment"
-        android:label="ItemDetailsBuyFragment" />
 </navigation>

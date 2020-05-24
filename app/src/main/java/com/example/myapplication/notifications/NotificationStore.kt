@@ -1,7 +1,5 @@
 package com.example.myapplication.notifications
 
-import android.util.Log
-import com.example.myapplication.AccountInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -30,24 +28,18 @@ class NotificationStore() {
 
         //Query for username, now just taking google display name
         val username = FirebaseAuth.getInstance().currentUser?.displayName
-        val tokens = mutableListOf<String?>()
 
         //Query for list of interested users
         firestore.collection("items").document(itemID)
             .get()
             .addOnSuccessListener { documentSnapshot ->
-                //val tokens = mutableListOf<String?>()
-                Log.d("MSG", "In first")
 
                 if (documentSnapshot["users_favorites"] != null) {
                     val usersID =
                         (documentSnapshot.data?.get("users_favorites")) as ArrayList<String>
-                    Log.d("MSG", usersID.toString())
 
                     // Query for tokens
                     for (user in usersID) {
-
-                        Log.d("MSG", user)
 
                         firestore.collection("tokens").document(user)
                             .get()

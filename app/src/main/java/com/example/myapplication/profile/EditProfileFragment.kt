@@ -6,7 +6,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,7 +13,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -25,17 +23,15 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.myapplication.*
-import com.google.android.material.navigation.NavigationView
+import com.example.myapplication.data.AccountInfo
+import com.example.myapplication.data.AccountInfoFactory
+import com.example.myapplication.main.Helpers
+import com.example.myapplication.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.UploadTask
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.coroutines.runBlocking
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -322,7 +318,14 @@ class EditProfileFragment : Fragment() {
                 uploadTask.addOnSuccessListener {
                     val downloadUrl = imageRef.downloadUrl
                     downloadUrl.addOnSuccessListener {
-                        val finalAC = AccountInfo(accountInfo.id, accountInfo.fullname, accountInfo.username, accountInfo.email, accountInfo.location, it.toString())
+                        val finalAC = AccountInfo(
+                            accountInfo.id,
+                            accountInfo.fullname,
+                            accountInfo.username,
+                            accountInfo.email,
+                            accountInfo.location,
+                            it.toString()
+                        )
                         usersRef.document(auth.currentUser?.uid!!).set(finalAC)
                         showProfileViewModel.setAccountInfo(finalAC)
                     }
@@ -335,17 +338,6 @@ class EditProfileFragment : Fragment() {
                 while(!uploadTask.isComplete){continue}
             }
         }
-
-
-
-        // Save content to sharedPreferences
-//        val jsonString = Gson().toJson(accountInfo)
-//        val sharedPref = (this.activity as AppCompatActivity).getSharedPreferences("account_info",  Context.MODE_PRIVATE) ?: return
-//        with (sharedPref.edit()) {
-//            putString("account_info", jsonString)
-//            commit()
-//        }
-
 
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("profile_picture_editing").apply()
 

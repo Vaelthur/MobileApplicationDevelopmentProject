@@ -1,11 +1,10 @@
-package com.example.myapplication.main
+package com.example.myapplication.data
 
 import android.content.Context
 import android.net.Uri
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProviders
 import com.example.myapplication.ItemEditFragment
-import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

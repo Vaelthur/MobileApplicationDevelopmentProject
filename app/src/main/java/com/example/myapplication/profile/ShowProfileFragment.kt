@@ -10,6 +10,10 @@ import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.myapplication.*
+import com.example.myapplication.data.AccountInfo
+import com.example.myapplication.data.AccountInfoFactory
+import com.example.myapplication.main.Helpers
+import com.example.myapplication.main.MainActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,7 +46,6 @@ class ShowProfileFragment : Fragment() {
         if(!myProfile!!) {
             val accountInfo = arguments?.get("account_info") as AccountInfo
             showProfileViewModel.accountInfo.value = accountInfo
-            //showProfileViewModel.tempAccountInfo.value = accountInfo
         }
         else {
             showProfileViewModel.accountInfo.value?.let {
@@ -71,11 +74,6 @@ class ShowProfileFragment : Fragment() {
                     .centerCrop()
                     .circleCrop()
                     .into(profile_picture)
-                /*Helpers.updatePicture(
-                    this.requireContext(),
-                    Uri.parse(it.profilePicture),
-                    profile_picture
-                )*/
                 showProfileViewModel.setTempAccountInfo(it)
                 setProfileNavHeaderHandler()
             })
@@ -93,14 +91,8 @@ class ShowProfileFragment : Fragment() {
                     .centerCrop()
                     .circleCrop()
                     .into(profile_picture)
-                /*Helpers.updatePicture(
-                    this.requireContext(),
-                    Uri.parse(it.profilePicture),
-                    profile_picture
-                )*/
             })
         }
-
     }
 
     override fun onDestroyView() {
@@ -113,7 +105,6 @@ class ShowProfileFragment : Fragment() {
         if(myProfile!!) {
             inflater.inflate(R.menu.show_profile_menu, menu)
         }
-        // inflater.inflate(R.menu.logout_menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -127,21 +118,6 @@ class ShowProfileFragment : Fragment() {
         }
     }
 
-    /// region Helpers
-    private fun readSharedPreferences() {
-
-        val parentActivity = this.requireActivity() as AppCompatActivity
-        val accountJson =
-            Helpers.readAccountJsonFromPreferences(
-                parentActivity
-            )
-
-        accountJson?. let {
-            showProfileViewModel.setAccountInfo(accountJson)
-            showProfileViewModel.setTempAccountInfo(accountJson)
-        }
-    }
-    /// endregion
 
     private fun setShowProfileViewModel() {
 

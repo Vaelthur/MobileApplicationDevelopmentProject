@@ -1,4 +1,4 @@
-package com.example.myapplication.main
+package com.example.myapplication.itemFragments
 
 import android.net.Uri
 import android.os.Bundle
@@ -9,11 +9,10 @@ import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.myapplication.AccountInfo
+import com.example.myapplication.data.AccountInfo
 import com.example.myapplication.R
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.Serializable
-import kotlin.coroutines.coroutineContext
 
 class UsersListAdapter(private val users: List<AccountInfo>)
     : RecyclerView.Adapter<UsersListAdapter.AccountInfoViewHolder>() {
@@ -26,7 +25,9 @@ class UsersListAdapter(private val users: List<AccountInfo>)
     ): AccountInfoViewHolder {
         val view  = LayoutInflater.from(parent.context).inflate(R.layout.profile_card_view, parent, false)
 
-        return AccountInfoViewHolder(view)
+        return AccountInfoViewHolder(
+            view
+        )
     }
 
     override fun onBindViewHolder(holder: AccountInfoViewHolder, position: Int) {

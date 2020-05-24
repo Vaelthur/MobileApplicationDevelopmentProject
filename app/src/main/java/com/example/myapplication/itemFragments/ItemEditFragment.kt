@@ -26,9 +26,9 @@ import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
-import com.example.myapplication.main.ItemCategories
-import com.example.myapplication.main.ItemInfoFactory
-import com.example.myapplication.main.ItemListViewModel
+import com.example.myapplication.data.ItemCategories
+import com.example.myapplication.data.ItemInfoFactory
+import com.example.myapplication.main.Helpers
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +41,6 @@ import java.io.Serializable
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 class ItemEditFragment : Fragment() {
     //requests and permissions codes
@@ -97,16 +96,16 @@ class ItemEditFragment : Fragment() {
             item_expire_date_value.text = it.expDate
             item_picture_description_edit.setText(it.description)
             item_condition_value.setText(it.condition)
-            category_spinner.setSelection(ItemCategories().getPosFromValue(it.category))
-            subcategory_spinner.setSelection(ItemCategories().getSubPosFrom(it.subCategory, it.category))
+            category_spinner.setSelection(
+                ItemCategories().getPosFromValue(it.category))
+            subcategory_spinner.setSelection(
+                ItemCategories()
+                    .getSubPosFrom(it.subCategory, it.category))
             this.pos = ItemCategories().getPosFromValue(it.category)
             Glide.with(requireContext())
                 .load(it.picture_uri)
                 .centerCrop()
                 .into(item_picture)
-//            Helpers.updatePicture(this.requireContext(),
-//                Uri.parse(it.picture_uri),
-//                item_picture)
         })
 
         // Listener to change profile pic
@@ -520,7 +519,8 @@ class ItemEditFragment : Fragment() {
     private fun setSpinners(view: View) {
 
         val spinner = view.findViewById<Spinner>(R.id.category_spinner)
-        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getMainCategories())
+        val ad = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories()
+            .getMainCategories())
         ad.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = ad
 
@@ -537,12 +537,15 @@ class ItemEditFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                val tempsubcat = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories().getSubCategoriesFromMain(spinner.selectedItem.toString()))
+                val tempsubcat = ArrayAdapter<String>(view.context, android.R.layout.simple_spinner_item, ItemCategories()
+                    .getSubCategoriesFromMain(spinner.selectedItem.toString()))
                 tempsubcat.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 subspinner.adapter = tempsubcat
 
                 if( pos == spinner.selectedItemPosition ) {
-                    subspinner.setSelection(ItemCategories().getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
+                    subspinner.setSelection(
+                        ItemCategories()
+                            .getSubPosFrom(viewModel.tempItemInfo.value!!.subCategory,viewModel.tempItemInfo.value!!.category ))
                 }
             }
         }
