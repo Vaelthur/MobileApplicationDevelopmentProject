@@ -3,8 +3,6 @@ package com.example.myapplication.profile
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.myapplication.data.AccountInfo
-import org.json.JSONObject
-
 
 class ShowProfileViewModel : ViewModel() {
     val accountInfo = MutableLiveData<AccountInfo>()
@@ -17,21 +15,4 @@ class ShowProfileViewModel : ViewModel() {
     fun setTempAccountInfo(tempAccountInfo: AccountInfo) {
         this.tempAccountInfo.value = tempAccountInfo
     }
-
-    private fun createAccountInfoFromJSON(accountJson: JSONObject): AccountInfo {
-
-        val fullname = accountJson["fullname"].toString()
-        val username = accountJson["username"].toString()
-        val email = accountJson["email"].toString()
-        val location = accountJson["location"].toString()
-        val profile_picture = accountJson["profilePicture"].toString()
-        return AccountInfo(
-            fullname,
-            username,
-            email,
-            location,
-            profile_picture
-        )
-    }
-
 }
