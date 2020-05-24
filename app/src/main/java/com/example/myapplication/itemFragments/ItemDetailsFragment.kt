@@ -110,6 +110,13 @@ class ItemDetailsFragment : Fragment() {
                 item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
                 FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
 
+                //Notify interested users that item has been blocked
+                val notificationStore : NotificationStore =
+                    NotificationStore()
+                notificationStore.postNotificationMultipleUsers(viewModel.itemInfo.value?.title!!,
+                    viewModel.itemInfo.value?.id!!,
+                    NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
+
                 Snackbar.make(view, "Item is no longer on sale", Snackbar.LENGTH_LONG)
                     .setAction("Action", null)
                     .show()
@@ -193,6 +200,11 @@ class ItemDetailsFragment : Fragment() {
                     notificationStore.apply {
                         postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.SOLD)
                     }
+
+                    //Notify interested users that item has been sold
+                    notificationStore.postNotificationMultipleUsers(viewModel.itemInfo.value?.title!!,
+                            viewModel.itemInfo.value?.id!!,
+                            NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
 
 
                     Snackbar.make(v, "Item bought, congratulations:)", Snackbar.LENGTH_LONG)
