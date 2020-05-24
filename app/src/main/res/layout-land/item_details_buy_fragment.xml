@@ -22,6 +22,7 @@
                 android:layout_height="0dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/default__item_image"
+                android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toTopOf="@id/picture_guideline"
                 app:layout_constraintEnd_toEndOf="@id/central_guideline"
                 app:layout_constraintHorizontal_bias="0.0"
