@@ -199,6 +199,10 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             else {
                 buyButton.setOnClickListener { v ->
 
+                    //Rate seller
+                    val ratingFragment = RateSellerDialogFragment(this, viewModel.itemInfo.value?.owner!!)
+                    ratingFragment.show(this.parentFragmentManager, "sellerRating")
+
                     val soldItem = FireItem(viewModel.itemInfo.value?.picture_uri, viewModel.itemInfo.value!!.title,
                         viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
                         viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
@@ -229,9 +233,6 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                             viewModel.itemInfo.value?.id!!,
                             NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
 
-                    //Rate seller
-                    val ratingFragment = RateSellerDialogFragment(this, viewModel.itemInfo.value?.owner!!)
-                    ratingFragment.show(this.parentFragmentManager, "sellerRating")
                 }
             }
 
@@ -292,7 +293,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
 
     /// region RateSellerDialog
 
-    override fun onDialogPositiveClick(dialog: DialogFragment, rating: Float?, ownerId: String) {
+    override fun onDialogPositiveClick(dialog: DialogFragment, rating: Float?, ownerId: String, comment : String?) {
 
         Snackbar.make(requireView(), "Item bought! Thanks for rating and congratulations:)", Snackbar.LENGTH_LONG)
             .setAction("Action", null)
@@ -303,18 +304,39 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
                 .get()
                 .addOnSuccessListener { doc ->
+                    var updateReview = false
+
+                    val newReview : Review? = if(comment != "") {
+                                                    Review(FirebaseAuth.getInstance().currentUser?.uid!!,
+                                                        FirebaseAuth.getInstance().currentUser?.displayName!!,
+                                                        rating,
+                                                        comment)
+                                                }
+                                            else
+                                                null
+
                     val newRating = if(doc.data == null){
+                                        updateReview = true
                                         Rating(rating / 1.0, 1)
                                     }
                                     else {
-                                        val currentRating = Rating.fromMapToObj(doc.data)
+                                        val currentRating = Rating.fromMapToObj(doc.data!!["rating"] as Map<String, Any>?)
                                         val newTotal = currentRating.ratingsReceived + 1
                                         val newMean = (currentRating.meanRating + rating) / newTotal
                                         Rating(newMean, newTotal)
                                     }
-                    //Update db with new rating
-                    FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
-                        .set(newRating)
+                    //Update db with new rating and new review if comment was left
+                    if(updateReview)
+                        FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
+                            .set(hashMapOf(Pair<String, Rating>("rating", newRating)))
+                    else
+                        FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
+                            .update("rating", newRating)
+
+                    newReview?.apply {
+                            FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
+                                .update("reviews", FieldValue.arrayUnion(this))
+                    }
                 }
         }
     }

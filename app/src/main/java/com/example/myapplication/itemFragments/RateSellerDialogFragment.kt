@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.app.SearchManager
 import android.media.Rating
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.RatingBar
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
@@ -17,7 +18,7 @@ class RateSellerDialogFragment(itemDetailsFragment: ItemDetailsFragment, val own
     private var listener: RateSellerListener = itemDetailsFragment
 
     interface RateSellerListener {
-        fun onDialogPositiveClick(dialog: DialogFragment, rating: Float?, ownerId: String)
+        fun onDialogPositiveClick(dialog: DialogFragment, rating: Float?, ownerId: String, comment: String?)
         fun onDialogNegativeClick(dialog: DialogFragment)
     }
 
@@ -31,7 +32,8 @@ class RateSellerDialogFragment(itemDetailsFragment: ItemDetailsFragment, val own
             builder.setPositiveButton("OK")
                 { _, _ ->
                     val ratingBar = ratingView.findViewById<RatingBar>(R.id.ratingBar)
-                    listener.onDialogPositiveClick(this, ratingBar.rating, ownerId)
+                    val commentView = ratingView.findViewById<EditText>(R.id.commentText)
+                    listener.onDialogPositiveClick(this, ratingBar.rating, ownerId, commentView.text.toString())
                 }
                 .setNegativeButton("Not now")
                 { _, _ ->

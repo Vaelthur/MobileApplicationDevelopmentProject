@@ -15,4 +15,10 @@
         app:showAsAction="always"
         android:title="Filter Item" />
 
+    <item
+        android:id="@+id/refresh"
+        android:icon="@drawable/refresh"
+        app:showAsAction="ifRoom"
+        android:title="Refresh" />
+
 </menu>

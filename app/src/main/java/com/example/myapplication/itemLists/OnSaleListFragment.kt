@@ -2,11 +2,14 @@ package com.example.myapplication.itemLists
 
 import android.app.SearchManager
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -75,6 +78,23 @@ class OnSaleListFragment : Fragment(),
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu, menu)
+
+        val refreshOption = menu.findItem(R.id.refresh)
+        refreshOption.setOnMenuItemClickListener {
+            itemListViewModel.refresh()
+            true
+        }
+
+        itemListViewModel.needRefresh.observe(requireActivity(), Observer {
+             if(it){
+                refreshOption.isVisible = true
+                refreshOption.isEnabled = true
+            }
+            else{
+                refreshOption.isVisible = false
+                refreshOption.isEnabled = false
+            }
+        })
         searchHandler(menu)
     }
 
