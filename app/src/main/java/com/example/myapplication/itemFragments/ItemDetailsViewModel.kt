@@ -82,10 +82,10 @@ class ItemDetailsViewModel : ViewModel() {
                 boughtLiveData.value = mutableListOf()
                 val bought = mutableListOf<FireItem>()
 
-                if (snapshot["users_bought"] != null) {
-                    val usersID = (snapshot.data?.get("users_bought")) as ArrayList<String>
-                    for(item in usersID) {
-                        FirebaseFirestore.getInstance().collection("users").document(item).get().addOnCompleteListener {
+                if (snapshot["bought"] != null) {
+                    val itemsID = (snapshot.data?.get("bought")) as ArrayList<String>
+                    for(item in itemsID) {
+                        FirebaseFirestore.getInstance().collection("items").document(item).get().addOnCompleteListener {
                             val itemInfo = FireItem.fromMapToObj(it.result?.data)
                             bought.add(itemInfo)
                             boughtLiveData.value = bought

@@ -5,6 +5,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -14,9 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.main.Helpers
 import com.example.myapplication.R
-import com.example.myapplication.data.FireItem
-import com.example.myapplication.data.ITEMSTATUS
-import com.example.myapplication.data.ItemStatusCreator
+import com.example.myapplication.data.*
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
@@ -37,7 +36,7 @@ import kotlinx.android.synthetic.main.item_details_fragment.item_subcategory_val
 import kotlinx.android.synthetic.main.item_details_fragment.item_title
 
 
-class ItemDetailsFragment : Fragment() {
+class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListener {
 
     private lateinit var viewModel: ItemDetailsViewModel
     private var myItems : Boolean? = false
@@ -230,13 +229,13 @@ class ItemDetailsFragment : Fragment() {
                             viewModel.itemInfo.value?.id!!,
                             NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
 
-
-                    Snackbar.make(v, "Item bought, congratulations:)", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show()
+                    //Rate seller
+                    val ratingFragment = RateSellerDialogFragment(this, viewModel.itemInfo.value?.owner!!)
+                    ratingFragment.show(this.parentFragmentManager, "sellerRating")
                 }
             }
 
+            //Viewmodel observer
             viewModel.itemInfo.observe(requireActivity(), Observer {
                 item_title.text = it.title
                 item_price.text = it.price
@@ -290,5 +289,42 @@ class ItemDetailsFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    /// region RateSellerDialog
+
+    override fun onDialogPositiveClick(dialog: DialogFragment, rating: Float?, ownerId: String) {
+
+        Snackbar.make(requireView(), "Item bought! Thanks for rating and congratulations:)", Snackbar.LENGTH_LONG)
+            .setAction("Action", null)
+            .show()
+
+        //Update rating of seller
+        rating?.let {
+            FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
+                .get()
+                .addOnSuccessListener { doc ->
+                    val newRating = if(doc.data == null){
+                                        Rating(rating / 1.0, 1)
+                                    }
+                                    else {
+                                        val currentRating = Rating.fromMapToObj(doc.data)
+                                        val newTotal = currentRating.ratingsReceived + 1
+                                        val newMean = (currentRating.meanRating + rating) / newTotal
+                                        Rating(newMean, newTotal)
+                                    }
+                    //Update db with new rating
+                    FirebaseFirestore.getInstance().collection("ratings").document(ownerId)
+                        .set(newRating)
+                }
+        }
+    }
+
+    override fun onDialogNegativeClick(dialog: DialogFragment) {
+        Snackbar.make(requireView(), "Item bought, congratulations:)", Snackbar.LENGTH_LONG)
+            .setAction("Action", null)
+            .show()
+    }
+
+    /// endregion
 
 }
