@@ -213,6 +213,11 @@ class ItemDetailsFragment : Fragment() {
                     buyButton.isClickable = false
                     buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
 
+                    // add bought item to db
+                    FirebaseFirestore.getInstance().collection("users")
+                        .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                        .update("bought", FieldValue.arrayUnion(viewModel.itemInfo.value?.id))
+
                     //Notify owner that item has been sold
                     val notificationStore : NotificationStore =
                         NotificationStore()

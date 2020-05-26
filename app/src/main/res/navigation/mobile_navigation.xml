@@ -75,9 +75,16 @@
         <action
             android:id="@+id/action_onSaleListFragment_to_itemsOfInterestListFragment"
             app:destination="@id/itemsOfInterestListFragment" />
+        <action
+            android:id="@+id/action_onSaleListFragment_to_itemBoughtFragment"
+            app:destination="@id/itemBoughtFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemsOfInterestListFragment"
         android:name="com.example.myapplication.itemLists.ItemsOfInterestListFragment"
         android:label="Favorite Items" />
+    <fragment
+        android:id="@+id/itemBoughtFragment"
+        android:name="com.example.myapplication.itemLists.ItemBoughtFragment"
+        android:label="ItemBoughtFragment" />
 </navigation>

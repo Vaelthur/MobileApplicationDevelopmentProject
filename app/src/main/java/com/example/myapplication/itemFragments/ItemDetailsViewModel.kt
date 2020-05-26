@@ -14,6 +14,7 @@ class ItemDetailsViewModel : ViewModel() {
     var itemInfo = MutableLiveData<FireItem>()
     var tempItemInfo = MutableLiveData<FireItem>()
     var interestedLiveData = MutableLiveData<List<AccountInfo>>()
+    var boughtLiveData = MutableLiveData<List<FireItem>>()
 
     fun setItemInfo(itemJson: JSONObject) {
         itemInfo.value = createItemInfoFromJSON(itemJson)
@@ -70,6 +71,28 @@ class ItemDetailsViewModel : ViewModel() {
                 }
             }
 
+        }
+    }
+
+    fun boughtItems(userId : String) {
+        FirebaseFirestore.getInstance().collection("users").document(userId).addSnapshotListener {
+                snapshot, firestoreException ->
+
+            if(snapshot != null){
+                boughtLiveData.value = mutableListOf()
+                val bought = mutableListOf<FireItem>()
+
+                if (snapshot["users_bought"] != null) {
+                    val usersID = (snapshot.data?.get("users_bought")) as ArrayList<String>
+                    for(item in usersID) {
+                        FirebaseFirestore.getInstance().collection("users").document(item).get().addOnCompleteListener {
+                            val itemInfo = FireItem.fromMapToObj(it.result?.data)
+                            bought.add(itemInfo)
+                            boughtLiveData.value = bought
+                        }
+                    }
+                }
+            }
         }
     }
 }
