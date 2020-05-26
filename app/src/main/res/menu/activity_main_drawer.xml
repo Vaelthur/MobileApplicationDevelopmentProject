@@ -23,7 +23,7 @@
             app:showAsAction="always" />
 
         <item
-            android:id="@+id/ItemBoughtFragment"
+            android:id="@+id/itemBoughtFragment"
             android:title="Bought Items"
             app:showAsAction="always"/>
 

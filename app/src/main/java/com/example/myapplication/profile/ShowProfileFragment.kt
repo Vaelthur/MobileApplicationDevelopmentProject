@@ -3,17 +3,17 @@ package com.example.myapplication.profile
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.example.myapplication.*
+import com.example.myapplication.R
 import com.example.myapplication.data.AccountInfo
 import com.example.myapplication.data.AccountInfoFactory
 import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
+import com.google.android.gms.maps.MapFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -93,6 +93,7 @@ class ShowProfileFragment : Fragment() {
                     .into(profile_picture)
             })
         }
+
     }
 
     override fun onDestroyView() {
