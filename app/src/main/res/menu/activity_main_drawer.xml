@@ -5,18 +5,28 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_itemList"
-            android:icon="@drawable/myitem_icon"
-            android:title="@string/items" />
+
         <item
             android:id="@+id/showProfileFragment"
             android:icon="@drawable/profile_icon"
             android:title="@string/profile" />
 
+        <item
+            android:id="@+id/nav_itemList"
+            android:icon="@drawable/myitem_icon"
+            android:title="@string/items" />
+
+        <item
+            android:id="@+id/itemsOfInterestListFragment"
+            android:icon="@android:drawable/btn_star"
+            android:title="Favorite Items"
+            app:showAsAction="always" />
+
         <item android:title="@string/logout"
             android:id="@+id/logout_action"
             android:icon="@drawable/logout_icon"
             app:showAsAction="always"/>
+
+
     </group>
 </menu>

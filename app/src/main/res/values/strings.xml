@@ -60,5 +60,6 @@
 
     <string name="btn_loggedout">Uh-oh! You need to sign in to see items on sale.</string>
     <string name="emptylist">Ooops! Looks like you don\'t have any items.</string>
+    <string name="emptyfavlist">You do not have favorite items. Go explore!</string>
 
 </resources>

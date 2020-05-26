@@ -72,5 +72,12 @@
         <action
             android:id="@+id/action_onSaleListFragment_to_nav_itemList"
             app:destination="@id/nav_itemList" />
+        <action
+            android:id="@+id/action_onSaleListFragment_to_itemsOfInterestListFragment"
+            app:destination="@id/itemsOfInterestListFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/itemsOfInterestListFragment"
+        android:name="com.example.myapplication.itemLists.ItemsOfInterestListFragment"
+        android:label="Favorite Items" />
 </navigation>
