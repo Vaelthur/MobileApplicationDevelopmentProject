@@ -49,6 +49,7 @@
     <string name="full_name">Full Name</string>
     <string name="username">username</string>
     <string name="email">email@domain.com</string>
+    <string name="rating">Rating: </string>
 
     <string name="full_name_header">Full name:</string>
     <string name="username_header">Username:</string>
