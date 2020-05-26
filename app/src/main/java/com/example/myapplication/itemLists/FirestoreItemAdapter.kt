@@ -25,8 +25,6 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>, filterM
 
     var userUid : String =     (options.owner as MainActivity).getAuth().currentUser!!.uid
 
-    var filter = filterMyItems
-
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
