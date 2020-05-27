@@ -13,6 +13,8 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
+import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -83,6 +85,10 @@ class EditProfileFragment : Fragment() {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
         }
 
+        // check location services are enabled => TODO: make it a popup
+        if (!isLocationEnabled(requireContext()))
+            Helpers.makeSnackbar(view, "Please enable location services")
+
         // get current location & update
         // TODO: do this in a async way and update field *before* editext are populated
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
@@ -94,7 +100,7 @@ class EditProfileFragment : Fragment() {
                 val  userAddress = address[0].locality.toString() //This is the city
                 // set value in viewModel
                 showProfileViewModel.accountInfo.value?.location = userAddress
-            }
+            } else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
         }
 
         if(showProfileViewModel.tempAccountInfo.value == null) {
@@ -148,6 +154,29 @@ class EditProfileFragment : Fragment() {
     }
 
 ///endregion
+
+    fun isLocationEnabled(context: Context): Boolean {
+        var locationMode = 0
+        val locationProviders: String
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            locationMode = try {
+                Settings.Secure.getInt(
+                    context.contentResolver,
+                    Settings.Secure.LOCATION_MODE
+                )
+            } catch (e: Settings.SettingNotFoundException) {
+                e.printStackTrace()
+                return false
+            }
+            locationMode != Settings.Secure.LOCATION_MODE_OFF
+        } else {
+            locationProviders = Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED
+            )
+            !TextUtils.isEmpty(locationProviders)
+        }
+    }
 
     private fun onImageButtonClickEvent(it: View) {
         registerForContextMenu(it)
