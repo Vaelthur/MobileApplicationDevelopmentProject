@@ -45,8 +45,6 @@ class OnSaleListFragment : Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         // set on click listener for login button - visible when we are logged out
         requireActivity().findViewById<Button>(R.id.btn_list_log).setOnClickListener { v ->
             requireActivity().findNavController(R.id.nav_host_fragment).navigate(
@@ -61,7 +59,7 @@ class OnSaleListFragment : Fragment(),
             itemListViewModel =
                 ViewModelProviders.of(requireActivity()).get(ItemListViewModel::class.java)
 
-            itemListViewModel.listenToItems()
+            itemListViewModel.listenToItems(view)
 
             itemListViewModel.liveItems.observe(requireActivity(), Observer {
                 val recyclerView: RecyclerView? = view.findViewById(R.id.recyclerItemList)
@@ -83,7 +81,7 @@ class OnSaleListFragment : Fragment(),
 
         val refreshOption = menu.findItem(R.id.refresh)
         refreshOption.setOnMenuItemClickListener {
-            itemListViewModel.refresh()
+            itemListViewModel.refresh(requireView())
             true
         }
 

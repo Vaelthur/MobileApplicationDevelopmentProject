@@ -1,15 +1,18 @@
 package com.example.myapplication.itemLists
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
-import androidx.lifecycle.*
-import com.example.myapplication.data.*
-import com.example.myapplication.main.MainActivity
-import com.google.common.collect.Iterables.removeAll
+import android.view.View
+import android.widget.ProgressBar
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.data.FireItem
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import io.grpc.InternalChannelz.id
+import kotlinx.android.synthetic.main.fragment_on_sale_list.*
+import com.example.myapplication.R
 
 class ItemListViewModel constructor(application: Application) : AndroidViewModel(application) {
 
@@ -21,10 +24,10 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
         firestore.firestoreSettings = FirebaseFirestoreSettings.Builder().build()
     }
 
-    fun listenToItems(instantRefresh : Boolean = true){
+    fun listenToItems(view : View, instantRefresh : Boolean = true){
 
         if(instantRefresh)
-            refresh()
+            refresh(view)
 
         FirebaseAuth.getInstance().currentUser?.let {
 
@@ -38,8 +41,14 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
         }
     }
 
-    fun refresh(){
+    fun refresh(view : View){
         FirebaseAuth.getInstance().currentUser?.let {
+
+            val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerItemList)
+            recyclerView.visibility = View.GONE
+
+            val spinner = view.findViewById<ProgressBar>(R.id.progressBar)
+            spinner.visibility = View.VISIBLE
 
             firestore.collection("items").get()
                 .addOnSuccessListener{ snapshot ->
@@ -53,7 +62,11 @@ class ItemListViewModel constructor(application: Application) : AndroidViewModel
                         }
                     }
 
+                    val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerItemList)
+                    val spinner = view.findViewById<ProgressBar>(R.id.progressBar)
+                    spinner.visibility = View.GONE
                     itemListLiveData.value = itemList
+                    recyclerView.visibility = View.VISIBLE
                     needRefresh.value = false
                 }
             }
