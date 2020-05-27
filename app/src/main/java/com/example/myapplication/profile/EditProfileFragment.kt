@@ -6,6 +6,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,6 +16,7 @@ import android.provider.MediaStore
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -22,11 +25,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.example.myapplication.*
+import com.example.myapplication.R
 import com.example.myapplication.data.AccountInfo
 import com.example.myapplication.data.AccountInfoFactory
 import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -46,6 +51,11 @@ class EditProfileFragment : Fragment() {
     private val REQUEST_IMAGE_GALLERY = 2
     private val PERMISSION_CODE_CAMERA = 1000
     private val PERMISSION_CODE_GALLERY = 1001
+
+    private val PERMISSION_CODE_LOC = 100
+    lateinit private var fusedLocationProviderClient: FusedLocationProviderClient
+
+    private var userAddress = "City"
 
     private lateinit var showProfileViewModel: ShowProfileViewModel
 
@@ -67,6 +77,25 @@ class EditProfileFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // check location permission
+
+        if(ContextCompat.checkSelfPermission(requireActivity() as MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
+        }
+
+        // get current location & update
+        // TODO: do this in a async way and update field *before* editext are populated
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
+
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+            if (it != null) {
+                val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+                val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
+                val  userAddress = address[0].locality.toString() //This is the city
+                // set value in viewModel
+                showProfileViewModel.accountInfo.value?.location = userAddress
+            }
+        }
 
         if(showProfileViewModel.tempAccountInfo.value == null) {
             setShowProfileViewModel()
