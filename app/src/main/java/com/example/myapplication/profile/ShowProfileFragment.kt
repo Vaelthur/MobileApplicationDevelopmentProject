@@ -100,11 +100,12 @@ class ShowProfileFragment : Fragment() {
             FirebaseFirestore.getInstance().collection("ratings").document(userId!!)
                 .get()
                 .addOnSuccessListener { doc ->
-                    userRatingBar.rating = doc?.let {
-                        val rating = Rating.fromMapToObj(it["rating"] as Map<String, Any>?)
-                        rating.meanRating.toFloat()
-                    } ?: 0.0F
-
+                    if(doc.data != null) {
+                        userRatingBar.rating = doc?.let {
+                            val rating = Rating.fromMapToObj(it["rating"] as Map<String, Any>?)
+                            rating.meanRating.toFloat()
+                        } ?: 0.0F
+                    }
                 }
         }
 

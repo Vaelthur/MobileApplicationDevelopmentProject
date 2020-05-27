@@ -53,7 +53,7 @@ class ItemDetailsViewModel : ViewModel() {
             FirebaseFirestore.getInstance().collection("items").document(itemId).addSnapshotListener {
                     snapshot, firestoreException ->
 
-                if(snapshot != null){
+                if(snapshot != null && snapshot.data != null){
                     interestedLiveData.value = mutableListOf()
                     val interested = mutableListOf<AccountInfo>()
 
@@ -78,7 +78,7 @@ class ItemDetailsViewModel : ViewModel() {
         FirebaseFirestore.getInstance().collection("users").document(userId).addSnapshotListener {
                 snapshot, firestoreException ->
 
-            if(snapshot != null){
+            if(snapshot != null && snapshot.data != null){
                 boughtLiveData.value = mutableListOf()
                 val bought = mutableListOf<FireItem>()
 

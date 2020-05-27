@@ -1,10 +1,12 @@
 package com.example.myapplication.itemFragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -34,6 +36,8 @@ import kotlinx.android.synthetic.main.item_details_fragment.item_picture
 import kotlinx.android.synthetic.main.item_details_fragment.item_price
 import kotlinx.android.synthetic.main.item_details_fragment.item_subcategory_value
 import kotlinx.android.synthetic.main.item_details_fragment.item_title
+import org.w3c.dom.Text
+import java.io.Serializable
 
 
 class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListener {
@@ -63,6 +67,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                     inflater.inflate(R.layout.item_details_buy_fragment, container, false)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
@@ -168,6 +173,25 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             //Other person items
 
             //set listeners
+            //Set link to seller profile
+            val sellerUsernameView = view.findViewById<TextView>(R.id.seller_usr)
+            sellerUsernameView.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+
+                    FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", viewModel.itemInfo.value?.owner)
+                        .get()
+                        .addOnCompleteListener {
+                            if(it.result != null){
+                                val accountInfo = AccountInfoFactory.fromMapToObj(it.result?.documents?.first()?.data)
+                                val accountBundle = Bundle(2)
+                                accountBundle.putSerializable("account_info", accountInfo as Serializable?)
+                                accountBundle.putBoolean("myprofile", false)
+                                view.findNavController().navigate(R.id.showProfileFragment, accountBundle)
+                            }
+                        }
+                }
+            })
+
             val fab: View = requireActivity().findViewById(R.id.fab_star)
             fab.setOnClickListener { view ->
 

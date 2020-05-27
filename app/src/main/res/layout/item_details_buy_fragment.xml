@@ -296,6 +296,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/username"
+                    android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintBaseline_toBaselineOf="@id/seller"
                     app:layout_constraintStart_toStartOf="@id/details_value_guideline"
                     app:layout_constraintEnd_toEndOf="parent"
