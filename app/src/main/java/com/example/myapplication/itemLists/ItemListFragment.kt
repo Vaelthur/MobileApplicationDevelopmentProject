@@ -83,6 +83,8 @@ class ItemListFragment : Fragment() {
 
     private fun checkEmptyQueryResult(query: Query, root : View) {
 
+        root.findViewById<TextView>(R.id.empty_list_msg).visibility = View.GONE
+
         query.get()
             .addOnSuccessListener { listItemDocument ->
                 if (listItemDocument.isEmpty) {

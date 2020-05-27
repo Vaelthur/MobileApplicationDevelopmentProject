@@ -38,6 +38,52 @@
         app:layout_constraintVertical_weight="2">
 
         <TextView
+            android:id="@+id/reviews_cnt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="0"
+            app:layout_constraintStart_toEndOf="@+id/total_reviews"
+            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+
+        <TextView
+            android:id="@+id/reviews_mean"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="0"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userRatingBar"
+            app:layout_constraintTop_toTopOf="@+id/userRatingBar" />
+
+        <TextView
+            android:id="@+id/total_reviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/totalRev"
+            app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
+            app:layout_constraintStart_toStartOf="@+id/userRatingBar"
+            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+
+        <RatingBar
+            android:id="@+id/userRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:isIndicator="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/textViewFullNameShowProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="34dp" />
+            app:layout_constraintGuide_begin="101dp" />
 
         <TextView
             android:id="@+id/textViewUserLocationShowProfile"

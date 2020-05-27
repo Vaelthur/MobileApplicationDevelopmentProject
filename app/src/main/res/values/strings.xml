@@ -55,6 +55,7 @@
     <string name="username_header">Username:</string>
     <string name="email_header">Email:</string>
     <string name="location_header">Location:</string>
+    <string name="totalRev">Total reviews:  </string>
 
     <string name="edit">Edit</string>
     <string name="logout">Logout</string>
