@@ -79,6 +79,8 @@ class OnSaleListFragment : Fragment(),
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.search_menu, menu)
 
+        itemListViewModel = ViewModelProviders.of(requireActivity()).get(ItemListViewModel::class.java)
+
         val refreshOption = menu.findItem(R.id.refresh)
         refreshOption.setOnMenuItemClickListener {
             itemListViewModel.refresh()
