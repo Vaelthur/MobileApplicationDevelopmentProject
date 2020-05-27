@@ -45,7 +45,7 @@
             android:layout_marginTop="8dp"
             android:text="0"
             app:layout_constraintStart_toEndOf="@+id/total_reviews"
-            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+            app:layout_constraintBaseline_toBaselineOf="@+id/total_reviews"/>
 
         <TextView
             android:id="@+id/reviews_mean"
@@ -67,6 +67,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:text="@string/totalRev"
+            app:layout_constraintBottom_toTopOf="@+id/HorizontalGuideShowProfile"
             app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
             app:layout_constraintStart_toStartOf="@+id/userRatingBar"
             app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
@@ -81,7 +82,8 @@
             android:isIndicator="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/total_reviews"/>
 
         <TextView
             android:id="@+id/textViewFullNameShowProfile"
@@ -123,15 +125,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="101dp" />
+            app:layout_constraintGuide_percent="0.20" />
 
         <TextView
             android:id="@+id/textViewUserLocationShowProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="@string/location"
             android:layout_marginTop="32dp"
+            android:text="@string/location"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
             app:layout_constraintStart_toStartOf="@id/textViewFullNameShowProfile"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailShowProfile" />
 
@@ -141,6 +144,22 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.08" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottomGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/userLocation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/VerticalGuideShowProfile"
+            app:layout_constraintTop_toTopOf="@+id/bottomGuideline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

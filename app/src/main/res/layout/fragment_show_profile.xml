@@ -88,14 +88,6 @@
             app:layout_constraintStart_toStartOf="@id/textViewFullNameShowProfile"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailShowProfile" />
 
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/mapView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="@+id/VerticalGuideShowProfile"
-            app:layout_constraintTop_toBottomOf="@+id/textViewUserLocationShowProfile" />
-
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/VerticalGuideShowProfile"
             android:layout_width="wrap_content"
@@ -148,6 +140,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/userRatingBar"
             app:layout_constraintTop_toTopOf="@+id/userRatingBar" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/userLocation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserLocationShowProfile" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

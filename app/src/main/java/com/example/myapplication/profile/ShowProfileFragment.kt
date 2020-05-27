@@ -3,7 +3,6 @@ package com.example.myapplication.profile
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.RatingBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -15,14 +14,20 @@ import com.example.myapplication.data.AccountInfoFactory
 import com.example.myapplication.data.Rating
 import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapFragment
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_show_profile.*
+import kotlin.concurrent.fixedRateTimer
 
 
-class ShowProfileFragment : Fragment() {
+class ShowProfileFragment : Fragment(), OnMapReadyCallback {
 
     private val RC_SIGN_IN = 343
     private lateinit var showProfileViewModel: ShowProfileViewModel
@@ -116,6 +121,10 @@ class ShowProfileFragment : Fragment() {
                 }
         }
 
+        val mapView = view.findViewById<MapView>(R.id.userLocation)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+        mapView.getMapAsync(this)
     }
 
     override fun onDestroyView() {
@@ -173,5 +182,15 @@ class ShowProfileFragment : Fragment() {
         accountInfo?.let {
             Helpers.setNavHeaderView(headerView, it.fullname!!, it.email!!, it.profilePicture!!)
         }
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+
+        //for fun
+        map!!.addMarker(
+            MarkerOptions()
+                .position(LatLng(0.0, 0.0))
+                .title("Marker")
+        )
     }
 }

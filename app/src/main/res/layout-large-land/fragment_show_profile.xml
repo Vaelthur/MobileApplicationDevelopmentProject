@@ -29,7 +29,8 @@
             android:layout_marginTop="8dp"
             android:text="0"
             app:layout_constraintStart_toEndOf="@+id/total_reviews"
-            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+            app:layout_constraintTop_toBottomOf="@+id/userRatingBar"
+            app:layout_constraintBaseline_toBaselineOf="@+id/total_reviews"/>
 
         <TextView
             android:id="@+id/reviews_mean"
@@ -49,9 +50,10 @@
             android:layout_width="87dp"
             android:layout_height="15dp"
             android:text="@string/totalRev"
+            app:layout_constraintTop_toBottomOf="@+id/userRatingBar"
+            app:layout_constraintBottom_toTopOf="@+id/topGuideline"
             app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
-            app:layout_constraintStart_toStartOf="@+id/userRatingBar"
-            tools:layout_editor_absoluteY="67dp" />
+            app:layout_constraintStart_toStartOf="@+id/userRatingBar" />
 
         <RatingBar
             android:id="@+id/userRatingBar"
@@ -61,6 +63,7 @@
             android:clickable="false"
             android:focusable="false"
             android:isIndicator="true"
+            app:layout_constraintBottom_toTopOf="@+id/total_reviews"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -103,7 +106,7 @@
             android:layout_height="wrap_content"
             android:text="@string/location"
             android:textSize="30sp"
-            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailShowProfile" />
 
@@ -124,11 +127,21 @@
             app:layout_constraintGuide_percent="0.20034246" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline3"
+            android:id="@+id/bottom_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.6" />
+
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/userLocation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
