@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.*
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
@@ -291,7 +293,14 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
 
         FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", ownerId)
             .get()
-            .addOnSuccessListener { documents ->  seller_usr.text =  documents.first()["username"] as String? }
+            .addOnSuccessListener { documents ->
+                //Make text underlined because it's a link
+                val contentText = documents.first()["username"] as String?
+                val content = SpannableString(contentText)
+                content.setSpan(UnderlineSpan(), 0, content.length, 0)
+                seller_usr.text = content
+                seller_usr.setTextColor(Color.BLUE)
+            }
     }
 
     override fun onDestroyView() {
