@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -71,6 +72,8 @@ class OnSaleListFragment : Fragment(),
                     checkEmptyList(it as MutableList<FireItem>)
             })
         }
+        else
+            view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.GONE
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
