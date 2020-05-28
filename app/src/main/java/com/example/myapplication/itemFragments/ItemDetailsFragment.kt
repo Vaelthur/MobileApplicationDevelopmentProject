@@ -23,6 +23,7 @@ import com.example.myapplication.R
 import com.example.myapplication.data.*
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -51,6 +52,7 @@ import java.io.Serializable
 class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListener, OnMapReadyCallback {
 
     private lateinit var viewModel: ItemDetailsViewModel
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var myItems : Boolean? = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -394,7 +396,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
 
     override fun onMapReady(map: GoogleMap?) {
         map!!.addMarker(MarkerOptions().position(LatLng(34.6,12.1)).title("prova"))
-
+        requireActivity()
     }
 
     /// endregion

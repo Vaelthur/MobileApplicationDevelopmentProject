@@ -40,20 +40,18 @@
             android:id="@+id/textViewFullNameEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
             android:text="@string/full_name_header"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewUsernameEditProfile"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintTop_toTopOf="@+id/HorizontalGuideEditProfile"
             app:layout_constraintVertical_bias="0.48000002"
-            app:layout_constraintVertical_chainStyle="spread" />
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
         <TextView
             android:id="@+id/textViewUserEmailEditProfile"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginBottom="64dp"
+            android:layout_height="wrap_content"
             android:text="@string/email_header"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewUserLocationEditProfile"
@@ -64,7 +62,6 @@
             android:id="@+id/textViewUsernameEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="64dp"
             android:text="@string/username_header"
             android:textSize="30sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewUserEmailEditProfile"
@@ -76,15 +73,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="34dp" />
+            app:layout_constraintGuide_percent=".05" />
 
         <TextView
             android:id="@+id/textViewUserLocationEditProfile"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="64dp"
+            android:layout_height="wrap_content"
             android:text="@string/location_header"
             android:textSize="30sp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_guideline"
             app:layout_constraintEnd_toEndOf="@+id/textViewUserEmailEditProfile"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailEditProfile" />
 
@@ -150,6 +147,34 @@
             app:barrierDirection="right"
             app:constraint_referenced_ids="textViewFullNameEditProfile,textViewUserEmailEditProfile,textViewUserLocationEditProfile,textViewUsernameEditProfile"
             tools:layout_editor_absoluteX="379dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/bottom_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <Button
+            android:id="@+id/buttonLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Locate ME"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/userLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
+
+        <com.example.myapplication.CustomMapView
+            android:id="@+id/userLocation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLocation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

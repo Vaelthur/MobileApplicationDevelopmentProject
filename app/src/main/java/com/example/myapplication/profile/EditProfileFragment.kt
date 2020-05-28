@@ -28,6 +28,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
+import com.example.myapplication.CustomMapView
 import com.example.myapplication.R
 import com.example.myapplication.data.AccountInfo
 import com.example.myapplication.data.AccountInfoFactory
@@ -35,6 +36,12 @@ import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdate
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -47,7 +54,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class EditProfileFragment : Fragment() {
+class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
     //requests and permissions codes
     private val REQUEST_IMAGE_CAPTURE = 1
@@ -76,6 +83,7 @@ class EditProfileFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
         return view
     }
 
@@ -124,7 +132,7 @@ class EditProfileFragment : Fragment() {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
             }
 
-            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
+
 
             var done = false
 
@@ -144,12 +152,18 @@ class EditProfileFragment : Fragment() {
                 }
             }. addOnCompleteListener {
                 editViewUserLocationEditProfile.setText(showProfileViewModel.tempAccountInfo.value?.location)
+
             }. addOnFailureListener {
                 if (!isLocationEnabled(requireContext()))
                     Helpers.makeSnackbar(view, "Please enable location services")
                 else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
             }
         }
+
+        val mapView = view.findViewById<CustomMapView>(R.id.userLocation)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+        mapView.getMapAsync(this)
     }
 
     override fun onCreateContextMenu(
@@ -522,6 +536,13 @@ class EditProfileFragment : Fragment() {
 
     /// endregion
 
+    override fun onMapReady(map: GoogleMap?) {
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+            val myPos = LatLng(it.latitude,it.longitude)
+            map!!.addMarker(MarkerOptions().position(myPos))
+            map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
+        }
+    }
 }
 
 

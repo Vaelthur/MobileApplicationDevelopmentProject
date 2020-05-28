@@ -8,10 +8,10 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/info_container_layout"
+    <ScrollView
+        android:id="@+id/info_container"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,12 +19,18 @@
         app:layout_constraintHorizontal_weight="2"
         app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/info_container_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/textViewFullNameEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="@string/full_name_header"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewUserEmailEditProfile"
@@ -36,6 +42,7 @@
             android:id="@+id/textViewUserEmailEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="@string/username_header"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewUsernameEditProfile"
@@ -46,6 +53,7 @@
             android:id="@+id/textViewUsernameEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="@string/email_header"
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@+id/textViewUserLocationEditProfile"
@@ -75,14 +83,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.2" />
+            app:layout_constraintGuide_percent="0.1" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/bottom_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.4" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline4"
@@ -135,7 +143,29 @@
             app:layout_constraintBaseline_toBaselineOf="@+id/textViewUserLocationEditProfile"
             app:layout_constraintStart_toEndOf="@+id/textViewUserLocationEditProfile" />
 
+        <com.example.myapplication.CustomMapView
+            android:id="@+id/userLocation"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonLocation" />
+
+        <Button
+            android:id="@+id/buttonLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Locate Me"
+            app:layout_constraintBottom_toTopOf="@+id/userLocation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_picture"
@@ -146,7 +176,7 @@
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/info_container_layout"
+        app:layout_constraintEnd_toStartOf="@+id/info_container"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
