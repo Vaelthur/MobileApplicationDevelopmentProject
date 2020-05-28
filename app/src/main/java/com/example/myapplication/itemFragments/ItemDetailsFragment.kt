@@ -17,6 +17,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.myapplication.CustomMapView
 import com.example.myapplication.main.Helpers
 import com.example.myapplication.R
 import com.example.myapplication.data.*
@@ -292,7 +293,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
         }
 
         //update map
-        val mapView = view.findViewById<MapView>(R.id.itemLocation)
+        val mapView = view.findViewById<CustomMapView>(R.id.itemLocation)
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
         mapView.getMapAsync(this)
