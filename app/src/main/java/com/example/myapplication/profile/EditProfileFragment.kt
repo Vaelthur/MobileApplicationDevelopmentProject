@@ -550,6 +550,12 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
             map.clear()
             map.addMarker(MarkerOptions().position(newPos))
 
+            val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+            val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
+            val  userAddress = address[0].locality.toString() //This is the city
+            // set value in viewModel
+            showProfileViewModel.tempAccountInfo.value?.location = userAddress
+            editViewUserLocationEditProfile.setText(showProfileViewModel.tempAccountInfo.value?.location)
             //move camera with style
             moveToCurrentLocation(map,newPos)
         }
