@@ -5,6 +5,7 @@ import android.net.Uri
 import android.widget.EditText
 import com.example.myapplication.main.MainActivity
 import com.example.myapplication.profile.EditProfileFragment
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import org.json.JSONObject
 import java.io.Serializable
@@ -16,6 +17,7 @@ data class AccountInfo (
     var username: String? = null,
     var email: String? = null,
     var location: String? = null,
+    var coord: GeoPoint? = null,
     var profilePicture: String? = "android.resource://com.example.myapplication/drawable/default_profile_picture")
     : Serializable { }
 
@@ -60,6 +62,8 @@ class AccountInfoFactory(){
             val location = StringBuffer(getEditViewText(editProfileFragment.editViewUserLocationEditProfile)).toString()
             val profilePicture = getProfilePicturePath(editProfileFragment).toString()
             val id = (editProfileFragment.requireActivity() as MainActivity).getAuth().currentUser?.uid
+            val coord = GeoPoint(10.0,10.0)
+            // TODO: start a getlastlocation to get real coords
 
 
             return AccountInfo(
@@ -68,6 +72,7 @@ class AccountInfoFactory(){
                 username,
                 email,
                 location,
+                coord,
                 profilePicture
             )
         }
@@ -79,6 +84,7 @@ class AccountInfoFactory(){
                 hash?.get("username") as String?,
                 hash?.get("email") as String?,
                 hash?.get("location") as String?,
+                hash?.get("coord") as GeoPoint?,
                 hash?.get("profilePicture") as String?
             )
         }

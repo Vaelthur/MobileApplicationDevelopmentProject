@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.fragment_show_profile.*
 import kotlin.concurrent.fixedRateTimer
 
@@ -203,12 +204,17 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(map: GoogleMap?) {
-
         //for fun
-        map!!.addMarker(
-            MarkerOptions()
-                .position(LatLng(0.0, 0.0))
-                .title("Marker")
-        )
+        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+            .addOnSuccessListener {
+                showProfileViewModel.accountInfo.value?.coord = it["coord"] as GeoPoint
+                map!!.addMarker(
+                        MarkerOptions()
+                            .position(LatLng(showProfileViewModel.accountInfo.value?.coord?.latitude!!, showProfileViewModel.accountInfo.value?.coord?.longitude!!))
+                            .title("Your are here")
+                        )
+            }
+
+
     }
 }

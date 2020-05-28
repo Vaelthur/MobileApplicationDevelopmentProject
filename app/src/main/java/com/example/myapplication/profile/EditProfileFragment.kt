@@ -44,6 +44,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.coroutines.runBlocking
@@ -132,17 +133,13 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
             }
 
-
-
-            var done = false
-
-
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
                     val geoCoder = Geocoder(requireContext(), Locale.getDefault())
                     val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
                     val  userAddress = address[0].locality.toString() //This is the city
                     // set value in viewModel
+                    showProfileViewModel.tempAccountInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
                     showProfileViewModel.tempAccountInfo.value?.location = userAddress
 
                 } else {
@@ -380,7 +377,8 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
         hideSoftKeyboard(this.activity)
 
-        val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        //val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
+        val accountInfo = showProfileViewModel.tempAccountInfo.value!!
 
         if(Helpers.someEmptyAccountFields(accountInfo)) {
             Helpers.makeSnackbar(this.requireView(), "Fill all the fields")
@@ -415,6 +413,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                             accountInfo.username,
                             accountInfo.email,
                             accountInfo.location,
+                            accountInfo.coord,
                             it.toString()
                         )
                         usersRef.document(auth.currentUser?.uid!!).set(finalAC)

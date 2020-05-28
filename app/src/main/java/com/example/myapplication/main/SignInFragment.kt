@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 
 class SignInFragment : Fragment() {
 
@@ -199,7 +200,8 @@ class SignInFragment : Fragment() {
         val profilePicture = currentUser.photoUrl
         return AccountInfo(
             id, fullname, username,
-            email!!, location, profilePicture.toString()
+            email!!, location, GeoPoint(0.0,0.0),
+            profilePicture.toString()
         )
     }
 
