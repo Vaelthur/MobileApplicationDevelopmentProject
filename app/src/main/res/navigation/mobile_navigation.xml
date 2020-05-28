@@ -33,6 +33,9 @@
             app:exitAnim="@android:anim/slide_out_right"
             app:popEnterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_showProfileFragment_to_reviewListFragment"
+            app:destination="@id/reviewListFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -87,4 +90,12 @@
         android:id="@+id/itemBoughtFragment"
         android:name="com.example.myapplication.itemLists.ItemBoughtFragment"
         android:label="Bought Items" />
+    <fragment
+        android:id="@+id/reviewListFragment"
+        android:name="com.example.myapplication.reviews.ReviewListFragment"
+        android:label="ReviewListFragment" >
+        <action
+            android:id="@+id/action_reviewListFragment_to_showProfileFragment"
+            app:destination="@id/showProfileFragment" />
+    </fragment>
 </navigation>

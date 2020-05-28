@@ -1,8 +1,12 @@
 package com.example.myapplication.profile
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.view.*
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
@@ -52,7 +56,9 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
         //Set showProfileViewModel with db info
         if(!myProfile!!) {
             val accountInfo = arguments?.get("account_info") as AccountInfo
-            showProfileViewModel.accountInfo.value = accountInfo
+            if(accountInfo != null){
+                showProfileViewModel.accountInfo.value = accountInfo
+            }
         }
         else {
             showProfileViewModel.accountInfo.value?.let {
@@ -119,6 +125,18 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
                         reviews_cnt.text = "0"
                     }
                 }
+
+            //Set listener for list of reviews
+            val linkToReviewsView = view.findViewById<TextView>(R.id.total_reviews)
+            val content = SpannableString("Total reviews:  ")
+            content.setSpan(UnderlineSpan(), 0, content.length, 0)
+            linkToReviewsView.text = content
+            linkToReviewsView.setTextColor(Color.BLUE)
+            linkToReviewsView.setOnClickListener {
+                val idBundle = Bundle(1)
+                idBundle.putString("userID", showProfileViewModel.accountInfo.value?.id)
+                view.findNavController().navigate(R.id.reviewListFragment, idBundle)
+            }
         }
 
         val mapView = view.findViewById<MapView>(R.id.userLocation)

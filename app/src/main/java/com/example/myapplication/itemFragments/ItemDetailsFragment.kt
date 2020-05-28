@@ -342,7 +342,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                     val newReview : Review? = if(comment != "") {
                                                     Review(FirebaseAuth.getInstance().currentUser?.uid!!,
                                                         FirebaseAuth.getInstance().currentUser?.displayName!!,
-                                                        rating,
+                                                        rating.toDouble(),
                                                         comment)
                                                 }
                                             else

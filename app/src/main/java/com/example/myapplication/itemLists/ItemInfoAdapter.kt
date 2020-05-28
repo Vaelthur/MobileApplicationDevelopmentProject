@@ -37,9 +37,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
         val view  = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_card_view_star, parent, false)
 
-        return ItemInfoViewHolder(
-            view
-        )
+        return ItemInfoViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ItemInfoViewHolder, position: Int) {
@@ -78,7 +76,6 @@ class ItemInfoAdapter(private val items: List<FireItem>)
                     .load(imageURI)
                     .centerCrop()
                     .into(v.findViewById(R.id.item_card_picture))
-                // pictureURIView.setImageURI(imageURI)
             }
 
             title.text = itemInfo.title
