@@ -1,156 +1,170 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    tools:context=".profile.ShowProfileFragment">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_picture"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:src="@drawable/default_profile_picture"
-        app:civ_border_width="2dp"
-        app:civ_border_color="#FF000000"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_weight="1"/>
-
+    android:layout_height="wrap_content"
+    android:fillViewport="false">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
-        app:layout_constraintVertical_weight="2">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        tools:context=".profile.ShowProfileFragment">
 
-        <TextView
-            android:id="@+id/textViewFullNameShowProfile"
-            android:layout_width="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:text="@string/full_name"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textViewUsernameShowProfile"
-            app:layout_constraintStart_toStartOf="@id/VerticalGuideShowProfile"
-            app:layout_constraintTop_toTopOf="@+id/HorizontalGuideShowProfile"
-            app:layout_constraintVertical_bias="0.48000002"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:layout_marginTop="8dp"
+            android:src="@drawable/default_profile_picture"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/picture_guideline"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintVertical_weight="1" />
 
-        <TextView
-            android:id="@+id/textViewUserEmailShowProfile"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/email"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/textViewUserLocationShowProfile"
-            app:layout_constraintStart_toStartOf="@+id/textViewUsernameShowProfile"
-            app:layout_constraintTop_toBottomOf="@+id/textViewUsernameShowProfile" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/picture_guideline">
 
-        <TextView
-            android:id="@+id/textViewUsernameShowProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/username"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/textViewUserEmailShowProfile"
-            app:layout_constraintStart_toStartOf="@id/textViewFullNameShowProfile"
-            app:layout_constraintTop_toBottomOf="@+id/textViewFullNameShowProfile" />
+            <TextView
+                android:id="@+id/textViewFullNameShowProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/full_name"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textViewUsernameShowProfile"
+                app:layout_constraintStart_toStartOf="@id/VerticalGuideShowProfile"
+                app:layout_constraintTop_toTopOf="@+id/HorizontalGuideShowProfile"
+                app:layout_constraintVertical_bias="0.48000002"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/textViewUserEmailShowProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/email"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/textViewUserLocationShowProfile"
+                app:layout_constraintStart_toStartOf="@+id/textViewUsernameShowProfile"
+                app:layout_constraintTop_toBottomOf="@+id/textViewUsernameShowProfile" />
+
+            <TextView
+                android:id="@+id/textViewUsernameShowProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/textViewUserEmailShowProfile"
+                app:layout_constraintStart_toStartOf="@id/textViewFullNameShowProfile"
+                app:layout_constraintTop_toBottomOf="@+id/textViewFullNameShowProfile" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/HorizontalGuideShowProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.2" />
+
+            <TextView
+                android:id="@+id/textViewUserLocationShowProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/location"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@id/textViewFullNameShowProfile"
+                app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailShowProfile" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/VerticalGuideShowProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.079155676" />
+
+            <RatingBar
+                android:id="@+id/userRatingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="false"
+                android:focusable="false"
+                android:isIndicator="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/total_reviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/totalRev"
+                app:layout_constraintBottom_toTopOf="@+id/HorizontalGuideShowProfile"
+                app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
+                app:layout_constraintStart_toStartOf="@+id/userRatingBar"
+                app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+
+            <TextView
+                android:id="@+id/reviews_cnt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="0"
+                app:layout_constraintStart_toEndOf="@+id/total_reviews"
+                app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+
+            <TextView
+                android:id="@+id/reviews_mean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="0"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/userRatingBar"
+                app:layout_constraintTop_toTopOf="@+id/userRatingBar" />
+
+            <com.example.myapplication.CustomMapView
+                android:id="@+id/userLocation"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewUserLocationShowProfile" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/HorizontalGuideShowProfile"
+            android:id="@+id/picture_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_begin="102dp" />
-
-        <TextView
-            android:id="@+id/textViewUserLocationShowProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/location"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="@id/textViewFullNameShowProfile"
-            app:layout_constraintTop_toBottomOf="@+id/textViewUserEmailShowProfile" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/VerticalGuideShowProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.08" />
-
-        <RatingBar
-            android:id="@+id/userRatingBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:clickable="false"
-            android:focusable="false"
-            android:isIndicator="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/total_reviews"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/totalRev"
-            app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
-            app:layout_constraintStart_toStartOf="@+id/userRatingBar"
-            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
-
-        <TextView
-            android:id="@+id/reviews_cnt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:text="0"
-            app:layout_constraintStart_toEndOf="@+id/total_reviews"
-            app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
-
-        <TextView
-            android:id="@+id/reviews_mean"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:text="0"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/userRatingBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/userRatingBar"
-            app:layout_constraintTop_toTopOf="@+id/userRatingBar" />
-
-        <com.google.android.gms.maps.MapView
-            android:id="@+id/userLocation"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewUserLocationShowProfile" />
+            app:layout_constraintGuide_percent="0.30" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

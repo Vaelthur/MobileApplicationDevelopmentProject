@@ -22,6 +22,11 @@ import com.example.myapplication.R
 import com.example.myapplication.data.*
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.MapView
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -42,7 +47,7 @@ import org.w3c.dom.Text
 import java.io.Serializable
 
 
-class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListener {
+class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListener, OnMapReadyCallback {
 
     private lateinit var viewModel: ItemDetailsViewModel
     private var myItems : Boolean? = false
@@ -286,6 +291,12 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             })
         }
 
+        //update map
+        val mapView = view.findViewById<MapView>(R.id.itemLocation)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+        mapView.getMapAsync(this)
+
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("item_picture_editing").apply()
     }
 
@@ -378,6 +389,11 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
         Snackbar.make(requireView(), "Item bought, congratulations:)", Snackbar.LENGTH_LONG)
             .setAction("Action", null)
             .show()
+    }
+
+    override fun onMapReady(map: GoogleMap?) {
+        map!!.addMarker(MarkerOptions().position(LatLng(34.6,12.1)).title("prova"))
+
     }
 
     /// endregion

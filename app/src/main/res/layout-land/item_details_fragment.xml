@@ -138,7 +138,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="invisible"
-                app:layout_constraintGuide_percent="0.07" />
+                app:layout_constraintGuide_percent="0" />
 
             <TextView
                 android:id="@+id/main_characteristics"
@@ -150,7 +150,7 @@
                 android:textSize="20sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_category"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/details_guideline"
+                app:layout_constraintTop_toBottomOf="@+id/itemLocation"
                 app:layout_constraintVertical_chainStyle="spread_inside" />
 
             <TextView
@@ -260,7 +260,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.55" />
+                app:layout_constraintGuide_percent="0.8" />
 
             <TextView
                 android:id="@+id/item_description"
@@ -283,6 +283,16 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/item_description"
                 app:layout_constraintTop_toBottomOf="@+id/item_description" />
+
+            <com.example.myapplication.CustomMapView
+                android:id="@+id/itemLocation"
+                android:layout_width="0dp"
+                android:layout_height="250dp"
+                app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/details_guideline"
+                app:layout_constraintVertical_chainStyle="packed" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
