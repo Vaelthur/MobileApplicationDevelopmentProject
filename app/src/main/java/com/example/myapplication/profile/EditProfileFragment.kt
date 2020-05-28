@@ -90,82 +90,6 @@ class EditProfileFragment : Fragment() {
         if (!isLocationEnabled(requireContext()) && ContextCompat.checkSelfPermission(requireActivity() as MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             Helpers.makeSnackbar(view, "Please enable location services")
 
-//        val progressBar = view.findViewById<ProgressBar>(R.id.progressBarEditProfile)
-//        progressBar.visibility = View.VISIBLE
-//
-//        // get current location & update
-//        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
-//
-//        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-//            if (it != null) {
-//                val geoCoder = Geocoder(requireContext(), Locale.getDefault())
-//                val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
-//                val  userAddress = address[0].locality.toString() //This is the city
-//                // set value in viewModel
-//                showProfileViewModel.accountInfo.value?.location = userAddress
-//
-//            } else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
-//        }
-//            .addOnCompleteListener{
-//
-//                progressBar.visibility = View.GONE
-//
-//                if(showProfileViewModel.tempAccountInfo.value == null) {
-//                    setShowProfileViewModel()
-//                }
-//
-//                showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
-//                    editViewFullNameEditProfile.setText(it.fullname)
-//                    editViewUsernameEditProfile.setText(it.username)
-//                    editViewUserEmailEditProfile.setText(it.email)
-//                    editViewUserLocationEditProfile.setText(it.location)
-//                    Glide.with(requireContext())
-//                        .load(it.profilePicture)
-//                        .centerCrop()
-//                        .circleCrop()
-//                        .into(profile_picture)
-//
-//                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-//                    if (sharedPref != null) {
-//                        with (sharedPref.edit()) {
-//                            putString("profile_picture_editing", it.profilePicture.toString())
-//                            apply()
-//                        }
-//                    }
-//
-//                })
-//            }
-//            .addOnFailureListener{
-//
-//                progressBar.visibility = View.GONE
-//
-//                if(showProfileViewModel.tempAccountInfo.value == null) {
-//                    setShowProfileViewModel()
-//                }
-//
-//                Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
-//
-//                showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
-//                    editViewFullNameEditProfile.setText(it.fullname)
-//                    editViewUsernameEditProfile.setText(it.username)
-//                    editViewUserEmailEditProfile.setText(it.email)
-//                    editViewUserLocationEditProfile.setText(it.location)
-//                    Glide.with(requireContext())
-//                        .load(it.profilePicture)
-//                        .centerCrop()
-//                        .circleCrop()
-//                        .into(profile_picture)
-//
-//                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-//                    if (sharedPref != null) {
-//                        with (sharedPref.edit()) {
-//                            putString("profile_picture_editing", it.profilePicture.toString())
-//                            apply()
-//                        }
-//                    }
-//                })
-//            }
-
         if(showProfileViewModel.tempAccountInfo.value == null) {
             setShowProfileViewModel()
         }
@@ -200,10 +124,10 @@ class EditProfileFragment : Fragment() {
                 ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
             }
 
-            if (!isLocationEnabled(requireContext()) && ContextCompat.checkSelfPermission(requireActivity() as MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                Helpers.makeSnackbar(view, "Please enable location services")
-
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
+
+            var done = false
+
 
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
@@ -213,7 +137,11 @@ class EditProfileFragment : Fragment() {
                     // set value in viewModel
                     showProfileViewModel.tempAccountInfo.value?.location = userAddress
 
-                } else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
+                } else {
+                    if (!isLocationEnabled(requireContext()))
+                        Helpers.makeSnackbar(view, "Please enable location services")
+                    else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
+                }
             }. addOnCompleteListener {
                 editViewUserLocationEditProfile.setText(showProfileViewModel.tempAccountInfo.value?.location)
             }. addOnFailureListener {
