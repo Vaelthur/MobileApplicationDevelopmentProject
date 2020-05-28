@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.29" />
+                app:layout_constraintGuide_percent="0.2" />
 
             <TextView
                 android:id="@+id/item_title"
@@ -341,11 +341,20 @@
                     android:backgroundTint="#FFC107"
                     android:text="BUY"
                     android:textAlignment="center"
-                    app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
+                    app:layout_constraintBottom_toTopOf="@+id/itemLocation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="BUY" />
+
+                <com.example.myapplication.CustomMapView
+                    android:id="@+id/itemLocation"
+                    android:layout_width="0dp"
+                    android:layout_height="300dp"
+                    app:layout_constraintBottom_toTopOf="@id/main_characteristics"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/buyButton" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
