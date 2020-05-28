@@ -538,10 +538,27 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap?) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-            val myPos = LatLng(it.latitude,it.longitude)
-            map!!.addMarker(MarkerOptions().position(myPos))
-            map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
+            it?.let {
+                val myPos = LatLng(it.latitude,it.longitude)
+                map!!.addMarker(MarkerOptions().position(myPos))
+                moveToCurrentLocation(map, myPos)
+                map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
+            }
         }
+        map!!.setOnMapClickListener {
+            val newPos = LatLng(it.latitude, it.longitude)
+            map.clear()
+            map.addMarker(MarkerOptions().position(newPos))
+
+            //move camera with style
+            moveToCurrentLocation(map,newPos)
+        }
+    }
+
+    private fun moveToCurrentLocation(map: GoogleMap, pos: LatLng) {
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15F))
+        map.animateCamera(CameraUpdateFactory.zoomIn())
+        map.animateCamera(CameraUpdateFactory.zoomTo(15F), 2000, null)
     }
 }
 
