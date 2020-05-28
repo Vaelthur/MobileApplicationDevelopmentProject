@@ -174,4 +174,20 @@
         app:layout_constraintStart_toStartOf="@+id/profile_picture"
         app:srcCompat="@android:drawable/ic_menu_camera" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2" />
+
+    <ProgressBar
+        android:id="@+id/progressBarEditProfile"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="125dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

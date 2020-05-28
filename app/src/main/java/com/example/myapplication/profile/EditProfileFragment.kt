@@ -17,6 +17,7 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -85,6 +86,9 @@ class EditProfileFragment : Fragment() {
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
         }
 
+        val progressBar = view.findViewById<ProgressBar>(R.id.progressBarEditProfile)
+        progressBar.visibility = View.VISIBLE
+
         // check location services are enabled => TODO: make it a popup
         if (!isLocationEnabled(requireContext()))
             Helpers.makeSnackbar(view, "Please enable location services")
@@ -100,33 +104,69 @@ class EditProfileFragment : Fragment() {
                 val  userAddress = address[0].locality.toString() //This is the city
                 // set value in viewModel
                 showProfileViewModel.accountInfo.value?.location = userAddress
+
             } else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
         }
+            .addOnCompleteListener{
 
-        if(showProfileViewModel.tempAccountInfo.value == null) {
-            setShowProfileViewModel()
-        }
+                progressBar.visibility = View.GONE
 
-        showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
-            editViewFullNameEditProfile.setText(it.fullname)
-            editViewUsernameEditProfile.setText(it.username)
-            editViewUserEmailEditProfile.setText(it.email)
-            editViewUserLocationEditProfile.setText(it.location)
-            Glide.with(requireContext())
-                .load(it.profilePicture)
-                .centerCrop()
-                .circleCrop()
-                .into(profile_picture)
-
-            val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
-            if (sharedPref != null) {
-                with (sharedPref.edit()) {
-                    putString("profile_picture_editing", it.profilePicture.toString())
-                    apply()
+                if(showProfileViewModel.tempAccountInfo.value == null) {
+                    setShowProfileViewModel()
                 }
+
+                showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
+                    editViewFullNameEditProfile.setText(it.fullname)
+                    editViewUsernameEditProfile.setText(it.username)
+                    editViewUserEmailEditProfile.setText(it.email)
+                    editViewUserLocationEditProfile.setText(it.location)
+                    Glide.with(requireContext())
+                        .load(it.profilePicture)
+                        .centerCrop()
+                        .circleCrop()
+                        .into(profile_picture)
+
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                    if (sharedPref != null) {
+                        with (sharedPref.edit()) {
+                            putString("profile_picture_editing", it.profilePicture.toString())
+                            apply()
+                        }
+                    }
+
+                })
+            }
+            .addOnFailureListener{
+
+                progressBar.visibility = View.GONE
+
+                if(showProfileViewModel.tempAccountInfo.value == null) {
+                    setShowProfileViewModel()
+                }
+
+                Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
+
+                showProfileViewModel.tempAccountInfo.observe(requireActivity(), Observer {
+                    editViewFullNameEditProfile.setText(it.fullname)
+                    editViewUsernameEditProfile.setText(it.username)
+                    editViewUserEmailEditProfile.setText(it.email)
+                    editViewUserLocationEditProfile.setText(it.location)
+                    Glide.with(requireContext())
+                        .load(it.profilePicture)
+                        .centerCrop()
+                        .circleCrop()
+                        .into(profile_picture)
+
+                    val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
+                    if (sharedPref != null) {
+                        with (sharedPref.edit()) {
+                            putString("profile_picture_editing", it.profilePicture.toString())
+                            apply()
+                        }
+                    }
+                })
             }
 
-        })
 
         imageButtonChangePic.setOnClickListener {
             onImageButtonClickEvent(it)
