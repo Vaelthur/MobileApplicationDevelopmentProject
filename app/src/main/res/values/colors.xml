@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FFC107</color>
     <color name="colorLightPrimary">#7B97A2</color>
+    <color name="bg_drawer">#7F7CAF</color>
 </resources>

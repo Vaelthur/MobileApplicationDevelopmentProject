@@ -64,6 +64,7 @@
     <string name="emptylist">Ooops! Looks like you don\'t have any items.</string>
     <string name="emptyfavlist">You do not have favorite items. Go explore!</string>
 
-    <string name="permission_rationale">Location permission is needed for core functionality</string>
+    <string name="fav">Favorite Items</string>
+    <string name="bought">Bought Items</string>
 
 </resources>
