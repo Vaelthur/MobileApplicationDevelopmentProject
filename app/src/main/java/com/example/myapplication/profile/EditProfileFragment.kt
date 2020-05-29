@@ -585,10 +585,14 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
             val geoCoder = Geocoder(requireContext(), Locale.getDefault())
             val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
-            val  userAddress = address[0].locality.toString() //This is the city
-            // set value in viewModel
-            showProfileViewModel.tempAccountInfo.value?.location = userAddress
-            editViewUserLocationEditProfile.setText(showProfileViewModel.tempAccountInfo.value?.location)
+            if(address.isNotEmpty()) {
+                if(!address[0].locality.isNullOrEmpty()) {
+                    val userAddress = address[0].locality.toString()
+                    showProfileViewModel.tempAccountInfo.value?.location = userAddress
+                    editViewUserLocationEditProfile.setText(showProfileViewModel.tempAccountInfo.value?.location)
+                }
+            }
+            showProfileViewModel.tempAccountInfo.value?.coord = GeoPoint(it.latitude,it.longitude)
             //move camera with style
             Helpers.moveToCurrentLocation(map,newPos)
         }
