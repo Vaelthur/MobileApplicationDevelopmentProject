@@ -17,7 +17,10 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -46,6 +49,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -378,6 +382,9 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
         hideSoftKeyboard(this.activity)
 
+        //Show progress bar while saving
+        showProgressAndHide(requireView())
+
         //val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         val accountInfo = showProfileViewModel.tempAccountInfo.value!!
 
@@ -435,6 +442,29 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
         //Return to ShowProfileActivity
         this.activity?.findNavController(R.id.nav_host_fragment)?.navigateUp()
         Helpers.makeSnackbar(requireView(), "Profile changed correctly")
+    }
+
+    private fun showProgressAndHide(view: View) {
+
+        view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+        view.findViewById<TextView>(R.id.saving_text).visibility = View.VISIBLE
+        view.findViewById<CircleImageView>(R.id.profile_picture).visibility = View.GONE
+        //fullname
+        view.findViewById<TextView>(R.id.textViewFullNameEditProfile).visibility = View.GONE
+        view.findViewById<TextView>(R.id.editViewFullNameEditProfile).visibility = View.GONE
+        //location
+        view.findViewById<TextView>(R.id.textViewUserLocationEditProfile).visibility = View.GONE
+        view.findViewById<TextView>(R.id.editViewUserLocationEditProfile).visibility = View.GONE
+        //username
+        view.findViewById<TextView>(R.id.editViewUsernameEditProfile).visibility = View.GONE
+        view.findViewById<TextView>(R.id.textViewUsernameEditProfile).visibility = View.GONE
+
+        view.findViewById<Button>(R.id.buttonLocation).visibility = View.GONE
+        view.findViewById<CustomMapView>(R.id.userLocation).visibility = View.GONE
+        view.findViewById<ImageButton>(R.id.imageButtonChangePic).visibility = View.GONE
+        //email
+        view.findViewById<TextView>(R.id.editViewUserEmailEditProfile).visibility = View.GONE
+        view.findViewById<TextView>(R.id.textViewUserEmailEditProfile).visibility = View.GONE
     }
 
     ///endregion
