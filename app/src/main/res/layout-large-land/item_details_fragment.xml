@@ -320,7 +320,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:background="#D0E61717"
-                    android:text="BLOCK"
+                    android:text="@string/block"
                     android:textColor="#FFFFFF" />
 
                 <TextView
@@ -328,7 +328,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
-                    android:text="Users interested"
+                    android:text="@string/interested"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toTopOf="@id/fav_users"
                     app:layout_constraintStart_toStartOf="parent"

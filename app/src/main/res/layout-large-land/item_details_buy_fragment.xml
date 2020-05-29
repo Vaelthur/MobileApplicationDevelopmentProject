@@ -339,13 +339,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:backgroundTint="#FFC107"
-                    android:text="BUY"
+                    android:text="@string/buy"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/itemLocation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="BUY" />
+                    tools:text="@string/buy" />
 
                 <com.example.myapplication.CustomMapView
                     android:id="@+id/itemLocation"

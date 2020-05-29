@@ -324,7 +324,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFC107"
-                    android:text="BUY"
+                    android:text="@string/buy"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
                     app:layout_constraintEnd_toEndOf="parent"

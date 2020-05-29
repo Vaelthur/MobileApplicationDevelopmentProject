@@ -46,7 +46,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Create new ad"
+        android:text="@string/new_ad"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/empty_list_msg"
         app:layout_constraintStart_toStartOf="@+id/empty_list_msg"

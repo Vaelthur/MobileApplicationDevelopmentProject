@@ -325,13 +325,13 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#FFC107"
-                    android:text="BUY"
+                    android:text="@string/buy"
                     android:textAlignment="center"
                     app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/details_guideline"
-                    tools:text="BUY" />
+                    tools:text="@string/buy" />
 
                 <com.example.myapplication.CustomMapView
                     android:id="@+id/customMapView"

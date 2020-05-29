@@ -56,6 +56,7 @@
     <string name="email_header">Email:</string>
     <string name="location_header">Location:</string>
     <string name="totalRev">Total reviews:</string>
+    <string name="def_numRev">0</string>
 
     <string name="edit">Edit</string>
     <string name="logout">Logout</string>
@@ -66,5 +67,12 @@
 
     <string name="fav">Favorite Items</string>
     <string name="bought">Bought Items</string>
+    <string name="locate">Locate me</string>
+
+    <string name="login">Please login with your account</string>
+    <string name="buy">BUY</string>
+    <string name="block">BLOCK</string>
+    <string name="interested">Users interested</string>
+    <string name="norevs">Ooops! No reviews for this user</string>
 
 </resources>

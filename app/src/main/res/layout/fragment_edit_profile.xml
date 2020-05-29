@@ -156,7 +156,7 @@
                 android:id="@+id/buttonLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Locate me"
+                android:text="@string/locate"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.1"
