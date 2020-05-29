@@ -102,7 +102,9 @@
                 android:textColor="#005BA3"
                 android:textSize="24sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_price"
-                app:layout_constraintStart_toEndOf="@id/item_price" />
+                app:layout_constraintStart_toEndOf="@id/item_price"
+                app:layout_constraintEnd_toStartOf="@id/details_value_guideline"
+                app:layout_constraintHorizontal_bias="0"/>
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/details_guideline"
@@ -265,6 +267,7 @@
                 android:layout_marginStart="8dp"
                 android:text="@string/status_header"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_price"
+                app:layout_constraintEnd_toStartOf="@id/item_status"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
