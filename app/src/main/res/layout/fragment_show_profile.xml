@@ -80,7 +80,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.2" />
+                app:layout_constraintGuide_percent="0.17" />
 
             <TextView
                 android:id="@+id/textViewUserLocationShowProfile"
@@ -103,7 +103,7 @@
                 android:id="@+id/userRatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:clickable="false"
                 android:focusable="false"
                 android:isIndicator="true"
@@ -115,10 +115,9 @@
                 android:id="@+id/total_reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:text="@string/totalRev"
-                app:layout_constraintBottom_toTopOf="@+id/HorizontalGuideShowProfile"
                 app:layout_constraintEnd_toEndOf="@+id/userRatingBar"
                 app:layout_constraintStart_toStartOf="@+id/userRatingBar"
                 app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
@@ -127,11 +126,10 @@
                 android:id="@+id/reviews_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="16dp"
                 android:text="0"
-                app:layout_constraintStart_toEndOf="@+id/total_reviews"
-                app:layout_constraintTop_toBottomOf="@+id/userRatingBar" />
+                app:layout_constraintBottom_toBottomOf="@+id/total_reviews"
+                app:layout_constraintStart_toEndOf="@+id/total_reviews" />
 
             <TextView
                 android:id="@+id/reviews_mean"
