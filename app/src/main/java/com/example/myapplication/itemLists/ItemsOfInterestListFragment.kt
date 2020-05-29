@@ -37,7 +37,7 @@ class ItemsOfInterestListFragment : Fragment() {
             itemFavViewModel.liveFavItems.observe(requireActivity(), Observer {
                 val recyclerView: RecyclerView? = view.findViewById(R.id.recyclerFavItemList)
                 recyclerView?.layoutManager = LinearLayoutManager(context)
-                recyclerView?.adapter = ItemInfoAdapter(it)
+                recyclerView?.adapter = ItemInfoAdapter(it, true)
 
                 if(view.isShown)
                     checkEmptyList(it as MutableList<FireItem>)

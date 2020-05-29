@@ -26,7 +26,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.io.Serializable
 
-class ItemInfoAdapter(private val items: List<FireItem>)
+class ItemInfoAdapter(private val items: List<FireItem>, private val isFavorites : Boolean = false)
     : RecyclerView.Adapter<ItemInfoAdapter.ItemInfoViewHolder>() {
 
     override fun getItemCount() = items.size
@@ -50,7 +50,7 @@ class ItemInfoAdapter(private val items: List<FireItem>)
                 val usernameOwner = documents.first()["username"] as String?
 
                 //Bind to viewHolder, which sets the view contents
-                holder.bind(item, usernameOwner)
+                holder.bind(item, usernameOwner, isFavorites)
                 holder.setListeners(item)
             }
     }
@@ -60,13 +60,18 @@ class ItemInfoAdapter(private val items: List<FireItem>)
     // responsible to bind these values to a data class object
      class ItemInfoViewHolder(private val v : View) : RecyclerView.ViewHolder(v){
 
-        fun bind(itemInfo: FireItem, usernameOwner: String?){
+        fun bind(itemInfo: FireItem, usernameOwner: String?, isFavorites: Boolean = false){
 
             val pictureURIView : ImageView = v.findViewById(R.id.item_card_picture)
             val title : TextView= v.findViewById(R.id.item_card_title)
             val location : TextView= v.findViewById(R.id.item_card_location)
             val price : TextView= v.findViewById(R.id.item_card_price)
             val seller : TextView = v.findViewById(R.id.Owner)
+
+            if(isFavorites){
+                val imgBtn = v.findViewById<ImageButton>(R.id.starItemButton)
+                imgBtn.visibility = View.GONE
+            }
 
             if (itemInfo.picture_uri == null) {
                 pictureURIView.setImageResource(R.drawable.default__item_image)
