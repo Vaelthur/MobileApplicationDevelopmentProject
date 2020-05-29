@@ -85,6 +85,7 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
                 textViewUserLocationShowProfile.text = it.location
                 Glide.with(requireContext())
                     .load(it.profilePicture)
+                    .error(R.drawable.default_profile_picture)
                     .centerCrop()
                     .circleCrop()
                     .into(profile_picture)
@@ -102,6 +103,7 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
                 textViewUserLocationShowProfile.text = it.location
                 Glide.with(requireContext())
                     .load(it.profilePicture)
+                    .error(R.drawable.default_profile_picture)
                     .centerCrop()
                     .circleCrop()
                     .into(profile_picture)
@@ -129,7 +131,7 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
 
             //Set listener for list of reviews
             val linkToReviewsView = view.findViewById<TextView>(R.id.total_reviews)
-            val content = SpannableString("Total reviews:  ")
+            val content = SpannableString("Total reviews:")
             content.setSpan(UnderlineSpan(), 0, content.length, 0)
             linkToReviewsView.text = content
             linkToReviewsView.setTextColor(Color.BLUE)

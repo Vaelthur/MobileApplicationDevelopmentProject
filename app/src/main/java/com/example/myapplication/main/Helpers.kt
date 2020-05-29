@@ -99,14 +99,22 @@ class Helpers(){
             headerView?.findViewById<TextView>(R.id.full_name_navheader)?.text = fullname
             headerView?.findViewById<TextView>(R.id.email_navheader)?.text = email
             headerView?.let {
-                Glide.with(it).load(profilePicture).into(headerView.findViewById<ImageView>(
-                    R.id.profile_picture_navheader
-                ))
+                Glide.with(it)
+                    .load(profilePicture)
+                    .error(R.drawable.default_profile_picture)
+                    .into(headerView.findViewById<ImageView>(R.id.profile_picture_navheader))
             }
         }
 
         fun makeSnackbar(view: View, text: CharSequence) {
             Snackbar.make(view, text, Snackbar.LENGTH_LONG).show()
+        }
+
+        fun getResizedUri(pictureUri: String): String {
+            val splitted : List<String> = pictureUri.split("?")
+            val percentegaSplit = splitted[0].split("%")
+            val finalUri = percentegaSplit[0] + "%" + percentegaSplit[1] + "_200x200?" + splitted[1]
+            return finalUri
         }
 
         ///endregion

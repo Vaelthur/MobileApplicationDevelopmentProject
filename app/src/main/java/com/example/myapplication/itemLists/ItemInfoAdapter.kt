@@ -17,6 +17,7 @@ import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.ITEMSTATUS
 import com.example.myapplication.data.ItemStatusCreator
+import com.example.myapplication.main.Helpers
 import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
 import com.google.android.material.snackbar.Snackbar
@@ -71,9 +72,11 @@ class ItemInfoAdapter(private val items: List<FireItem>)
                 pictureURIView.setImageResource(R.drawable.default__item_image)
             }
             else {
-                val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
+                val resized = Helpers.Helpers.getResizedUri(itemInfo.picture_uri)
+                val imageURI : Uri? = Uri.parse(resized)
                 Glide.with(v.context)
                     .load(imageURI)
+                    .error(R.drawable.default__item_image)
                     .centerCrop()
                     .into(v.findViewById(R.id.item_card_picture))
             }

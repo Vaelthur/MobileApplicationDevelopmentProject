@@ -173,6 +173,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
 
                 Glide.with(requireContext())
                     .load(it.picture_uri)
+                    .error(R.drawable.default__item_image)
                     .centerCrop()
                     .into(item_picture)
 

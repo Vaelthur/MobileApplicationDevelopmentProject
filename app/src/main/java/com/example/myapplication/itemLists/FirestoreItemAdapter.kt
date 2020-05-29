@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.myapplication.R
 import com.example.myapplication.data.FireItem
+import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter
 import com.firebase.ui.firestore.FirestoreRecyclerOptions
@@ -61,9 +62,11 @@ class FirestoreItemAdapter(options : FirestoreRecyclerOptions<FireItem>, filterM
                 pictureURIView.setImageResource(R.drawable.default__item_image)
             }
             else {
-                val imageURI : Uri? = Uri.parse(itemInfo.picture_uri)
+                val resized = Helpers.getResizedUri(itemInfo.picture_uri)
+                val imageURI : Uri? = Uri.parse(resized)
                 Glide.with(containerView.context)
                     .load(imageURI)
+                    .error(R.drawable.default__item_image)
                     .centerCrop()
                     .into(containerView.findViewById(R.id.item_card_picture))
                 
