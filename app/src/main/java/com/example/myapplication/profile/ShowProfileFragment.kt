@@ -209,12 +209,15 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
         //for fun
         FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
             .addOnSuccessListener {
-                showProfileViewModel.accountInfo.value?.coord = it["coord"] as GeoPoint
+                val myPos = it["coord"] as GeoPoint
+                showProfileViewModel.accountInfo.value?.coord = myPos
+                map?.clear()
                 map!!.addMarker(
                         MarkerOptions()
                             .position(LatLng(showProfileViewModel.accountInfo.value?.coord?.latitude!!, showProfileViewModel.accountInfo.value?.coord?.longitude!!))
                             .title("Your are here")
                         )
+                Helpers.moveToCurrentLocation(map, LatLng(myPos.latitude,myPos.longitude))
             }
 
 

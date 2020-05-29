@@ -23,6 +23,9 @@ import com.example.myapplication.R
 import com.example.myapplication.data.AccountInfo
 import com.example.myapplication.data.FireItem
 import com.example.myapplication.data.ItemInfoFactory
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import org.json.JSONObject
@@ -118,5 +121,13 @@ class Helpers(){
         }
 
         ///endregion
+
+        ///region map
+
+        fun moveToCurrentLocation(map: GoogleMap, pos: LatLng) {
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15F))
+            map.animateCamera(CameraUpdateFactory.zoomIn())
+            map.animateCamera(CameraUpdateFactory.zoomTo(15F), 2000, null)
+        }
     }
 }

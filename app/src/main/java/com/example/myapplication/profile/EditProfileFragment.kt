@@ -146,6 +146,8 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                     // set value in viewModel
                     showProfileViewModel.tempAccountInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
                     showProfileViewModel.tempAccountInfo.value?.location = userAddress
+                    val mapView = view.findViewById<CustomMapView>(R.id.userLocation)
+                    mapView.getMapAsync(this)
 
                 } else {
                     if (!isLocationEnabled(requireContext()))
@@ -570,8 +572,9 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener {
             it?.let {
                 val myPos = LatLng(it.latitude,it.longitude)
+                map?.clear()
                 map!!.addMarker(MarkerOptions().position(myPos))
-                moveToCurrentLocation(map, myPos)
+                Helpers.moveToCurrentLocation(map, myPos)
                 map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
             }
         }
@@ -587,14 +590,8 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
             showProfileViewModel.tempAccountInfo.value?.location = userAddress
             editViewUserLocationEditProfile.setText(showProfileViewModel.tempAccountInfo.value?.location)
             //move camera with style
-            moveToCurrentLocation(map,newPos)
+            Helpers.moveToCurrentLocation(map,newPos)
         }
-    }
-
-    private fun moveToCurrentLocation(map: GoogleMap, pos: LatLng) {
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(pos, 15F))
-        map.animateCamera(CameraUpdateFactory.zoomIn())
-        map.animateCamera(CameraUpdateFactory.zoomTo(15F), 2000, null)
     }
 }
 
