@@ -7,6 +7,7 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.media.tv.TvContract
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,8 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.Constraints
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -307,6 +310,12 @@ class ItemEditFragment : Fragment() {
     private fun saveEdits(){
 
         hideSoftKeyboard(requireActivity())
+        requireView().findViewById<ConstraintLayout>(R.id.constraintLayout).visibility = View.GONE
+        requireView().findViewById<ImageView>(R.id.item_picture).visibility = View.GONE
+        requireView().findViewById<ImageButton>(R.id.imageButtonChangePhoto).visibility = View.GONE
+        requireView().findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+        requireView().findViewById<TextView>(R.id.saving_text).visibility = View.VISIBLE
+
         val itemID = viewModel.tempItemInfo.value?.id
 
         val itemToSave = if(itemID.equals("0")) {
