@@ -147,7 +147,7 @@
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/item_category"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buyButton"
+                    app:layout_constraintTop_toBottomOf="@+id/directionbutton"
                     app:layout_constraintVertical_chainStyle="spread_inside" />
 
                 <TextView
@@ -326,7 +326,7 @@
                     android:backgroundTint="#FFC107"
                     android:text="@string/buy"
                     android:textAlignment="center"
-                    app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
+                    app:layout_constraintBottom_toTopOf="@+id/itemLocation"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/details_guideline"
@@ -337,10 +337,21 @@
                     android:layout_width="0dp"
                     android:layout_height="150dp"
                     android:layout_marginTop="16dp"
-                    app:layout_constraintBottom_toTopOf="@+id/main_characteristics"
+                    app:layout_constraintBottom_toTopOf="@+id/directionbutton"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/buyButton" />
+
+                <Button
+                    android:id="@+id/directionbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="#4A89F3"
+                    android:textColor="#FFFFFF"
+                    android:text="@string/get_dir"
+                    android:layout_marginTop="8sp"
+                    app:layout_constraintTop_toBottomOf="@id/itemLocation"
+                    app:layout_constraintBottom_toTopOf="@id/main_characteristics" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

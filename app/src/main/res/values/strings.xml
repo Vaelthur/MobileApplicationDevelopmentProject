@@ -75,4 +75,6 @@
     <string name="interested">Users interested</string>
     <string name="norevs">Ooops! No reviews for this user</string>
 
+    <string name="get_dir">Get Directions</string>
+
 </resources>

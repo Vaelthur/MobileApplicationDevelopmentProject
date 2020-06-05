@@ -185,6 +185,10 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
         else {
             //Other person items
 
+            directionbutton.setOnClickListener { v: View? ->
+                view.findNavController().navigate(R.id.routeMapFragment)
+            }
+
             //set listeners
             //Set link to seller profile
             val sellerUsernameView = view.findViewById<TextView>(R.id.seller_usr)
