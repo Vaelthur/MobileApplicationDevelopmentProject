@@ -1,5 +1,6 @@
 package com.example.myapplication.data
 
+import com.google.firebase.firestore.GeoPoint
 import java.io.Serializable
 
 data class FireItem(
@@ -14,6 +15,7 @@ data class FireItem(
     val description: String,
     val id: String,
     val owner: String,
+    var coord: GeoPoint? = null,
     val status: String = "Available"
 )  : Serializable {
 
@@ -41,6 +43,7 @@ data class FireItem(
                 hash["description"] as String,
                 hash["id"] as String,
                 hash["owner"] as String,
+                hash["coord"] as GeoPoint,
                 status
             )
         }

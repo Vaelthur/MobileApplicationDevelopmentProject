@@ -365,6 +365,7 @@ class ItemEditFragment : Fragment() {
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
                             "owner" to itemToSave.owner,
+                            "coord" to itemToSave.coord,
                             "status" to itemToSave.status
                         )
                         val finalItem = FireItem(it.toString(),
@@ -378,6 +379,7 @@ class ItemEditFragment : Fragment() {
                             itemToSave.description,
                             itemToSave.id,
                             itemToSave.owner,
+                            itemToSave.coord,
                             itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = finalItem
@@ -397,6 +399,7 @@ class ItemEditFragment : Fragment() {
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
                             "owner" to itemToSave.owner,
+                            "coord" to itemToSave.coord,
                             "status" to itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = itemToSave

@@ -129,6 +129,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                         viewModel.itemInfo.value!!.description,
                         viewModel.itemInfo.value!!.id,
                         viewModel.itemInfo.value!!.owner,
+                        viewModel.itemInfo.value!!.coord,
                         ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
                     )
 
@@ -242,6 +243,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                         viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
                         viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
                         viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
+                        viewModel.itemInfo.value!!.coord,
                         ItemStatusCreator.getStatus(ITEMSTATUS.SOLD))
 
                     viewModel.setItemInfo(soldItem)
@@ -396,7 +398,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        map!!.addMarker(MarkerOptions().position(LatLng(34.6,12.1)).title("prova"))
+        map!!.addMarker(MarkerOptions().position(LatLng(viewModel.itemInfo.value!!.coord!!.latitude,viewModel.itemInfo.value!!.coord!!.longitude)).title("prova"))
         requireActivity()
     }
 
