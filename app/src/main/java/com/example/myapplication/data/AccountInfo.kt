@@ -27,6 +27,27 @@ class AccountInfoFactory(){
 
         const val defaultProfilePic = "android.resource://com.example.myapplication/drawable/default_profile_picture"
 
+        val getProfilePicturePath : (editProfileFragment : EditProfileFragment) -> Uri =
+            {
+                val readFromPref = it.requireActivity().getPreferences(Context.MODE_PRIVATE)
+                val tempProfilePicture = readFromPref.getString("profile_picture_editing", null)
+
+                if(tempProfilePicture == null) {
+                    val readFromSharePref = it.requireActivity().getSharedPreferences("account_info", Context.MODE_PRIVATE)
+                    val accountInfo = readFromSharePref.getString("account_info", null)
+
+                    if(!accountInfo.isNullOrBlank()) {
+                        val accountJson = JSONObject(accountInfo)
+                        Uri.parse(accountJson["profilePicture"].toString())
+                    }
+                    else {
+                        Uri.parse(defaultProfilePic)
+                    }
+                }
+                else {
+                    Uri.parse(tempProfilePicture)
+                }
+            }
 
         fun getAccountInfoFromTextEdit(editProfileFragment: EditProfileFragment) : AccountInfo {
 

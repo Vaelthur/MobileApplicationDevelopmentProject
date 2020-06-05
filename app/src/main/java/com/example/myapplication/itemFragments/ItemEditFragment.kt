@@ -314,7 +314,6 @@ class ItemEditFragment : Fragment() {
         requireView().findViewById<ImageView>(R.id.item_picture).visibility = View.GONE
         requireView().findViewById<ImageButton>(R.id.imageButtonChangePhoto).visibility = View.GONE
         requireView().findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
-        requireView().findViewById<TextView>(R.id.saving_text).visibility = View.VISIBLE
 
         val itemID = viewModel.tempItemInfo.value?.id
 

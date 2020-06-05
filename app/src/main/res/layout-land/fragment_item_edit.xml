@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
+            app:layout_constraintGuide_percent="0.3" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -74,19 +74,17 @@
                 app:layout_constraintBottom_toTopOf="@+id/item_price"
                 app:layout_constraintStart_toStartOf="@id/fieldsGuideline"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_chainStyle="spread_inside" />
+                app:layout_constraintVertical_chainStyle="spread" />
 
             <EditText
                 android:id="@+id/item_title_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
                 android:inputType="textMultiLine"
                 android:text="@string/title_std"
-                app:layout_constraintBottom_toTopOf="@+id/item_price_edit"
+                app:layout_constraintBaseline_toBaselineOf="@+id/item_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/details_value_guideline"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="spread_inside" />
 
 
@@ -113,11 +111,10 @@
                 android:text="@string/price_val_std"
                 android:textColor="#005BA3"
                 android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/details_guideline"
+                app:layout_constraintBaseline_toBaselineOf="@+id/item_price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@id/details_value_guideline"
-                app:layout_constraintTop_toBottomOf="@+id/item_title_edit" />
+                app:layout_constraintStart_toStartOf="@id/details_value_guideline" />
 
             <TextView
                 android:id="@+id/price_currency"
@@ -138,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="visible"
-                app:layout_constraintGuide_percent="0.22"
+                app:layout_constraintGuide_percent="0.20"
                 tools:visibility="visible" />
 
             <TextView
@@ -183,7 +180,7 @@
                 android:layout_marginTop="16dp"
                 android:fontFamily="sans-serif-light"
                 android:text="@string/location"
-                app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
+                app:layout_constraintBottom_toTopOf="@+id/itemLocationMap"
                 app:layout_constraintStart_toStartOf="@+id/item_subcategory"
                 app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
 
@@ -196,7 +193,7 @@
                 android:text="@string/expire_date"
                 app:layout_constraintBottom_toTopOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/item_location_details"
-                app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
+                app:layout_constraintTop_toBottomOf="@+id/itemLocationMap" />
 
             <TextView
                 android:id="@+id/item_condition"
@@ -279,6 +276,7 @@
                 android:id="@+id/item_picture_description_edit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:text="@string/description"
                 app:layout_constraintEnd_toEndOf="@id/details_value_guideline"
                 app:layout_constraintStart_toStartOf="@id/fieldsGuideline"
@@ -303,13 +301,26 @@
             <com.example.myapplication.CustomMapView
                 android:id="@+id/itemLocationMap"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@id/item_expire_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf=""
-                tools:layout_editor_absoluteY="291dp" />
+                app:layout_constraintTop_toBottomOf="@id/item_location_details" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="245dp"
+            android:layout_height="163dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/item_picture"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/item_picture"
+            app:layout_constraintTop_toTopOf="@+id/item_picture" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
