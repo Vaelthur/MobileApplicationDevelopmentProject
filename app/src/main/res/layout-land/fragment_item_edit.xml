@@ -242,7 +242,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/location"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
@@ -306,6 +305,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_location_details" />
+
+            <Button
+                android:id="@+id/LocateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:text="Locate me"
+                app:layout_constraintBottom_toTopOf="@+id/itemLocationMap"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/item_location_value"
+                app:layout_constraintTop_toBottomOf="@+id/subcategory_spinner" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

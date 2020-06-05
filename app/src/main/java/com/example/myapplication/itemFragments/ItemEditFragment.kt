@@ -73,6 +73,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
 
     private lateinit var  viewModel: ItemDetailsViewModel
     lateinit private var fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var itemMap : GoogleMap
 
     ///region create/destroy
 
@@ -139,14 +140,16 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
 
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 if (it != null) {
-                    val geoCoder = Geocoder(requireContext(), Locale.getDefault())
-                    val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
-                    val  itemAddress = address[0].locality.toString() //This is the city
-                    // set value in viewModel
-                    viewModel.tempItemInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
-                    viewModel.tempItemInfo.value?.location = itemAddress
-                    val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
-                    mapView.getMapAsync(this)
+                    val myPos = LatLng(it.latitude, it.longitude)
+                    updateMapLocation(itemMap, myPos)
+//                    val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+//                    val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
+//                    val  itemAddress = address[0].locality.toString() //This is the city
+//                    // set value in viewModel
+//                    viewModel.tempItemInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
+//                    viewModel.tempItemInfo.value?.location = itemAddress
+//                    val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
+//                    mapView.getMapAsync(this)
 
                 } else {
                     if (!isLocationEnabled(requireContext()))
@@ -647,32 +650,50 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
     ///endregion
 
     override fun onMapReady(map: GoogleMap?) {
-        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-            it?.let {
-                val myPos = LatLng(it.latitude,it.longitude)
+
+        itemMap = map!!
+        //First tray to retrieve location from db
+        FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
+            .addOnSuccessListener {
+                val itemPos = it["coord"] as GeoPoint
+                val itemLatLng = LatLng(itemPos.latitude, itemPos.longitude)
                 map?.clear()
-                map!!.addMarker(MarkerOptions().position(myPos))
-                Helpers.moveToCurrentLocation(map, myPos)
-                map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
-            }
+                map!!.addMarker(MarkerOptions()
+                    .position(itemLatLng)
+                    .title("Item Position"))
+                viewModel.tempItemInfo.value?.coord = itemPos
+                Helpers.moveToCurrentLocation(map,itemLatLng)
         }
+//        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+//            it?.let {
+//                val myPos = LatLng(it.latitude,it.longitude)
+//                map?.clear()
+//                map!!.addMarker(MarkerOptions().position(myPos))
+//                Helpers.moveToCurrentLocation(map, myPos)
+//                map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
+//            }
+//        }
         map!!.setOnMapClickListener {
             val newPos = LatLng(it.latitude, it.longitude)
-            map.clear()
-            map.addMarker(MarkerOptions().position(newPos))
-
-            val geoCoder = Geocoder(requireContext(), Locale.getDefault())
-            val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
-            if(address.isNotEmpty()) {
-                if(!address[0].locality.isNullOrEmpty()) {
-                    val itemAddress = address[0].locality.toString()
-                    viewModel.tempItemInfo.value?.location = itemAddress
-                    editViewUserLocationEditProfile.setText(viewModel.tempItemInfo.value?.location)
-                }
-            }
-            viewModel.tempItemInfo.value?.coord = GeoPoint(it.latitude,it.longitude)
-            //move camera with style
-            Helpers.moveToCurrentLocation(map,newPos)
+            updateMapLocation(map, newPos)
         }
+    }
+
+    fun updateMapLocation(map : GoogleMap, newPos : LatLng) {
+        map.clear()
+        map.addMarker(MarkerOptions().position(newPos).title("Item position"))
+        val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+        val address: List<Address> = geoCoder.getFromLocation(newPos.latitude, newPos.longitude, 1)
+        if(address.isNotEmpty()) {
+            if(!address[0].locality.isNullOrEmpty()) {
+                val itemAddress = address[0].locality.toString()
+                viewModel.tempItemInfo.value?.location = itemAddress
+                item_location_value.setText(itemAddress)
+            }
+        }
+
+        viewModel.tempItemInfo.value?.coord = GeoPoint(newPos.latitude,newPos.longitude)
+        //move camera with style
+        Helpers.moveToCurrentLocation(map,newPos)
     }
 }
