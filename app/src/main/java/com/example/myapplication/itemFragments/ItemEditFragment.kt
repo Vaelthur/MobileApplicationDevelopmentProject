@@ -44,6 +44,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -70,6 +71,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
     private val PERMISSION_CODE_LOC = 100
     // var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
     private var pos=0
+    var coordGPItem: GeoPoint = GeoPoint(0.0, 0.0)
 
     private lateinit var  viewModel: ItemDetailsViewModel
     lateinit private var fusedLocationProviderClient: FusedLocationProviderClient
@@ -90,6 +92,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
 
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
+        coordGPItem = viewModel.tempItemInfo.value?.coord!!
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
 
@@ -98,6 +101,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
             viewModel.setItemInfo(incomingItem)
             if(viewModel.tempItemInfo.value == null) {
                 viewModel.setTempItemInfo(incomingItem)
+                coordGPItem = viewModel.tempItemInfo.value?.coord!!
             }
         }
 
@@ -653,17 +657,21 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
 
         itemMap = map!!
         //First tray to retrieve location from db
-        FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
-            .addOnSuccessListener {
-                val itemPos = it["coord"] as GeoPoint
-                val itemLatLng = LatLng(itemPos.latitude, itemPos.longitude)
-                map?.clear()
-                map!!.addMarker(MarkerOptions()
-                    .position(itemLatLng)
-                    .title("Item Position"))
-                viewModel.tempItemInfo.value?.coord = itemPos
-                Helpers.moveToCurrentLocation(map,itemLatLng)
-        }
+        val itemPos = LatLng(coordGPItem.latitude, coordGPItem.longitude)
+        map.clear()
+        map.addMarker(MarkerOptions().position(itemPos))
+        Helpers.moveToCurrentLocation(map, itemPos)
+//        FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
+//            .addOnSuccessListener {
+//                val itemPos = it["coord"] as GeoPoint
+//                val itemLatLng = LatLng(itemPos.latitude, itemPos.longitude)
+//                map?.clear()
+//                map!!.addMarker(MarkerOptions()
+//                    .position(itemLatLng)
+//                    .title("Item Position"))
+//                viewModel.tempItemInfo.value?.coord = itemPos
+//                Helpers.moveToCurrentLocation(map,itemLatLng)
+//        }
 //        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
 //            it?.let {
 //                val myPos = LatLng(it.latitude,it.longitude)
@@ -691,7 +699,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                 item_location_value.setText(itemAddress)
             }
         }
-
+        coordGPItem = GeoPoint(newPos.latitude, newPos.longitude)
         viewModel.tempItemInfo.value?.coord = GeoPoint(newPos.latitude,newPos.longitude)
         //move camera with style
         Helpers.moveToCurrentLocation(map,newPos)

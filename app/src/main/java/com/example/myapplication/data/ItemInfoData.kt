@@ -51,7 +51,7 @@ class ItemInfoFactory(){
             val description = StringBuffer(getEditViewText(editFrag.item_picture_description_edit)).toString()
             val itemPic = getItemPicturePath(editFrag).toString()
             val owner = FirebaseAuth.getInstance().currentUser!!.uid
-            val coord = GeoPoint(10.0,10.0)
+            val coord = editFrag.coordGPItem
             // TODO: start a getlastlocation to get real coords
 
             id?.let{

@@ -89,7 +89,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
-        coordGP = showProfileViewModel.accountInfo.value?.coord!!
+        coordGP = showProfileViewModel.tempAccountInfo.value?.coord!!
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
         return view
     }
@@ -560,6 +560,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                     val accountInfo = AccountInfoFactory.fromMapToObj(accountDocument.data)
                     showProfileViewModel.accountInfo.value = accountInfo
                     showProfileViewModel.tempAccountInfo.value = accountInfo
+                    coordGP = showProfileViewModel.tempAccountInfo.value?.coord!!
                 }
                 else {
                     Helpers.makeSnackbar(requireView(), "Could not retrieve user info")
@@ -585,7 +586,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
         val myPos = LatLng(coordGP.latitude, coordGP.longitude)
         map?.clear()
         map!!.addMarker(MarkerOptions().position(myPos))
-        map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
+        Helpers.moveToCurrentLocation(map,myPos)
 
         map!!.setOnMapClickListener {
             val newPos = LatLng(it.latitude, it.longitude)
