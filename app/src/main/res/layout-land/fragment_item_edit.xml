@@ -300,6 +300,15 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="43dp" />
 
+            <com.example.myapplication.CustomMapView
+                android:id="@+id/itemLocationMap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf=""
+                tools:layout_editor_absoluteY="291dp" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
