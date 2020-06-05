@@ -6,7 +6,7 @@ import java.io.Serializable
 data class FireItem(
     val picture_uri: String?,
     val title: String,
-    val location: String?,
+    var location: String?,
     val price: String,
     val category: String,
     val subCategory: String,
@@ -43,7 +43,7 @@ data class FireItem(
                 hash["description"] as String,
                 hash["id"] as String,
                 hash["owner"] as String,
-                hash["coord"] as GeoPoint,
+                hash["coord"] as GeoPoint?,
                 status
             )
         }

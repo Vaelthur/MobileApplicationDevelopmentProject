@@ -7,18 +7,23 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.media.tv.TvContract
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
+import android.text.TextUtils
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.Constraints
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -32,10 +37,20 @@ import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.example.myapplication.data.ItemCategories
 import com.example.myapplication.data.ItemInfoFactory
 import com.example.myapplication.main.Helpers
+import com.example.myapplication.main.MainActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -45,18 +60,19 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ItemEditFragment : Fragment() {
+class ItemEditFragment : Fragment(), OnMapReadyCallback {
     //requests and permissions codes
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_IMAGE_GALLERY = 2
     private val PERMISSION_CODE_CAMERA = 1000
     private val PERMISSION_CODE_GALLERY = 1001
 
+    private val PERMISSION_CODE_LOC = 100
     // var needed to differentiate change on spinners: when first entering the fragment end when changing inside the fragment
     private var pos=0
 
     private lateinit var  viewModel: ItemDetailsViewModel
-
+    lateinit private var fusedLocationProviderClient: FusedLocationProviderClient
 
     ///region create/destroy
 
@@ -74,6 +90,8 @@ class ItemEditFragment : Fragment() {
 
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
 
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
+
         arguments?. let {
             val incomingItem : FireItem = it.getSerializable("item") as FireItem
             viewModel.setItemInfo(incomingItem)
@@ -87,6 +105,8 @@ class ItemEditFragment : Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+
 
         setSpinners(view)
         setDatePicker(view)
@@ -111,8 +131,63 @@ class ItemEditFragment : Fragment() {
                 .into(item_picture)
         })
 
+        LocateButton.setOnClickListener {
+
+            if(ContextCompat.checkSelfPermission(requireActivity() as MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_CODE_LOC)
+            }
+
+            fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+                if (it != null) {
+                    val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+                    val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
+                    val  itemAddress = address[0].locality.toString() //This is the city
+                    // set value in viewModel
+                    viewModel.tempItemInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
+                    viewModel.tempItemInfo.value?.location = itemAddress
+                    val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
+                    mapView.getMapAsync(this)
+
+                } else {
+                    if (!isLocationEnabled(requireContext()))
+                        Helpers.makeSnackbar(view, "Please enable location services")
+                    else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
+                }
+            }. addOnCompleteListener {
+                item_location_value.setText(viewModel.tempItemInfo.value?.location)
+
+            }. addOnFailureListener {
+                if (!isLocationEnabled(requireContext()))
+                    Helpers.makeSnackbar(view, "Please enable location services")
+                else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
+            }
+        }
+
         // Listener to change profile pic
         imageButtonChangePhoto.setOnClickListener {  onImageButtonClickEvent(it) }
+    }
+
+    fun isLocationEnabled(context: Context): Boolean {
+        var locationMode = 0
+        val locationProviders: String
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            locationMode = try {
+                Settings.Secure.getInt(
+                    context.contentResolver,
+                    Settings.Secure.LOCATION_MODE
+                )
+            } catch (e: Settings.SettingNotFoundException) {
+                e.printStackTrace()
+                return false
+            }
+            locationMode != Settings.Secure.LOCATION_MODE_OFF
+        } else {
+            locationProviders = Settings.Secure.getString(
+                context.contentResolver,
+                Settings.Secure.LOCATION_PROVIDERS_ALLOWED
+            )
+            !TextUtils.isEmpty(locationProviders)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -563,4 +638,34 @@ class ItemEditFragment : Fragment() {
     }
 
     ///endregion
+
+    override fun onMapReady(map: GoogleMap?) {
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
+            it?.let {
+                val myPos = LatLng(it.latitude,it.longitude)
+                map?.clear()
+                map!!.addMarker(MarkerOptions().position(myPos))
+                Helpers.moveToCurrentLocation(map, myPos)
+                map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
+            }
+        }
+        map!!.setOnMapClickListener {
+            val newPos = LatLng(it.latitude, it.longitude)
+            map.clear()
+            map.addMarker(MarkerOptions().position(newPos))
+
+            val geoCoder = Geocoder(requireContext(), Locale.getDefault())
+            val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
+            if(address.isNotEmpty()) {
+                if(!address[0].locality.isNullOrEmpty()) {
+                    val userAddress = address[0].locality.toString()
+                    viewModel.tempItemInfo.value?.location = userAddress
+                    editViewUserLocationEditProfile.setText(viewModel.tempItemInfo.value?.location)
+                }
+            }
+            viewModel.tempItemInfo.value?.coord = GeoPoint(it.latitude,it.longitude)
+            //move camera with style
+            Helpers.moveToCurrentLocation(map,newPos)
+        }
+    }
 }

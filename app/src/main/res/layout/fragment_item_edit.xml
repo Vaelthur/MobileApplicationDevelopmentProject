@@ -251,8 +251,9 @@
                 android:selectAllOnFocus="true"
                 android:singleLine="true"
                 android:text="@string/location"
+                android:textSize="14sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/item_location_details"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/LocateButton"
                 app:layout_constraintStart_toStartOf="@+id/details_value_guideline" />
 
             <TextView
@@ -313,6 +314,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/item_location_details" />
+
+            <Button
+                android:id="@+id/LocateButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/locate"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toEndOf="@id/item_location_value"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBaseline_toBaselineOf="@id/item_location_value"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
