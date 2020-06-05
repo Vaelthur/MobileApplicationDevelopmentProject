@@ -8,6 +8,7 @@ import com.example.myapplication.ItemEditFragment
 import com.example.myapplication.itemFragments.ItemDetailsViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 
 class ItemInfoFactory(){
@@ -50,13 +51,15 @@ class ItemInfoFactory(){
             val description = StringBuffer(getEditViewText(editFrag.item_picture_description_edit)).toString()
             val itemPic = getItemPicturePath(editFrag).toString()
             val owner = FirebaseAuth.getInstance().currentUser!!.uid
+            val coord = GeoPoint(10.0,10.0)
+            // TODO: start a getlastlocation to get real coords
 
             id?.let{
-                return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id, owner)
+                return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id, owner, coord = coord)
             }
 
             val newItemID = FirebaseFirestore.getInstance().collection("items").document().id
-            return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, newItemID, owner)
+            return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, newItemID, owner, coord = coord)
         }
     }
 

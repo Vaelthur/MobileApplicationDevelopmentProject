@@ -69,6 +69,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
     private val PERMISSION_CODE_LOC = 100
     lateinit private var fusedLocationProviderClient: FusedLocationProviderClient
+    var coordGP: GeoPoint = GeoPoint(0.0, 0.0)
 
     private var userAddress = "City"
 
@@ -88,6 +89,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
+        coordGP = showProfileViewModel.accountInfo.value?.coord!!
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
         return view
     }
@@ -118,7 +120,6 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                 .centerCrop()
                 .circleCrop()
                 .into(profile_picture)
-
             val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE)
             if (sharedPref != null) {
                 with (sharedPref.edit()) {
@@ -144,6 +145,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                     val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
                     val  userAddress = address[0].locality.toString() //This is the city
                     // set value in viewModel
+                    coordGP = GeoPoint(it.latitude, it.longitude)
                     showProfileViewModel.tempAccountInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
                     showProfileViewModel.tempAccountInfo.value?.location = userAddress
                     val mapView = view.findViewById<CustomMapView>(R.id.userLocation)
@@ -593,6 +595,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
                 }
             }
             showProfileViewModel.tempAccountInfo.value?.coord = GeoPoint(it.latitude,it.longitude)
+            coordGP = GeoPoint(it.latitude, it.longitude)
             //move camera with style
             Helpers.moveToCurrentLocation(map,newPos)
         }

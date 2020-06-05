@@ -463,7 +463,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             itemCoord,
                             itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
-                        viewModel.itemInfo.value = finalItem
+                        viewModel.setItemInfo(finalItem)
                         endingSave(finalItem)
                     }
                 }

@@ -28,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.GeoPoint
 import org.json.JSONObject
 import java.io.IOException
 import java.io.Serializable
@@ -45,7 +46,8 @@ class Helpers(){
 
             val itemInfo = FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own)
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own, coord = GeoPoint(0.0, 0.0)
+            )
             val itemBundle = Bundle(2)
             itemBundle.putBoolean("myitems", true)
             itemBundle.putSerializable("item", itemInfo as Serializable?)
@@ -59,7 +61,7 @@ class Helpers(){
 
             return FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own)
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own, coord = GeoPoint(0.0, 0.0))
         }
 
         ///endregion
