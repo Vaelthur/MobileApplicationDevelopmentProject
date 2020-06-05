@@ -92,8 +92,9 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
         val view = inflater.inflate(R.layout.fragment_item_edit, container, false)
 
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
-        coordGPItem = viewModel.tempItemInfo.value?.coord!!
-
+        viewModel.tempItemInfo.value?.let {
+            coordGPItem = it.coord!!
+        }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
 
         arguments?. let {
