@@ -60,7 +60,7 @@ class FirebaseFirestoreNotifications : FirebaseMessagingService() {
             setContentTitle(notification?.title)
             setContentText(notification?.body)
             setContentInfo("Info")
-            setSmallIcon(R.drawable.ic_stat_name)
+            setSmallIcon(R.mipmap.sellback_app)
         }
 
         notificationManager.notify(Random.nextInt(), notificationBuilder.build())
