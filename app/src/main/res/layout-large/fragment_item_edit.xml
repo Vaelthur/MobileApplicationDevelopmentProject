@@ -38,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.3" />
+            app:layout_constraintGuide_percent="0.25" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:visibility="visible"
-                app:layout_constraintGuide_percent="0.20"
+                app:layout_constraintGuide_percent="0.10"
                 tools:visibility="visible" />
 
             <TextView
@@ -187,7 +187,7 @@
                 android:fontFamily="sans-serif-light"
                 android:text="@string/location"
                 android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/item_expire_date"
+                app:layout_constraintBottom_toTopOf="@+id/itemLocationMap"
                 app:layout_constraintStart_toStartOf="@+id/item_subcategory"
                 app:layout_constraintTop_toBottomOf="@+id/item_subcategory" />
 
@@ -201,7 +201,7 @@
                 android:textSize="24sp"
                 app:layout_constraintBottom_toTopOf="@+id/item_condition"
                 app:layout_constraintStart_toStartOf="@+id/item_location_details"
-                app:layout_constraintTop_toBottomOf="@+id/item_location_details" />
+                app:layout_constraintTop_toBottomOf="@+id/itemLocationMap" />
 
             <TextView
                 android:id="@+id/item_condition"
@@ -304,6 +304,16 @@
                 app:layout_constraintBaseline_toBaselineOf="@id/item_expire_date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/item_expire_date_value" />
+
+            <com.example.myapplication.CustomMapView
+                android:id="@+id/itemLocationMap"
+                android:layout_width="0dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@id/item_expire_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/item_location_details" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

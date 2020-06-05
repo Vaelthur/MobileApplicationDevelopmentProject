@@ -214,7 +214,7 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
                 map?.clear()
                 map!!.addMarker(
                         MarkerOptions()
-                            .position(LatLng(showProfileViewModel.accountInfo.value?.coord?.latitude!!, showProfileViewModel.accountInfo.value?.coord?.longitude!!))
+                            .position(LatLng(myPos.latitude, myPos.longitude))
                             .title("Your are here")
                         )
                 Helpers.moveToCurrentLocation(map, LatLng(myPos.latitude,myPos.longitude))
