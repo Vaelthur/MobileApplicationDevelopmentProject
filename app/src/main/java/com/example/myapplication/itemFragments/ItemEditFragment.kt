@@ -165,6 +165,12 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
 
         // Listener to change profile pic
         imageButtonChangePhoto.setOnClickListener {  onImageButtonClickEvent(it) }
+
+        //update map
+        val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+        mapView.getMapAsync(this)
     }
 
     fun isLocationEnabled(context: Context): Boolean {
@@ -391,6 +397,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
         requireView().findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
 
         val itemID = viewModel.tempItemInfo.value?.id
+        val itemCoord = viewModel.tempItemInfo.value?.coord
 
         val itemToSave = if(itemID.equals("0")) {
             ItemInfoFactory.getItemInfoFromTextEdit(this, null)
@@ -439,7 +446,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
                             "owner" to itemToSave.owner,
-                            "coord" to itemToSave.coord,
+                            "coord" to itemCoord!!,
                             "status" to itemToSave.status
                         )
                         val finalItem = FireItem(it.toString(),
@@ -453,7 +460,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             itemToSave.description,
                             itemToSave.id,
                             itemToSave.owner,
-                            itemToSave.coord,
+                            itemCoord,
                             itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = finalItem
@@ -473,7 +480,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
                             "owner" to itemToSave.owner,
-                            "coord" to itemToSave.coord,
+                            "coord" to itemCoord,
                             "status" to itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = itemToSave
@@ -658,8 +665,8 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
             val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
             if(address.isNotEmpty()) {
                 if(!address[0].locality.isNullOrEmpty()) {
-                    val userAddress = address[0].locality.toString()
-                    viewModel.tempItemInfo.value?.location = userAddress
+                    val itemAddress = address[0].locality.toString()
+                    viewModel.tempItemInfo.value?.location = itemAddress
                     editViewUserLocationEditProfile.setText(viewModel.tempItemInfo.value?.location)
                 }
             }

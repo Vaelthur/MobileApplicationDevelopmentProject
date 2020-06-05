@@ -33,6 +33,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.GeoPoint
 import kotlinx.android.synthetic.main.item_details_buy_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.item_category_value
@@ -398,8 +399,20 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
     }
 
     override fun onMapReady(map: GoogleMap?) {
-        map!!.addMarker(MarkerOptions().position(LatLng(viewModel.itemInfo.value!!.coord!!.latitude,viewModel.itemInfo.value!!.coord!!.longitude)).title("prova"))
-        requireActivity()
+        FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
+            .addOnSuccessListener {
+                val myPos = it["coord"] as GeoPoint
+                viewModel.itemInfo.value?.coord = myPos
+                map?.clear()
+                map!!.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(myPos.latitude, myPos.longitude))
+                        .title("Your Item here")
+                )
+                Helpers.moveToCurrentLocation(map, LatLng(myPos.latitude,myPos.longitude))
+            }
+//        map!!.addMarker(MarkerOptions().position(LatLng(viewModel.itemInfo.value!!.coord!!.latitude,viewModel.itemInfo.value!!.coord!!.longitude)).title("prova"))
+//        requireActivity()
     }
 
     /// endregion
