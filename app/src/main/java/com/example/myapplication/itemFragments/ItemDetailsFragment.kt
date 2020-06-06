@@ -189,7 +189,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             //Other person items
             FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
                 .addOnSuccessListener { it ->
-                    usrC = GeoPoint(it["lat"] as Double, it["lon"] as Double)
+                    usrC = it["coord"] as GeoPoint
                 }
 
             directionbutton.setOnClickListener { v: View? ->
