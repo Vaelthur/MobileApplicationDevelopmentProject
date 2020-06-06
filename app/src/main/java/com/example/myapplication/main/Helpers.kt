@@ -46,7 +46,7 @@ class Helpers(){
 
             val itemInfo = FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own, coord = GeoPoint(0.0, 0.0)
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own, lat = 0.0, lon = 0.0
             )
             val itemBundle = Bundle(2)
             itemBundle.putBoolean("myitems", true)
@@ -61,7 +61,8 @@ class Helpers(){
 
             return FireItem(
                 ItemInfoFactory.defaultItemPhoto, "", "",
-                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own, coord = GeoPoint(0.0, 0.0))
+                "", "Arts & Crafts", "Painting, Drawing & Art Supplies", "", "", "", "0", owner = own, lat = 0.0, lon = 0.0
+            )
         }
 
         ///endregion

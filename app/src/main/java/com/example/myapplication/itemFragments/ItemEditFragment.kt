@@ -93,7 +93,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
 
         viewModel = of(requireActivity()).get(ItemDetailsViewModel::class.java)
         viewModel.tempItemInfo.value?.let {
-            coordGPItem = it.coord!!
+            coordGPItem = GeoPoint(it.lat!!, it.lon!!)
         }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
 
@@ -102,7 +102,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
             viewModel.setItemInfo(incomingItem)
             if(viewModel.tempItemInfo.value == null) {
                 viewModel.setTempItemInfo(incomingItem)
-                coordGPItem = viewModel.tempItemInfo.value?.coord!!
+                coordGPItem = GeoPoint(viewModel.tempItemInfo.value?.lat!!, viewModel.tempItemInfo.value?.lon!!)
             }
         }
 
@@ -405,7 +405,8 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
         requireView().findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
 
         val itemID = viewModel.tempItemInfo.value?.id
-        val itemCoord = viewModel.tempItemInfo.value?.coord
+        val itemLat= viewModel.tempItemInfo.value?.lat
+        val itemLon = viewModel.tempItemInfo.value?.lon
 
         val itemToSave = if(itemID.equals("0")) {
             ItemInfoFactory.getItemInfoFromTextEdit(this, null)
@@ -454,7 +455,8 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
                             "owner" to itemToSave.owner,
-                            "coord" to itemCoord!!,
+                            "lat" to itemLat!!,
+                            "lon" to itemLon!!,
                             "status" to itemToSave.status
                         )
                         val finalItem = FireItem(it.toString(),
@@ -468,7 +470,8 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             itemToSave.description,
                             itemToSave.id,
                             itemToSave.owner,
-                            itemCoord,
+                            itemLat,
+                            itemLon,
                             itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.setItemInfo(finalItem)
@@ -488,7 +491,8 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             "sub_category" to itemToSave.subCategory,
                             "title" to itemToSave.title,
                             "owner" to itemToSave.owner,
-                            "coord" to itemCoord,
+                            "lat" to itemLat!!,
+                            "lon" to itemLon!!,
                             "status" to itemToSave.status)
                         collectionRef.document(itemToSave.id).set(itemInf)
                         viewModel.itemInfo.value = itemToSave
@@ -701,7 +705,8 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
             }
         }
         coordGPItem = GeoPoint(newPos.latitude, newPos.longitude)
-        viewModel.tempItemInfo.value?.coord = GeoPoint(newPos.latitude,newPos.longitude)
+        viewModel.tempItemInfo.value?.lat = newPos.latitude
+        viewModel.tempItemInfo.value?.lon = newPos.longitude
         //move camera with style
         Helpers.moveToCurrentLocation(map,newPos)
     }

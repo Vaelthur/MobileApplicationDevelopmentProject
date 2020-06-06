@@ -60,7 +60,7 @@ class AccountInfoFactory(){
             val location = StringBuffer(getEditViewText(editProfileFragment.editViewUserLocationEditProfile)).toString()
             val profilePicture = getProfilePicturePath(editProfileFragment).toString()
             val id = (editProfileFragment.requireActivity() as MainActivity).getAuth().currentUser?.uid
-            val coord = editProfileFragment.coordGP
+            val coord = GeoPoint(editProfileFragment.coordGP.latitude, editProfileFragment.coordGP.longitude)
 
 
             return AccountInfo(

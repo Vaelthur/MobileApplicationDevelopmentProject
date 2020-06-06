@@ -15,7 +15,9 @@ data class FireItem(
     val description: String,
     val id: String,
     val owner: String,
-    var coord: GeoPoint? = null,
+    //var coord: GeoPoint? = null,
+    var lat: Double?,
+    var lon: Double?,
     val status: String = "Available"
 )  : Serializable {
 
@@ -24,6 +26,8 @@ data class FireItem(
         fun fromMapToObj(hash: Map<String, Any>?): FireItem {
 
             var status : String? = null
+            var lat : Double? = null
+            var lon: Double? = null
             if(hash?.get("status") is String){
                 status =  hash?.get("status") as String
             }
@@ -43,7 +47,9 @@ data class FireItem(
                 hash["description"] as String,
                 hash["id"] as String,
                 hash["owner"] as String,
-                hash["coord"] as GeoPoint?,
+                //hash["coord"] as GeoPoint?,
+                hash["lat"] as Double,
+                hash["lon"] as Double,
                 status
             )
         }

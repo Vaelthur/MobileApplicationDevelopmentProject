@@ -51,15 +51,16 @@ class ItemInfoFactory(){
             val description = StringBuffer(getEditViewText(editFrag.item_picture_description_edit)).toString()
             val itemPic = getItemPicturePath(editFrag).toString()
             val owner = FirebaseAuth.getInstance().currentUser!!.uid
-            val coord = editFrag.coordGPItem
+            val lat = editFrag.coordGPItem.latitude
+            val lon = editFrag.coordGPItem.longitude
             // TODO: start a getlastlocation to get real coords
 
             id?.let{
-                return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id, owner, coord = coord)
+                return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id, owner, lat, lon)
             }
 
             val newItemID = FirebaseFirestore.getInstance().collection("items").document().id
-            return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, newItemID, owner, coord = coord)
+            return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, newItemID, owner, lat, lon)
         }
     }
 

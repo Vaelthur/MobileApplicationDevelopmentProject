@@ -89,7 +89,9 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
         val view = inflater.inflate(R.layout.fragment_edit_profile, container, false)
         showProfileViewModel = of(requireActivity()).get(ShowProfileViewModel::class.java)
-        coordGP = showProfileViewModel.tempAccountInfo.value?.coord!!
+        showProfileViewModel.tempAccountInfo.value?.let {
+            coordGP = it.coord!!
+        }
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity() as MainActivity)
         return view
     }

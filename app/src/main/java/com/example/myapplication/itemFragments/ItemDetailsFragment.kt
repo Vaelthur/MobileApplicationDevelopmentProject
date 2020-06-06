@@ -131,7 +131,8 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                         viewModel.itemInfo.value!!.description,
                         viewModel.itemInfo.value!!.id,
                         viewModel.itemInfo.value!!.owner,
-                        viewModel.itemInfo.value!!.coord,
+                        viewModel.itemInfo.value!!.lat,
+                        viewModel.itemInfo.value!!.lon,
                         ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
                     )
 
@@ -188,18 +189,18 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             //Other person items
             FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
                 .addOnSuccessListener { it ->
-                    usrC = it["coord"] as GeoPoint
+                    usrC = GeoPoint(it["lat"] as Double, it["lon"] as Double)
                 }
 
             directionbutton.setOnClickListener { v: View? ->
 
                 val dirBundle = Bundle(2)
                 val src = doubleArrayOf(usrC.latitude, usrC.longitude)
-                val dst = viewModel.itemInfo.value?.coord?.latitude?.let {
-                    viewModel.itemInfo.value?.coord?.longitude?.let { it1 ->
+                val dst = viewModel.itemInfo.value?.lat.let {lat ->
+                    viewModel.itemInfo.value?.lon.let { lon ->
                         doubleArrayOf(
-                            it,
-                            it1
+                            lat!!,
+                            lon!!
                         )
                     }
                 }
@@ -267,7 +268,7 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                         viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
                         viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
                         viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
-                        viewModel.itemInfo.value!!.coord,
+                        viewModel.itemInfo.value!!.lat, viewModel.itemInfo.value!!.lon,
                         ItemStatusCreator.getStatus(ITEMSTATUS.SOLD))
 
                     viewModel.setItemInfo(soldItem)
@@ -424,8 +425,9 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
     override fun onMapReady(map: GoogleMap?) {
         FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
             .addOnSuccessListener {
-                val myPos = it["coord"] as GeoPoint
-                viewModel.itemInfo.value?.coord = myPos
+                val myPos = GeoPoint(it["lat"] as Double, it["lon"] as Double)
+                viewModel.itemInfo.value?.lat = myPos.latitude
+                viewModel.itemInfo.value?.lon = myPos.longitude
                 map?.clear()
                 map!!.addMarker(
                     MarkerOptions()
