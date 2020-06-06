@@ -34,6 +34,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.item_details_buy_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.item_category_value
@@ -183,10 +184,28 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             })
         }
         else {
+            var usrC : GeoPoint = GeoPoint(1.0,1.0)
             //Other person items
+            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+                .addOnSuccessListener { it ->
+                    usrC = it["coord"] as GeoPoint
+                }
 
             directionbutton.setOnClickListener { v: View? ->
-                view.findNavController().navigate(R.id.routeMapFragment)
+
+                val dirBundle = Bundle(2)
+                val src = doubleArrayOf(usrC.latitude, usrC.longitude)
+                val dst = viewModel.itemInfo.value?.coord?.latitude?.let {
+                    viewModel.itemInfo.value?.coord?.longitude?.let { it1 ->
+                        doubleArrayOf(
+                            it,
+                            it1
+                        )
+                    }
+                }
+                dirBundle.putDoubleArray("src", src)
+                dirBundle.putDoubleArray("dst",dst)
+                view.findNavController().navigate(R.id.routeMapFragment, dirBundle)
             }
 
             //set listeners

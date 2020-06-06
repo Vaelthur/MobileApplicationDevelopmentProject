@@ -11,12 +11,19 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.firestore.GeoPoint
 
 
 class RouteMapFragment : Fragment(), OnMapReadyCallback {
+    var src = GeoPoint(51.7, 61.9)
+    var dst = GeoPoint(1.0, 8.9)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val c1 : DoubleArray = arguments?.get("src") as DoubleArray
+        src = GeoPoint(c1[0], c1[1])
+        val c2 : DoubleArray = arguments?.get("dst") as DoubleArray
+        dst = GeoPoint(c2[0], c2[1])
     }
 
     override fun onCreateView(
@@ -38,12 +45,13 @@ class RouteMapFragment : Fragment(), OnMapReadyCallback {
 
 
     override fun onMapReady(map: GoogleMap?) {
-        //for fun
+
+
         map?.addPolyline(
             PolylineOptions()
                 .add(
-                    LatLng(51.5, -0.1),
-                    LatLng(40.7, -74.0)
+                    LatLng(src.latitude, src.longitude),
+                    LatLng(dst.latitude, dst.longitude)
                 )
                 .width(5f)
                 .color(Color.RED) )
