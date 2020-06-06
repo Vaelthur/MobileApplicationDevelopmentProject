@@ -6,17 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.myapplication.main.Helpers
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.Polyline
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
 
 
 class RouteMapFragment : Fragment(), OnMapReadyCallback {
@@ -36,7 +30,6 @@ class RouteMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val mapView = view.findViewById<MapView>(R.id.mapRoute)
         mapView.onCreate(savedInstanceState)
         mapView.onResume()
@@ -46,6 +39,14 @@ class RouteMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap?) {
         //for fun
+        map?.addPolyline(
+            PolylineOptions()
+                .add(
+                    LatLng(51.5, -0.1),
+                    LatLng(40.7, -74.0)
+                )
+                .width(5f)
+                .color(Color.RED) )
     }
 }
 
