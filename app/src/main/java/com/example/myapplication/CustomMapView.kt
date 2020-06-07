@@ -20,7 +20,7 @@ class CustomMapView : MapView {
     constructor(context: Context?, options: GoogleMapOptions?) : super(context, options) {}
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        //perchè altrimenti nelle scrollview non posso fare nulla se non muovere la mappa in orizzontale
+
         parent.requestDisallowInterceptTouchEvent(true)
         return super.dispatchTouchEvent(ev)
     }

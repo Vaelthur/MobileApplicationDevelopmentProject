@@ -574,15 +574,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
     /// endregion
 
     override fun onMapReady(map: GoogleMap?) {
-//        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-//            it?.let {
-//                val myPos = LatLng(it.latitude,it.longitude)
-//                map?.clear()
-//                map!!.addMarker(MarkerOptions().position(myPos))
-//                Helpers.moveToCurrentLocation(map, myPos)
-//                map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
-//            }
-//        }
+
 
         // shows effective location of user
         val myPos = LatLng(coordGP.latitude, coordGP.longitude)

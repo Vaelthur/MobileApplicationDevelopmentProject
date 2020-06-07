@@ -15,7 +15,6 @@ data class FireItem(
     val description: String,
     val id: String,
     val owner: String,
-    //var coord: GeoPoint? = null,
     var lat: Double?,
     var lon: Double?,
     val status: String = "Available"

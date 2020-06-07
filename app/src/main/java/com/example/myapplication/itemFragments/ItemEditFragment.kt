@@ -147,14 +147,6 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                 if (it != null) {
                     val myPos = LatLng(it.latitude, it.longitude)
                     updateMapLocation(itemMap, myPos)
-//                    val geoCoder = Geocoder(requireContext(), Locale.getDefault())
-//                    val address: List<Address> = geoCoder.getFromLocation(it.latitude, it.longitude, 1)
-//                    val  itemAddress = address[0].locality.toString() //This is the city
-//                    // set value in viewModel
-//                    viewModel.tempItemInfo.value?.coord = GeoPoint(it.latitude, it.longitude)
-//                    viewModel.tempItemInfo.value?.location = itemAddress
-//                    val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
-//                    mapView.getMapAsync(this)
 
                 } else {
                     if (!isLocationEnabled(requireContext()))
@@ -666,27 +658,7 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
         map.clear()
         map.addMarker(MarkerOptions().position(itemPos))
         Helpers.moveToCurrentLocation(map, itemPos)
-//        FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
-//            .addOnSuccessListener {
-//                val itemPos = it["coord"] as GeoPoint
-//                val itemLatLng = LatLng(itemPos.latitude, itemPos.longitude)
-//                map?.clear()
-//                map!!.addMarker(MarkerOptions()
-//                    .position(itemLatLng)
-//                    .title("Item Position"))
-//                viewModel.tempItemInfo.value?.coord = itemPos
-//                Helpers.moveToCurrentLocation(map,itemLatLng)
-//        }
-//        fusedLocationProviderClient.lastLocation.addOnSuccessListener {
-//            it?.let {
-//                val myPos = LatLng(it.latitude,it.longitude)
-//                map?.clear()
-//                map!!.addMarker(MarkerOptions().position(myPos))
-//                Helpers.moveToCurrentLocation(map, myPos)
-//                map.moveCamera(CameraUpdateFactory.newLatLng(myPos))
-//            }
-//        }
-        map!!.setOnMapClickListener {
+        map.setOnMapClickListener {
             val newPos = LatLng(it.latitude, it.longitude)
             updateMapLocation(map, newPos)
         }

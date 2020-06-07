@@ -53,7 +53,7 @@ class ItemInfoFactory(){
             val owner = FirebaseAuth.getInstance().currentUser!!.uid
             val lat = editFrag.coordGPItem.latitude
             val lon = editFrag.coordGPItem.longitude
-            // TODO: start a getlastlocation to get real coords
+
 
             id?.let{
                 return FireItem(itemPic, title, location, price, category, subcategory, expDate, condition, description, id, owner, lat, lon)

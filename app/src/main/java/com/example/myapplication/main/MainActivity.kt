@@ -53,11 +53,6 @@ class MainActivity : AppCompatActivity() {
                 logout(navView)
             }
             //updateHeader
-//            Helpers.setNavHeaderView(
-//                navView.getHeaderView(0),
-//                currentUser.displayName!!,
-//                currentUser.email!!,
-//                currentUser.photoUrl!!.toString())
 
             val usrRef= FirebaseFirestore.getInstance().collection("users").document(auth.currentUser!!.uid)
             usrRef.get().addOnSuccessListener {doc ->
@@ -72,9 +67,8 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        appBarConfiguration = AppBarConfiguration( //è IMPORTANTE, SETTA LA START DESTINATION
+        appBarConfiguration = AppBarConfiguration(
             setOf(
-                //R.id.nav_itemList //(now is commented for debug puropsooeoses
                 R.id.onSaleListFragment
             ), drawerLayout
         )

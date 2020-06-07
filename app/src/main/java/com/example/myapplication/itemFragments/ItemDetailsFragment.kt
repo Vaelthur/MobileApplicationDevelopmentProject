@@ -436,8 +436,6 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                 )
                 Helpers.moveToCurrentLocation(map, LatLng(myPos.latitude,myPos.longitude))
             }
-//        map!!.addMarker(MarkerOptions().position(LatLng(viewModel.itemInfo.value!!.coord!!.latitude,viewModel.itemInfo.value!!.coord!!.longitude)).title("prova"))
-//        requireActivity()
     }
 
     /// endregion
