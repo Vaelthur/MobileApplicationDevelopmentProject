@@ -390,12 +390,6 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
     @ExperimentalUnsignedTypes
     private fun saveEdits(){
 
-        hideSoftKeyboard(requireActivity())
-        requireView().findViewById<ConstraintLayout>(R.id.constraintLayout).visibility = View.GONE
-        requireView().findViewById<ImageView>(R.id.item_picture).visibility = View.GONE
-        requireView().findViewById<ImageButton>(R.id.imageButtonChangePhoto).visibility = View.GONE
-        requireView().findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
-
         val itemID = viewModel.tempItemInfo.value?.id
         val itemLat= viewModel.tempItemInfo.value?.lat
         val itemLon = viewModel.tempItemInfo.value?.lon
@@ -419,6 +413,12 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
             item_title_edit.requestFocus()
             return
         }
+
+        hideSoftKeyboard(requireActivity())
+        requireView().findViewById<ConstraintLayout>(R.id.constraintLayout).visibility = View.GONE
+        requireView().findViewById<ImageView>(R.id.item_picture).visibility = View.GONE
+        requireView().findViewById<ImageButton>(R.id.imageButtonChangePhoto).visibility = View.GONE
+        requireView().findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
 
         // Save to DB or update item on DB
         val collectionRef = FirebaseFirestore.getInstance().collection("items")

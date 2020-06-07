@@ -388,9 +388,6 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
 
         hideSoftKeyboard(this.activity)
 
-        //Show progress bar while saving
-        showProgressAndHide(requireView())
-
         //val accountInfo = AccountInfoFactory.getAccountInfoFromTextEdit(this)
         val accountInfo = showProfileViewModel.tempAccountInfo.value!!
 
@@ -404,6 +401,9 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
             editViewUserEmailEditProfile.requestFocus()
             return
         }
+
+        //Show progress bar while saving
+        showProgressAndHide(requireView())
 
         //Save content to FireStore Database
         val db = FirebaseFirestore.getInstance()
