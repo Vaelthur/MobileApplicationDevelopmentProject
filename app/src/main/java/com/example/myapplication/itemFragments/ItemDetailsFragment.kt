@@ -25,7 +25,6 @@ import com.example.myapplication.notifications.NOTIFICATION_TYPE
 import com.example.myapplication.notifications.NotificationStore
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
@@ -34,7 +33,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
-import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.item_details_buy_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.*
 import kotlinx.android.synthetic.main.item_details_fragment.item_category_value
@@ -47,16 +45,16 @@ import kotlinx.android.synthetic.main.item_details_fragment.item_picture
 import kotlinx.android.synthetic.main.item_details_fragment.item_price
 import kotlinx.android.synthetic.main.item_details_fragment.item_subcategory_value
 import kotlinx.android.synthetic.main.item_details_fragment.item_title
-import org.w3c.dom.Text
 import java.io.Serializable
 
 
 class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListener, OnMapReadyCallback {
 
     private lateinit var viewModel: ItemDetailsViewModel
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var myItems : Boolean? = false
 
+
+    ///region create/destroy
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myItems = arguments?.getBoolean("myitems")
@@ -101,225 +99,10 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
                 (status == ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
 
         if(myItems!!) {
-            //Here personal item
-            //get users interested
-            viewModel.interestedUsers(itemInfo.value!!.id)
-
-            viewModel.interestedLiveData.observe(requireActivity(), Observer {
-                val recyclerView: RecyclerView? = view.findViewById(R.id.fav_users)
-                recyclerView?.layoutManager = LinearLayoutManager(context)
-                recyclerView?.adapter =
-                    UsersListAdapter(it)
-            })
-
-            if (isItemSoldOrBlocked) {
-                blockButton.isClickable = false
-                blockButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-            } else {
-                //set listener block button
-                blockButton.setOnClickListener { v ->
-
-                    val blockItem = FireItem(
-                        viewModel.itemInfo.value?.picture_uri,
-                        viewModel.itemInfo.value!!.title,
-                        viewModel.itemInfo.value?.location,
-                        viewModel.itemInfo.value!!.price,
-                        viewModel.itemInfo.value!!.category,
-                        viewModel.itemInfo.value!!.subCategory,
-                        viewModel.itemInfo.value!!.expDate,
-                        viewModel.itemInfo.value!!.condition,
-                        viewModel.itemInfo.value!!.description,
-                        viewModel.itemInfo.value!!.id,
-                        viewModel.itemInfo.value!!.owner,
-                        viewModel.itemInfo.value!!.lat,
-                        viewModel.itemInfo.value!!.lon,
-                        ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
-                    )
-
-                    viewModel.setItemInfo(blockItem)
-
-                    val updatedStatus = HashMap<String, Any>()
-                    updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
-                    item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
-                    FirebaseFirestore.getInstance().collection("items")
-                        .document(viewModel.itemInfo.value!!.id).update(updatedStatus)
-
-                    //Notify interested users that item has been blocked
-                    val notificationStore: NotificationStore =
-                        NotificationStore()
-                    notificationStore.postNotificationMultipleUsers(
-                        viewModel.itemInfo.value?.title!!,
-                        viewModel.itemInfo.value?.id!!,
-                        NOTIFICATION_TYPE.NO_LONGER_AVAILABLE
-                    )
-
-                    blockButton.isClickable = false
-                    blockButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-
-                    Snackbar.make(view, "Item is no longer on sale", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show()
-                }
-            }
-
-
-            viewModel.itemInfo.observe(requireActivity(), Observer {
-                item_title.text = it.title
-                item_price.text = it.price
-                item_location.text = it.location
-                item_category_value.text = it.category
-                item_subcategory_value.text = it.subCategory
-                item_expire_date_value.text = it.expDate
-                item_location_value.text = it.location
-                item_condition_value.text = it.condition
-                item_description_value.text = it.description
-                item_status.text = it.status
-
-                Glide.with(requireContext())
-                    .load(it.picture_uri)
-                    .error(R.drawable.default__item_image)
-                    .centerCrop()
-                    .into(item_picture)
-
-                viewModel.setTempItemInfo(it)
-            })
+            setMyItemView(view, isItemSoldOrBlocked)
         }
         else {
-            var usrC : GeoPoint = GeoPoint(1.0,1.0)
-            //Other person items
-            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
-                .addOnSuccessListener { it ->
-                    usrC = it["coord"] as GeoPoint
-                }
-
-            directionbutton.setOnClickListener { v: View? ->
-
-                val dirBundle = Bundle(2)
-                val src = doubleArrayOf(usrC.latitude, usrC.longitude)
-                val dst = viewModel.itemInfo.value?.lat.let {lat ->
-                    viewModel.itemInfo.value?.lon.let { lon ->
-                        doubleArrayOf(
-                            lat!!,
-                            lon!!
-                        )
-                    }
-                }
-                dirBundle.putDoubleArray("src", src)
-                dirBundle.putDoubleArray("dst",dst)
-                view.findNavController().navigate(R.id.routeMapFragment, dirBundle)
-            }
-
-            //set listeners
-            //Set link to seller profile
-            val sellerUsernameView = view.findViewById<TextView>(R.id.seller_usr)
-            sellerUsernameView.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View?) {
-
-                    FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", viewModel.itemInfo.value?.owner)
-                        .get()
-                        .addOnCompleteListener {
-                            if(it.result != null){
-                                val accountInfo = AccountInfoFactory.fromMapToObj(it.result?.documents?.first()?.data)
-                                val accountBundle = Bundle(2)
-                                accountBundle.putSerializable("account_info", accountInfo as Serializable?)
-                                accountBundle.putBoolean("myprofile", false)
-                                view.findNavController().navigate(R.id.showProfileFragment, accountBundle)
-                            }
-                        }
-                }
-            })
-
-            val fab: View = requireActivity().findViewById(R.id.fab_star)
-            fab.setOnClickListener { view ->
-
-                //insert favorite in user
-                FirebaseFirestore.getInstance().collection("users")
-                    .document(FirebaseAuth.getInstance().currentUser!!.uid)
-                    .update("favorites", FieldValue.arrayUnion(viewModel.itemInfo.value?.id))
-
-                //insert favorite in item (for other queries)
-                FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id)
-                    .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
-
-                //Notify owner
-                val notificationStore : NotificationStore =
-                    NotificationStore()
-                notificationStore.apply {
-                    postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.INTERESTED)
-                }
-
-                Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null)
-                    .show()
-            }
-
-            if(isItemSoldOrBlocked){
-                buyButton.isClickable = false
-                buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-            }
-            else {
-                buyButton.setOnClickListener { v ->
-
-                    //Rate seller
-                    val ratingFragment = RateSellerDialogFragment(this, viewModel.itemInfo.value?.owner!!)
-                    ratingFragment.show(this.parentFragmentManager, "sellerRating")
-
-                    val soldItem = FireItem(viewModel.itemInfo.value?.picture_uri, viewModel.itemInfo.value!!.title,
-                        viewModel.itemInfo.value?.location, viewModel.itemInfo.value!!.price, viewModel.itemInfo.value!!.category,
-                        viewModel.itemInfo.value!!.subCategory, viewModel.itemInfo.value!!.expDate, viewModel.itemInfo.value!!.condition,
-                        viewModel.itemInfo.value!!.description, viewModel.itemInfo.value!!.id, viewModel.itemInfo.value!!.owner,
-                        viewModel.itemInfo.value!!.lat, viewModel.itemInfo.value!!.lon,
-                        ItemStatusCreator.getStatus(ITEMSTATUS.SOLD))
-
-                    viewModel.setItemInfo(soldItem)
-                    val updatedStatus = HashMap<String, Any>()
-                    updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)
-                    FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
-                    buyButton.isClickable = false
-                    buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
-
-                    // add bought item to db
-                    FirebaseFirestore.getInstance().collection("users")
-                        .document(FirebaseAuth.getInstance().currentUser!!.uid)
-                        .update("bought", FieldValue.arrayUnion(viewModel.itemInfo.value?.id))
-
-                    //Notify owner that item has been sold
-                    val notificationStore : NotificationStore =
-                        NotificationStore()
-                    notificationStore.apply {
-                        postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.SOLD)
-                    }
-
-                    //Notify interested users that item has been sold
-                    notificationStore.postNotificationMultipleUsers(viewModel.itemInfo.value?.title!!,
-                            viewModel.itemInfo.value?.id!!,
-                            NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
-
-                }
-            }
-
-            //Viewmodel observer
-            viewModel.itemInfo.observe(requireActivity(), Observer {
-                item_title.text = it.title
-                item_price.text = it.price
-                item_location.text = it.location
-                item_category_value.text = it.category
-                item_subcategory_value.text = it.subCategory
-                item_expire_date_value.text = it.expDate
-                item_location_value.text = it.location
-                item_condition_value.text = it.condition
-                item_description_value.text = it.description
-                item_status_buy.text = it.status
-
-                queryOwnerName(it.owner)
-
-                Glide.with(requireContext())
-                    .load(it.picture_uri)
-                    .centerCrop()
-                    .into(item_picture)
-
-                viewModel.setTempItemInfo(it)
-            })
+            setOthersItemView(view, isItemSoldOrBlocked)
         }
 
         //update map
@@ -331,25 +114,254 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
         this.requireActivity().getPreferences(Context.MODE_PRIVATE).edit().remove("item_picture_editing").apply()
     }
 
-    private fun queryOwnerName(ownerId: String) {
-
-        FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", ownerId)
-            .get()
-            .addOnSuccessListener { documents ->
-                //Make text underlined because it's a link
-                val contentText = documents.first()["username"] as String?
-                val content = SpannableString(contentText)
-                content.setSpan(UnderlineSpan(), 0, content.length, 0)
-                seller_usr.text = content
-                seller_usr.setTextColor(Color.BLUE)
-            }
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.itemInfo.removeObservers(requireActivity())
         viewModel.interestedLiveData.removeObservers(requireActivity())
     }
+
+    ///endregion
+
+    ///region setOthersItemView
+
+    private fun setOthersItemView(view: View, isItemSoldOrBlocked: Boolean) {
+
+        //set direction button listener
+        setDirectionButtonListener()
+
+        //Set link to seller profile
+        setLinkToSeller()
+
+        //set FAB for favorites and notifications
+        setFABListener()
+
+
+        if(isItemSoldOrBlocked){
+            buyButton.isClickable = false
+            buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+        }
+        else {
+            setBuyButtonListener()
+        }
+
+        //Viewmodel observer
+        viewModel.itemInfo.observe(requireActivity(), Observer {
+            item_title.text = it.title
+            item_price.text = it.price
+            item_location.text = it.location
+            item_category_value.text = it.category
+            item_subcategory_value.text = it.subCategory
+            item_expire_date_value.text = it.expDate
+            item_location_value.text = it.location
+            item_condition_value.text = it.condition
+            item_description_value.text = it.description
+            item_status_buy.text = it.status
+
+            queryOwnerName(it.owner)
+
+            Glide.with(requireContext())
+                .load(it.picture_uri)
+                .centerCrop()
+                .into(item_picture)
+
+            viewModel.setTempItemInfo(it)
+        })
+    }
+
+    private fun setDirectionButtonListener() {
+        var usrC : GeoPoint = GeoPoint(1.0,1.0)
+        //get my coordinates for directions
+        FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+            .addOnSuccessListener { it ->
+                usrC = it["coord"] as GeoPoint
+            }
+
+        directionbutton.setOnClickListener { v: View? ->
+
+            val dirBundle = Bundle(2)
+            val src = doubleArrayOf(usrC.latitude, usrC.longitude)
+            val dst = viewModel.itemInfo.value?.lat.let {lat ->
+                viewModel.itemInfo.value?.lon.let { lon ->
+                    doubleArrayOf(
+                        lat!!,
+                        lon!!
+                    )
+                }
+            }
+            dirBundle.putDoubleArray("src", src)
+            dirBundle.putDoubleArray("dst",dst)
+            v!!.findNavController().navigate(R.id.routeMapFragment, dirBundle)
+        }
+    }
+
+    private fun setFABListener() {
+        val fab: View = requireActivity().findViewById(R.id.fab_star)
+        fab.setOnClickListener { view ->
+
+            //insert favorite in user
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .update("favorites", FieldValue.arrayUnion(viewModel.itemInfo.value?.id))
+
+            //insert favorite in item (for other queries)
+            FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id)
+                .update("users_favorites", FieldValue.arrayUnion(FirebaseAuth.getInstance().currentUser!!.uid))
+
+            //Notify owner
+            val notificationStore : NotificationStore =
+                NotificationStore()
+            notificationStore.apply {
+                postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.INTERESTED)
+            }
+
+            Snackbar.make(view, "Item Added to Favourites", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
+        }
+    }
+
+    private fun setLinkToSeller() {
+        val sellerUsernameView = requireView().findViewById<TextView>(R.id.seller_usr)
+        sellerUsernameView.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+
+                FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", viewModel.itemInfo.value?.owner)
+                    .get()
+                    .addOnCompleteListener {
+                        if(it.result != null){
+                            val accountInfo = AccountInfoFactory.fromMapToObj(it.result?.documents?.first()?.data)
+                            val accountBundle = Bundle(2)
+                            accountBundle.putSerializable("account_info", accountInfo as Serializable?)
+                            accountBundle.putBoolean("myprofile", false)
+                            v!!.findNavController().navigate(R.id.showProfileFragment, accountBundle)
+                        }
+                    }
+            }
+        })
+    }
+
+    private fun setBuyButtonListener() {
+        buyButton.setOnClickListener { v ->
+
+            //Rate seller
+            val ratingFragment = RateSellerDialogFragment(this, viewModel.itemInfo.value?.owner!!)
+            ratingFragment.show(this.parentFragmentManager, "sellerRating")
+
+            val soldItem = changeItemStatus(ItemStatusCreator.getStatus(ITEMSTATUS.SOLD))
+
+            viewModel.setItemInfo(soldItem)
+            val updatedStatus = HashMap<String, Any>()
+            updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.SOLD)
+            FirebaseFirestore.getInstance().collection("items").document(viewModel.itemInfo.value!!.id).update(updatedStatus)
+            buyButton.isClickable = false
+            buyButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
+            // add bought item to db
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .update("bought", FieldValue.arrayUnion(viewModel.itemInfo.value?.id))
+
+            //Notify owner that item has been sold
+            val notificationStore : NotificationStore =
+                NotificationStore()
+            notificationStore.apply {
+                postNotification(viewModel.itemInfo.value?.title!!, viewModel.itemInfo.value?.owner!!, NOTIFICATION_TYPE.SOLD)
+            }
+
+            //Notify interested users that item has been sold
+            notificationStore.postNotificationMultipleUsers(viewModel.itemInfo.value?.title!!,
+                viewModel.itemInfo.value?.id!!,
+                NOTIFICATION_TYPE.NO_LONGER_AVAILABLE)
+
+        }
+    }
+
+    ///endregion
+
+    ///region setMyItems
+
+    private fun setMyItemView(view: View, isItemSoldOrBlocked: Boolean) {
+
+        val itemInfo = viewModel.itemInfo
+        if(itemInfo.value == Helpers.getDefaultItem()){
+            this.activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+            return
+        }
+
+        //get users interested
+        viewModel.interestedUsers(itemInfo.value!!.id)
+
+        viewModel.interestedLiveData.observe(requireActivity(), Observer {
+            val recyclerView: RecyclerView? = view.findViewById(R.id.fav_users)
+            recyclerView?.layoutManager = LinearLayoutManager(context)
+            recyclerView?.adapter =
+                UsersListAdapter(it)
+        })
+
+        if (isItemSoldOrBlocked) {
+            blockButton.isClickable = false
+            blockButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+        } else {
+            //set listener block button
+            setBlockButtonListener(view)
+        }
+
+        viewModel.itemInfo.observe(requireActivity(), Observer {
+            item_title.text = it.title
+            item_price.text = it.price
+            item_location.text = it.location
+            item_category_value.text = it.category
+            item_subcategory_value.text = it.subCategory
+            item_expire_date_value.text = it.expDate
+            item_location_value.text = it.location
+            item_condition_value.text = it.condition
+            item_description_value.text = it.description
+            item_status.text = it.status
+
+            Glide.with(requireContext())
+                .load(it.picture_uri)
+                .error(R.drawable.default__item_image)
+                .centerCrop()
+                .into(item_picture)
+
+            viewModel.setTempItemInfo(it)
+        })
+    }
+
+    private fun setBlockButtonListener(view: View) {
+        blockButton.setOnClickListener { v ->
+
+            val blockItem = changeItemStatus(ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED))
+
+            viewModel.setItemInfo(blockItem)
+
+            val updatedStatus = HashMap<String, Any>()
+            updatedStatus["status"] = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
+            item_status.text = ItemStatusCreator.getStatus(ITEMSTATUS.BLOCKED)
+            FirebaseFirestore.getInstance().collection("items")
+                .document(viewModel.itemInfo.value!!.id).update(updatedStatus)
+
+            //Notify interested users that item has been blocked
+            val notificationStore: NotificationStore =
+                NotificationStore()
+            notificationStore.postNotificationMultipleUsers(
+                viewModel.itemInfo.value?.title!!,
+                viewModel.itemInfo.value?.id!!,
+                NOTIFICATION_TYPE.NO_LONGER_AVAILABLE
+            )
+
+            blockButton.isClickable = false
+            blockButton.backgroundTintList = ColorStateList.valueOf(Color.GRAY)
+
+            Snackbar.make(view, "Item is no longer on sale", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
+        }
+    }
+
+    ///endregion
+
+    ///region optionsMenu
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
@@ -365,6 +377,8 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    ///endregion
 
     /// region RateSellerDialog
 
@@ -422,6 +436,43 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             .show()
     }
 
+    ///endregion
+
+    ///region Helpers and Map
+
+    private fun changeItemStatus(status: String): FireItem {
+        return FireItem(
+            viewModel.itemInfo.value?.picture_uri,
+            viewModel.itemInfo.value!!.title,
+            viewModel.itemInfo.value?.location,
+            viewModel.itemInfo.value!!.price,
+            viewModel.itemInfo.value!!.category,
+            viewModel.itemInfo.value!!.subCategory,
+            viewModel.itemInfo.value!!.expDate,
+            viewModel.itemInfo.value!!.condition,
+            viewModel.itemInfo.value!!.description,
+            viewModel.itemInfo.value!!.id,
+            viewModel.itemInfo.value!!.owner,
+            viewModel.itemInfo.value!!.lat,
+            viewModel.itemInfo.value!!.lon,
+            status
+        )
+    }
+
+    private fun queryOwnerName(ownerId: String) {
+
+        FirebaseFirestore.getInstance().collection("users").whereEqualTo("id", ownerId)
+            .get()
+            .addOnSuccessListener { documents ->
+                //Make text underlined because it's a link
+                val contentText = documents.first()["username"] as String?
+                val content = SpannableString(contentText)
+                content.setSpan(UnderlineSpan(), 0, content.length, 0)
+                seller_usr.text = content
+                seller_usr.setTextColor(Color.BLUE)
+            }
+    }
+
     override fun onMapReady(map: GoogleMap?) {
         FirebaseFirestore.getInstance().collection("items").document(viewModel.tempItemInfo.value!!.id).get()
             .addOnSuccessListener {
@@ -438,6 +489,6 @@ class ItemDetailsFragment : Fragment(), RateSellerDialogFragment.RateSellerListe
             }
     }
 
-    /// endregion
+    ///endregion
 
 }

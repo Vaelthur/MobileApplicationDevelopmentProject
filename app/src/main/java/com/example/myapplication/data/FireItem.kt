@@ -46,7 +46,6 @@ data class FireItem(
                 hash["description"] as String,
                 hash["id"] as String,
                 hash["owner"] as String,
-                //hash["coord"] as GeoPoint?,
                 hash["lat"] as Double,
                 hash["lon"] as Double,
                 status
