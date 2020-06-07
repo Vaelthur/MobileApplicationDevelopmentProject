@@ -351,6 +351,7 @@
                     android:text="@string/get_dir"
                     android:layout_marginTop="8sp"
                     app:layout_constraintTop_toBottomOf="@id/itemLocation"
+                    app:layout_constraintStart_toStartOf="@id/itemLocation"
                     app:layout_constraintBottom_toTopOf="@id/main_characteristics" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

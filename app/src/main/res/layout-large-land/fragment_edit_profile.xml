@@ -9,19 +9,6 @@
     android:layout_marginRight="16dp">
 
 
-    <!--    <ImageView-->
-    <!--        android:id="@+id/a"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        android:layout_marginTop="8dp"-->
-    <!--        android:layout_marginBottom="8dp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--        app:layout_constraintEnd_toStartOf="@+id/info_container_layout"-->
-    <!--        app:layout_constraintHorizontal_chainStyle="packed"-->
-    <!--        app:layout_constraintHorizontal_weight="1"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent"-->
-    <!--        app:srcCompat="@drawable/default_profile_picture" />-->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/info_container_layout"

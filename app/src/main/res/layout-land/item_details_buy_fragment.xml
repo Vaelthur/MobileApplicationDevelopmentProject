@@ -140,6 +140,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/picture_guideline">
 
+                <Button
+                    android:id="@+id/directionbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8sp"
+                    android:backgroundTint="#4A89F3"
+                    android:text="@string/get_dir"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toTopOf="@id/main_characteristics"
+                    app:layout_constraintStart_toStartOf="@id/itemLocation"
+                    app:layout_constraintTop_toBottomOf="@id/itemLocation" />
+
                 <TextView
                     android:id="@+id/item_condition_value"
                     android:layout_width="0dp"
@@ -334,7 +346,7 @@
                     tools:text="@string/buy" />
 
                 <com.example.myapplication.CustomMapView
-                    android:id="@+id/customMapView"
+                    android:id="@+id/itemLocation"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
                     android:layout_marginBottom="8dp"
