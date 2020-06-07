@@ -92,6 +92,11 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
                 showProfileViewModel.setTempAccountInfo(it)
                 setProfileNavHeaderHandler()
             })
+
+            val mapView = view.findViewById<MapView>(R.id.userLocation)
+            mapView.onCreate(savedInstanceState)
+            mapView.onResume()
+            mapView.getMapAsync(this)
         }
         else {
 
@@ -142,10 +147,7 @@ class ShowProfileFragment : Fragment(), OnMapReadyCallback {
             }
         }
 
-        val mapView = view.findViewById<MapView>(R.id.userLocation)
-        mapView.onCreate(savedInstanceState)
-        mapView.onResume()
-        mapView.getMapAsync(this)
+
     }
 
     override fun onDestroyView() {
