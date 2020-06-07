@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.myapplication.R
+import com.example.myapplication.main.Helpers
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -47,7 +48,6 @@ class RouteMapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap?) {
 
-
         map?.addPolyline(
             PolylineOptions()
                 .add(
@@ -56,7 +56,13 @@ class RouteMapFragment : Fragment(), OnMapReadyCallback {
                 )
                 .width(5f)
                 .color(Color.RED) )
+
+        if (map != null) {
+            Helpers.moveToCurrentLocation(map, LatLng(dst.latitude, dst.longitude))
+        }
     }
+
+
 }
 
 
