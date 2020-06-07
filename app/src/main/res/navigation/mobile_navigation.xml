@@ -11,15 +11,8 @@
         android:label="My Items"
         tools:layout="@layout/fragment_itemlist">
         <action
-            android:id="@+id/action_nav_itemList_to_showProfileFragment"
-            app:destination="@id/showProfileFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right"
-            app:popEnterAnim="@android:anim/slide_in_left"
-            app:popExitAnim="@android:anim/slide_out_right" />
-        <action
-            android:id="@+id/action_nav_itemList_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            android:id="@+id/action_nav_itemList_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
@@ -47,26 +40,16 @@
         android:name="com.example.myapplication.itemFragments.ItemDetailsFragment"
         android:label="Item Details">
         <action
-            android:id="@+id/action_itemDetailsFragment_to_nav_itemList"
-            app:destination="@id/nav_itemList"
-            app:launchSingleTop="false"
-            app:popUpTo="@id/nav_itemList"
-            app:popUpToInclusive="false" />
-        <action
             android:id="@+id/action_itemDetailsFragment_to_routeMapFragment"
             app:destination="@id/routeMapFragment" />
+        <action
+            android:id="@+id/action_itemDetailsFragment_to_ItemEditFragment"
+            app:destination="@id/ItemEditFragment" />
     </fragment>
     <fragment
         android:id="@+id/ItemEditFragment"
         android:name="com.example.myapplication.ItemEditFragment"
-        android:label="Edit Item">
-        <action
-            android:id="@+id/action_itemEditFragment2_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
-        <action
-            android:id="@+id/action_ItemEditFragment_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
-    </fragment>
+        android:label="Edit Item"/>
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.myapplication.main.SignInFragment"
@@ -84,26 +67,36 @@
         <action
             android:id="@+id/action_onSaleListFragment_to_itemBoughtFragment"
             app:destination="@id/itemBoughtFragment" />
+        <action
+            android:id="@+id/action_onSaleListFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+        <action
+            android:id="@+id/action_onSaleListFragment_to_showProfileFragment"
+            app:destination="@id/showProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/itemsOfInterestListFragment"
         android:name="com.example.myapplication.itemLists.ItemsOfInterestListFragment"
-        android:label="Favorite Items" />
+        android:label="Favorite Items" >
+        <action
+            android:id="@+id/action_itemsOfInterestListFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/itemBoughtFragment"
         android:name="com.example.myapplication.itemLists.ItemBoughtFragment"
-        android:label="Bought Items" />
+        android:label="Bought Items" >
+        <action
+            android:id="@+id/action_itemBoughtFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/reviewListFragment"
         android:name="com.example.myapplication.reviews.ReviewListFragment"
-        android:label="ReviewListFragment" >
-        <action
-            android:id="@+id/action_reviewListFragment_to_showProfileFragment"
-            app:destination="@id/showProfileFragment" />
-    </fragment>
+        android:label="ReviewListFragment" />
     <fragment
         android:id="@+id/routeMapFragment"
-        android:name="com.example.myapplication.RouteMapFragment"
-        android:label="fragment_route_map"
+        android:name="com.example.myapplication.map.RouteMapFragment"
+        android:label="Directions"
         tools:layout="@layout/fragment_route_map" />
 </navigation>

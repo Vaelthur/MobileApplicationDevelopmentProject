@@ -167,7 +167,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/bottom_guideline" />
 
-        <com.example.myapplication.CustomMapView
+        <com.example.myapplication.map.CustomMapView
             android:id="@+id/userLocation"
             android:layout_width="0dp"
             android:layout_height="0dp"

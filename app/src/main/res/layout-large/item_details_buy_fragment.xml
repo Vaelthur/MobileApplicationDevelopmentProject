@@ -340,7 +340,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="@string/buy" />
 
-            <com.example.myapplication.CustomMapView
+            <com.example.myapplication.map.CustomMapView
                 android:id="@+id/itemLocation"
                 android:layout_width="0dp"
                 android:layout_height="200dp"

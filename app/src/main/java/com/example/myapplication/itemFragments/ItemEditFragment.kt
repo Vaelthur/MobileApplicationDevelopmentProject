@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
-import android.media.tv.TvContract
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -22,7 +21,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.Constraints
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -38,20 +36,18 @@ import com.example.myapplication.data.ItemCategories
 import com.example.myapplication.data.ItemInfoFactory
 import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
+import com.example.myapplication.map.CustomMapView
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.fragment_edit_profile.*
 import kotlinx.android.synthetic.main.fragment_item_edit.*
 import kotlinx.coroutines.runBlocking
 import java.io.File
@@ -112,8 +108,6 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
-
         setSpinners(view)
         setDatePicker(view)
 
@@ -137,6 +131,21 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                 .into(item_picture)
         })
 
+        setLocateButtonListener(view)
+
+
+
+        // Listener to change profile pic
+        imageButtonChangePhoto.setOnClickListener {  onImageButtonClickEvent(it) }
+
+        //update map
+        val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
+        mapView.onCreate(savedInstanceState)
+        mapView.onResume()
+        mapView.getMapAsync(this)
+    }
+
+    private fun setLocateButtonListener(view: View) {
         LocateButton.setOnClickListener {
 
             if(ContextCompat.checkSelfPermission(requireActivity() as MainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -162,15 +171,6 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                 else Helpers.makeSnackbar(view, "It was not possible to retrieve your location. Please try again later")
             }
         }
-
-        // Listener to change profile pic
-        imageButtonChangePhoto.setOnClickListener {  onImageButtonClickEvent(it) }
-
-        //update map
-        val mapView = view.findViewById<CustomMapView>(R.id.itemLocationMap)
-        mapView.onCreate(savedInstanceState)
-        mapView.onResume()
-        mapView.getMapAsync(this)
     }
 
     fun isLocationEnabled(context: Context): Boolean {
@@ -435,22 +435,6 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                 it.addOnSuccessListener {
                     val downloadUri = imageRef.downloadUrl
                     downloadUri.addOnSuccessListener {
-                        val itemInf : Map<String, Any?> = hashMapOf(
-                            "category" to itemToSave.category,
-                            "condition" to itemToSave.condition,
-                            "description" to itemToSave.description,
-                            "expDate" to itemToSave.expDate,
-                            "id" to itemToSave.id,
-                            "location" to itemToSave.location,
-                            "picture_uri" to it.toString(), //change picture
-                            "price" to itemToSave.price,
-                            "sub_category" to itemToSave.subCategory,
-                            "title" to itemToSave.title,
-                            "owner" to itemToSave.owner,
-                            "lat" to itemLat!!,
-                            "lon" to itemLon!!,
-                            "status" to itemToSave.status
-                        )
                         val finalItem = FireItem(it.toString(),
                             itemToSave.title,
                             itemToSave.location,
@@ -465,28 +449,13 @@ class ItemEditFragment : Fragment(), OnMapReadyCallback {
                             itemLat,
                             itemLon,
                             itemToSave.status)
-                        collectionRef.document(itemToSave.id).set(itemInf)
+                        collectionRef.document(itemToSave.id).set(finalItem)
                         viewModel.setItemInfo(finalItem)
                         endingSave(finalItem)
                     }
                 }
                     .addOnFailureListener {
-                        val itemInf : Map<String, Any?> = hashMapOf(
-                            "category" to itemToSave.category,
-                            "condition" to itemToSave.condition,
-                            "description" to itemToSave.description,
-                            "expDate" to itemToSave.expDate,
-                            "id" to itemToSave.id,
-                            "location" to itemToSave.location,
-                            "picture_uri" to itemToSave.picture_uri,
-                            "price" to itemToSave.price,
-                            "sub_category" to itemToSave.subCategory,
-                            "title" to itemToSave.title,
-                            "owner" to itemToSave.owner,
-                            "lat" to itemLat!!,
-                            "lon" to itemLon!!,
-                            "status" to itemToSave.status)
-                        collectionRef.document(itemToSave.id).set(itemInf)
+                        collectionRef.document(itemToSave.id).set(itemToSave)
                         viewModel.itemInfo.value = itemToSave
                         endingSave(itemToSave)
                     }

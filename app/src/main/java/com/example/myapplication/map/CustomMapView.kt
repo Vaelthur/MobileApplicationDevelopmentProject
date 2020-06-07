@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.map
 
 import android.content.Context
 import android.util.AttributeSet

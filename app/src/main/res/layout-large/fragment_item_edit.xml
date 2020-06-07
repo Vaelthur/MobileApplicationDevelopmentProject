@@ -305,7 +305,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/item_expire_date_value" />
 
-            <com.example.myapplication.CustomMapView
+            <com.example.myapplication.map.CustomMapView
                 android:id="@+id/itemLocationMap"
                 android:layout_width="0dp"
                 android:layout_height="300dp"

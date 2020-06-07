@@ -31,7 +31,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders.of
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.example.myapplication.CustomMapView
+import com.example.myapplication.map.CustomMapView
 import com.example.myapplication.R
 import com.example.myapplication.data.AccountInfo
 import com.example.myapplication.data.AccountInfoFactory
@@ -39,8 +39,6 @@ import com.example.myapplication.main.Helpers
 import com.example.myapplication.main.MainActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdate
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng

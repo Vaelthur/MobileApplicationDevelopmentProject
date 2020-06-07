@@ -280,7 +280,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/statusView" />
 
-            <com.example.myapplication.CustomMapView
+            <com.example.myapplication.map.CustomMapView
                 android:id="@+id/itemLocation"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
