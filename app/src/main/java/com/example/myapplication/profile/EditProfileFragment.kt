@@ -453,7 +453,7 @@ class EditProfileFragment : Fragment(), OnMapReadyCallback {
     private fun showProgressAndHide(view: View) {
 
         view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
-        view.findViewById<TextView>(R.id.saving_text).visibility = View.VISIBLE
+        //view.findViewById<TextView>(R.id.saving_text).visibility = View.VISIBLE
         view.findViewById<CircleImageView>(R.id.profile_picture).visibility = View.GONE
         //fullname
         view.findViewById<TextView>(R.id.textViewFullNameEditProfile).visibility = View.GONE
